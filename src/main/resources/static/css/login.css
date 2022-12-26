@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+.login-div {
+    border : 2px black solid;
+    width : 40%;
+    margin : 0 auto;
+    text-align : center;
+}
+
+.oauth-div{
+    border : 1px black solid;
+    margin-top : 10%;
+    text-align : center;
+}

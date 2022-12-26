@@ -13,15 +13,32 @@ repositories {
 }
 
 dependencies {
-//	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-security'
+//	data jpa config
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+//	thymeleaf config
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+//	spring web config
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-//	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-//	runtimeOnly 'com.mysql:mysql-connector-j'
+
+//	mysql config
+	implementation 'mysql:mysql-connector-java'
+
+//	test config
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//	testImplementation 'org.springframework.security:spring-security-test'
+
+//	devtools(compile하면 자동으로 변경) config
 	compileOnly("org.springframework.boot:spring-boot-devtools")
+
+//	spring security config
+	implementation "org.springframework.boot:spring-boot-starter-security"
+
+//	lombok config
+	compileOnly 'org.projectlombok:lombok:1.18.24'
+	annotationProcessor 'org.projectlombok:lombok:1.18.24'
+	testCompileOnly 'org.projectlombok:lombok:1.18.24'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
 
 tasks.named('test') {
