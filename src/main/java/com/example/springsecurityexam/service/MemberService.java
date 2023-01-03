@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
+    @Autowired
+    private JPAMemberRepository memberRepository;
+
+
 
 }

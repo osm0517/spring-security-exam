@@ -8,8 +8,11 @@
 <body>
   <div class="login-div">
     <div>
-      <input placeholder="name"/>
-      <input type="button" placeholder="로그인" />
+      <form action="/login-proc" method="post">
+        <input placeholder="id"/>
+        <input placeholder="password"/>
+        <button type="submit"> 로그인 </button>
+      </form>
     </div>
     <div class="oauth-div"> kakao login</div>
     <div class="oauth-div"> google login </div>

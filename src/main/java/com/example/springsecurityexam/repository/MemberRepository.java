@@ -1,7 +1,6 @@
 package com.example.springsecurityexam.repository;
 
-import com.example.springsecurityexam.dto.Member;
-import org.springframework.stereotype.Repository;
+import com.example.springsecurityexam.entity.Member;
 
 import java.util.List;
 import java.util.Optional;
