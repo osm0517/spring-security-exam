@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title> 회원가입 결과 </title>
+    <link rel="stylesheet" href="css/basic.css">
+</head>
+<body>
+    <th:block th:if="${result == 'fail'}">
+        <h3> 입력이 올바르지 못합니다. </h3><br/>
+        <h3> 회원가입을 다시 시도해주세요. </h3>
+    </th:block>
+    <th:block th:if="${result == 'success'}">
+        <h3> 회원가입에 성공했습니다. </h3><br/>
+        <h3> 반갑습니다. </h3>
+        <h3 th:text = "${name}"> 회원님 </h3>
+    </th:block>
+</body>
+</html>

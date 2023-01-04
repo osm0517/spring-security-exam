@@ -2,16 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title> 로그인 </title>
   <link rel="stylesheet" href="css/basic.css">
 </head>
 <body>
   <div class="login-div">
     <div>
       <form action="/login-proc" method="post">
-        <input placeholder="id"/>
-        <input placeholder="password"/>
-        <button type="submit"> 로그인 </button>
+<!--        사용자 아이디 -->
+        <input placeholder="id" class="user-id"
+        name="userId"/><br/>
+<!--        사용자 비밀번호(평문) -->
+        <input placeholder="password" class="password"
+        name="password"/>
+        <div>
+          <button type="submit"> 로그인 </button>
+          <button class="signup-btn"> 회원가입 </button>
+        </div>
       </form>
     </div>
     <div class="oauth-div"> kakao login</div>

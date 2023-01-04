@@ -51,13 +51,13 @@ class JPAMemberRepositoryTest {
         memberRepository.save(member2);
 
 //        when
-//        List<Member> admins = memberRepository.findByAuth(RoleType.ADMIN);
+        List<Member> admins = memberRepository.findByAuth(RoleType.ADMIN);
         List<Member> users = memberRepository.findByAuth(RoleType.USER);
 
 //        then
-//        assertThat(admins)
-//                .usingRecursiveFieldByFieldElementComparator()
-//                .contains(member2);
+        assertThat(admins)
+                .usingRecursiveFieldByFieldElementComparator()
+                .contains(member2);
         assertThat(users).size().isEqualTo(2);
         assertThat(users)
                 .usingRecursiveFieldByFieldElementComparator()

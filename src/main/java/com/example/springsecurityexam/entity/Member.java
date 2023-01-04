@@ -4,6 +4,7 @@ import com.example.springsecurityexam.enumdata.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
@@ -28,7 +29,7 @@ public class Member {
      * @return
      */
     public Member createAdminMember(String userId){
-        return new Member(userId, "testPwd", "testName", RoleType.USER);
+        return new Member(userId, "testPwd", "testName", RoleType.ADMIN);
     }
 
     @Id
@@ -47,6 +48,16 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private RoleType auth;
+
+    @Column(name = "created-date", insertable = false, updatable = false)
+    private Date createdDate;
+
+    @Column(name = "updated-date", insertable = false, updatable = false)
+    private Date updatedDate;
+
+    @Setter
+    @Column(name = "stop-state")
+    private String stopState;
 
     public Member(String userId, String password, String name, RoleType auth){
         this.userId = userId;
