@@ -37,6 +37,22 @@ public class MemberService {
     }
 
     /**
+     * 성공하면 true, 실패하면 false
+     * 실패하면 redirection
+     * @param member
+     * @return
+     */
+    public boolean login(Member member){
+//        사용자가 입력한 비밀번호(평문)
+        String userId = member.getUserId();
+        String inputPassword = member.getPassword();
+
+        Member findResult = memberRepository.findByUserId(userId);
+
+        return encoder.matches(inputPassword, findResult.getPassword());
+    }
+
+    /**
      * 평문을 암호화하는 로직
      * @param member
      * @param inputPassword

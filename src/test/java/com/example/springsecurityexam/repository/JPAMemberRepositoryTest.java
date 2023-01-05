@@ -5,6 +5,7 @@ import com.example.springsecurityexam.enumdata.RoleType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,5 +81,22 @@ class JPAMemberRepositoryTest {
         assertThat(members)
                 .usingRecursiveFieldByFieldElementComparator()
                 .contains(member, member1);
+    }
+
+    @DisplayName("userId로 회원을 찾기")
+    @Test
+    void findByUserId(){
+//        given
+        Member member = new Member().createUserMember("admin2");
+
+//        when
+        memberRepository.save(member);
+
+        Member byId = memberRepository.findById(member.getId());
+        Member byUserId = memberRepository.findByUserId(member.getUserId());
+
+//        then
+        assertThat(byUserId).usingRecursiveComparison()
+                .isEqualTo(byId);
     }
 }

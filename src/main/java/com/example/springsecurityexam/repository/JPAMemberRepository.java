@@ -21,7 +21,7 @@ public interface JPAMemberRepository extends JpaRepository<Member, Integer> {
 
     List<Member> findAll();
 
-
+    Member findByUserId(String userId);
     @Override
     void deleteAllInBatch();
 }

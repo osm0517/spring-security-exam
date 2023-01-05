@@ -4,6 +4,7 @@ import com.example.springsecurityexam.entity.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,16 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String loginProcess(Model model){
+    public String loginProcess(
+            @RequestParam("userId") String userId,
+            @RequestParam("password") String password,
+            Model model,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ){
+        if(parameterNullCheck(request)){
+           return "redirect:/";
+        }
         return "login";
     }
 
@@ -73,6 +83,7 @@ public class MemberController {
 
     /**
      * 입력한 파라미터 중에서 null이 존재하는지 확인함
+     * null이 존재하면 true 없으면 false
      * @param request
      * @return
      */
