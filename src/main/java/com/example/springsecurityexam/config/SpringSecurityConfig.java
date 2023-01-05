@@ -26,10 +26,10 @@ public class SpringSecurityConfig {
 //                    .anyRequest().authenticated()
                 .and()
                     .csrf().disable()
-                    .formLogin()
-                    .loginPage("/login").permitAll()
-//                    .loginProcessingUrl()
-                .and()
+                    .formLogin().disable()
+//                    .loginPage("/login").permitAll()
+//                    .loginProcessingUrl("/login-proc")
+//                .and()
         ;
         return http.build();
     }

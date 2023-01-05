@@ -19,10 +19,11 @@ public class MemberController {
 
 //    --- view path start ---
 
-    private final String signupPath = "/member/signup";
-    private final String signupResultPath = "/member/signup-result";
-    private final String signupFailPath = "/member/signup-fail";
-    private final String loginPath = "/member/login";
+    private final String signupPath = "/member/signup/signup";
+    private final String signupResultPath = "/member/signup/signup-result";
+    private final String signupFailPath = "/member/signup/signup-fail";
+    private final String loginPath = "/member/login/login";
+    private final String loginFailPath = "/member/login/login-fail";
 
 //    --- view path end ---
 
@@ -30,7 +31,7 @@ public class MemberController {
     private MemberService memberService;
 
     @GetMapping("/login")
-    public String login(Model model){
+    public String login(){
         log.info("login view render");
         return loginPath;
     }
@@ -39,18 +40,25 @@ public class MemberController {
     public String loginProcess(
             @RequestParam("userId") String userId,
             @RequestParam("password") String password,
-            Model model,
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ){
+//        log.debug("error test");
         if(parameterNullCheck(request)){
-           return "redirect:/";
+            return loginFailPath;
+        } else {
+            Member member = new Member(userId, password, null, null);
+
+            if(memberService.login(member)){
+                log.debug("login success");
+                return "redirect:/";
+            }
+            log.debug("login fail");
+            return "redirect:/login";
         }
-        return "login";
     }
 
     @GetMapping("/signup")
-    public String signup(Model model){
+    public String signup(){
         log.info("signup view render");
         return signupPath;
     }
@@ -92,6 +100,7 @@ public class MemberController {
         request.getParameterNames().asIterator()
                 .forEachRemaining(param -> {
                     if(request.getParameter(param) == null){
+                        log.warn("parameterNull");
                         result.set(true);
                     }
                 });
