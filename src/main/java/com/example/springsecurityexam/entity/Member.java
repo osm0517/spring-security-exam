@@ -49,14 +49,14 @@ public class Member {
     @Column(nullable = false)
     private RoleType auth;
 
-    @Column(name = "created-date", insertable = false, updatable = false)
+    @Column(name = "created_date", insertable = false, updatable = false, nullable = false)
     private Date createdDate;
 
-    @Column(name = "updated-date", insertable = false, updatable = false)
+    @Column(name = "updated_date", insertable = false, updatable = false, nullable = false)
     private Date updatedDate;
 
     @Setter
-    @Column(name = "stop-state")
+    @Column(name = "stop_state", insertable = false, nullable = false)
     private String stopState;
 
     public Member(String userId, String password, String name, RoleType auth){
