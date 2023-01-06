@@ -3,7 +3,10 @@ package com.example.springsecurityexam.entity;
 import com.example.springsecurityexam.enumdata.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -11,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @NoArgsConstructor
 @Entity
 @Table(name = "user")
-public class Member {
+public class Member{
 
     /**
      * testCode를 작성할 때 보다 쉽게 작성을 하기 위함
