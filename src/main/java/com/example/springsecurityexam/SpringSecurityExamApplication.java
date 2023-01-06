@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:/META-INF/application-local.properties")
 public class SpringSecurityExamApplication {
 
 	public static void main(String[] args) {
