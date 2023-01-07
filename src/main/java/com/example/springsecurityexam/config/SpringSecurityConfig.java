@@ -14,8 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SpringSecurityConfig {
 
-    @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
+
+    public SpringSecurityConfig(CustomOAuth2UserService customOAuth2UserService){
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
 
 
     // 암호화에 사용하는 class를 bean으로 등록해서 사용
@@ -36,10 +39,10 @@ public class SpringSecurityConfig {
 //                    .loginPage("/login").permitAll()
 //                    .loginProcessingUrl("/login-proc")
 //                .and()
-                .oauth2Login()
-                .loginPage("/login")
-//                .userInfoEndpoint()
-//                .userService(customOAuth2UserService)
+                    .oauth2Login()
+                    .loginPage("/login")
+                    .userInfoEndpoint()
+                    .userService(customOAuth2UserService)
         ;
         return http.build();
     }

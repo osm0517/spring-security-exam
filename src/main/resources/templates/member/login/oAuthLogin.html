@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <title> 로그인 </title>
+  <link rel="stylesheet" href="css/basic.css">
+</head>
+<body>
+<div class="login-div">
+  <div class="test-div" style="height:30px" onclick="dataTest()">
+
+  </div>
+</div>
+<script th:inline="javascript">
+  console.log(4);
+  function dataTest() {
+    $.ajax({
+        url: "/test",
+        data: { "data" : "testData" },
+        type:"POST",
+    }).done(function () {
+        console.log("send success");
+    });
+  }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>

@@ -3,12 +3,8 @@ package com.example.springsecurityexam.entity;
 import com.example.springsecurityexam.enumdata.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 @NoArgsConstructor
@@ -23,7 +19,7 @@ public class Member{
      * @return
      */
     public Member createUserMember(String userId){
-        return new Member(userId, "testPwd", "testName", RoleType.USER);
+        return new Member(userId, "testPwd", "testName", "testEmail", RoleType.USER);
     }
 
     /**
@@ -32,7 +28,7 @@ public class Member{
      * @return
      */
     public Member createAdminMember(String userId){
-        return new Member(userId, "testPwd", "testName", RoleType.ADMIN);
+        return new Member(userId, "testPwd", "testName", "testEmail", RoleType.ADMIN);
     }
 
     @Id
@@ -48,6 +44,9 @@ public class Member{
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private String email;
+
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
     private RoleType auth;
@@ -62,10 +61,11 @@ public class Member{
     @Column(name = "stop_state", insertable = false, nullable = false)
     private String stopState;
 
-    public Member(String userId, String password, String name, RoleType auth){
+    public Member(String userId, String password, String name, String email, RoleType auth){
         this.userId = userId;
         this.password = password;
         this.name = name;
+        this.email = email;
         this.auth = auth;
     }
 }

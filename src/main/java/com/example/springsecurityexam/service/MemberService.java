@@ -62,7 +62,7 @@ public class MemberService {
 //        암호화가 된 비밀번호
         String password = encoder.encode(inputPassword);
 //        암호화가 된 비밀번호로 다시 만든 객체
-        return new Member(member.getUserId(), password, member.getName(), RoleType.USER);
+        return new Member(member.getUserId(), password, member.getName(), member.getEmail(), RoleType.USER);
     }
 
     /**

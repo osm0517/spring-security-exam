@@ -32,8 +32,22 @@ public class MemberController {
 
     @GetMapping("/login")
     public String login(){
-        log.info("login view render");
+        log.debug("login view render");
         return loginPath;
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "/member/login/oAuthLogin";
+    }
+
+    @PostMapping("/test")
+    @ResponseBody
+    public void postTest(@RequestBody String data){
+        System.out.println("data = " + data);
+        log.debug("data send test result = {}", data);
+        log.debug("ajax test");
+
     }
 
     @PostMapping("/login")
@@ -46,7 +60,7 @@ public class MemberController {
         if(parameterNullCheck(request)){
             return loginFailPath;
         } else {
-            Member member = new Member(userId, password, null, null);
+            Member member = new Member(userId, password, null, null, null);
 
             if(memberService.login(member)){
                 log.debug("login success");
@@ -68,6 +82,7 @@ public class MemberController {
             @RequestParam("userId") String userId,
             @RequestParam("password") String password,
             @RequestParam("name") String name,
+            @RequestParam("email") String email,
             Model model,
             HttpServletRequest request
     ){
@@ -77,7 +92,7 @@ public class MemberController {
             return signupResultPath;
         }else {
 //            given
-            Member member = new Member(userId, password, name, RoleType.USER);
+            Member member = new Member(userId, password, name, email, RoleType.USER);
 //            when
             if(memberService.signup(member)){
 //            then
