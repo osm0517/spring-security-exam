@@ -20,13 +20,6 @@ public class SpringSecurityConfig {
         this.customOAuth2UserService = customOAuth2UserService;
     }
 
-
-    // 암호화에 사용하는 class를 bean으로 등록해서 사용
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

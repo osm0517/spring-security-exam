@@ -27,8 +27,11 @@ public class MemberController {
 
 //    --- view path end ---
 
-    @Autowired
     private MemberService memberService;
+
+    public MemberController(MemberService memberService){
+        this.memberService = memberService;
+    }
 
     @GetMapping("/login")
     public String login(){
@@ -37,8 +40,11 @@ public class MemberController {
     }
 
     @GetMapping("/test")
-    public String test(){
-        return "/member/login/oAuthLogin";
+    public void test(){
+        log.debug("test Debug");
+        log.info("test Debug");
+        log.warn("test Debug");
+        log.error("test Debug");
     }
 
     @PostMapping("/test")

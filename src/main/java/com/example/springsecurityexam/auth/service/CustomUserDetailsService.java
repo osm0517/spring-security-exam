@@ -11,8 +11,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
     JPAMemberRepository memberRepository;
+
+    public CustomUserDetailsService(JPAMemberRepository memberRepository){
+        this.memberRepository = memberRepository;
+    }
 
     /**
      * userId 를 파라미터로 받아서 repository 에서 계정을 받음

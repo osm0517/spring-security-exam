@@ -13,11 +13,14 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MemberService {
 
-    @Autowired
     private JPAMemberRepository memberRepository;
 
-    @Autowired
     private BCryptPasswordEncoder encoder;
+
+    public MemberService(JPAMemberRepository memberRepository, BCryptPasswordEncoder encoder){
+        this.memberRepository = memberRepository;
+        this.encoder = encoder;
+    }
 
     /**
      * 회원가입 로직
