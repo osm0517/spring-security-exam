@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         String uri = userRequest.getClientRegistration().getRegistrationId();
+        OAuth2AccessToken token = userRequest.getAccessToken();
+        log.debug("oauth2 token = {}", token);
+        log.debug("access token = {}", userRequest.getAccessToken().toString());
+        userRequest.getAdditionalParameters().forEach(
+                (key, value) -> log.debug("key = {}, value = {}", key, value)
+        );
+        log.debug("token value = {}",userRequest.getAccessToken().getTokenValue());
+        log.debug("scope = {}", userRequest.getAccessToken().getScopes().toString());
+
 
         OAuth2UserInfo userInfo = setUserInfo(uri, oAuth2User);
 //        기본적으로 저장되는 정보

@@ -45,14 +45,17 @@ public class MemberService {
      * @param member
      * @return
      */
-    public boolean login(Member member){
+    public Member login(Member member){
 //        사용자가 입력한 비밀번호(평문)
         String userId = member.getUserId();
         String inputPassword = member.getPassword();
 
         Member findResult = memberRepository.findByUserId(userId);
 
-        return encoder.matches(inputPassword, findResult.getPassword());
+        if (encoder.matches(inputPassword, findResult.getPassword())){
+            return findResult;
+        }
+        return null;
     }
 
     /**

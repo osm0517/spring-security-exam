@@ -1,10 +1,15 @@
 package com.example.springsecurityexam.controller;
 
+import com.example.springsecurityexam.config.JWTConfig;
+import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.entity.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.service.MemberService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +32,26 @@ public class MemberController {
 
     private MemberService memberService;
 
-    public MemberController(MemberService memberService){
+    private JWTConfig jwtConfig;
+
+    private CookieUtils cookieUtils;
+
+    @Value("${jwt.access_token_name}")
+    private String accessTokenName;
+
+    @Value("${jwt.refresh_token_name}")
+    private String refreshTokenName;
+
+//    @Value("${jwt.access_expire_time}")
+    private long accessExpireTime = 1800000;
+
+//    @Value("${jwt.refresh_expire_time}")
+    private long refreshExpireTime = 1209600000;
+
+    public MemberController(MemberService memberService, JWTConfig jwtConfig, CookieUtils cookieUtils){
+        this.jwtConfig = jwtConfig;
         this.memberService = memberService;
+        this.cookieUtils = cookieUtils;
     }
 
     @GetMapping("/login")
@@ -56,9 +79,10 @@ public class MemberController {
 
     @PostMapping("/login")
     public String loginProcess(
-            @RequestParam("userId") String userId,
-            @RequestParam("password") String password,
-            HttpServletRequest request
+            String userId,
+            String password,
+            HttpServletRequest request,
+            HttpServletResponse response
     ){
 //        log.debug("error test");
         if(parameterNullCheck(request)){
@@ -66,8 +90,14 @@ public class MemberController {
         } else {
             Member member = new Member(userId, password, null, null, null);
 
-            if(memberService.login(member)){
+            Member loginResult = memberService.login(member);
+            if (loginResult != null) {
                 log.debug("login success");
+                response.addCookie(cookieUtils.setCookie(
+                        refreshTokenName,
+                        jwtConfig.createRefreshToken(userId),
+                        refreshExpireTime
+                        ));
                 return "redirect:/";
             }
             log.debug("login fail");
