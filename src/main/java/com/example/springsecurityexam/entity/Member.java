@@ -33,9 +33,11 @@ public class Member{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @OneToOne
     private int id;
 
     @Column(nullable = false, unique = true)
+    @OneToOne
     private String userId;
 
     @Column(nullable = false)
