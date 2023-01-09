@@ -3,11 +3,8 @@ package com.example.springsecurityexam.auth.service;
 import com.example.springsecurityexam.auth.CustomUserDetails;
 import com.example.springsecurityexam.entity.Member;
 import com.example.springsecurityexam.repository.JPAMemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 
 public class CustomUserDetailsService implements UserDetailsService {
 

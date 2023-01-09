@@ -1,5 +1,6 @@
 package com.example.springsecurityexam.auth.service;
 
+import com.example.springsecurityexam.auth.OAuth2UserInfo;
 import com.example.springsecurityexam.entity.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.repository.JPAMemberRepository;
@@ -33,17 +34,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         log.debug("oauth2 loadUser");
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
+
+        String uri = userRequest.getClientRegistration().getRegistrationId();
+
+        OAuth2UserInfo userInfo = setUserInfo(uri, oAuth2User);
 //        기본적으로 저장되는 정보
         String email = "defaultEmail";
         String name = "defaultName";
         String password = "";
 
 //        attributes 로 어떤 값이 넘어오는지 확인
-//        Map<String, Object> attributes = oAuth2User.getAttributes();
-//        attributesCheckSout(attributes);
+//        attributesCheckSout(userInfo.getAttributes());
 
-        String providerId = Objects.requireNonNull(oAuth2User.getAttribute("id")).toString(); // 임의의 숫자배열로 이루어진 id
-        String userId = "kakao_"+providerId;  			// 사용자가 입력한 적은 없지만 만들어준다
+        String providerId = userInfo.getProviderId(); // 임의의 숫자배열로 이루어진 id
+        String userId = uri + "_" + providerId;  			// 사용자가 입력한 적은 없지만 만들어준다
 
         String uuid = UUID.randomUUID().toString().substring(0, 6);
         try {
@@ -52,10 +56,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             log.error("password encode input null");
         }
         try {
-            Map<String, Object> accountMap = oAuth2User.getAttribute("kakao_account");
-            email = Objects.requireNonNull(accountMap).get("email").toString();
-            Map<String, Object> profile = (Map<String, Object>) accountMap.get("profile");
-            name = Objects.requireNonNull(profile).get("nickname").toString();
+            email = userInfo.getEmail();
+            name = userInfo.getName();
         }catch (NullPointerException e){
             log.error("email or nickname null \n email = {}, nickname = {}", email, name);
         }
@@ -75,12 +77,30 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     /**
+     * uri를 체크해서 처리해줄 수 있는 handler를 return 해줌
+     * @param uri
+     * @return OAuth2UserInfo
+     */
+    private static OAuth2UserInfo setUserInfo(String uri, OAuth2User oAuth2User) {
+        OAuth2UserInfo userInfo;
+        log.debug("OAuth2UserInfo uri = {}", uri);
+        if (Objects.equals(uri, "kakao")){
+            userInfo = new KakaoOAuth2UserInfo(oAuth2User);
+        } else if (Objects.equals(uri, "google")) {
+            userInfo = new GoogleOAuth2UserInfo(oAuth2User);
+        }else {
+            userInfo = new NaverOAuth2UserInfo(oAuth2User);
+        }
+        return userInfo;
+    }
+
+    /**
      * attributes 에 어떤 정보가 들어오고 어떻게 사용을 할지를 판단하기 위해서 사용
      * @param attributes
      */
     private static void attributesCheckSout(Map<String, Object> attributes) {
         attributes.forEach((name, value) -> {
-            System.out.println(name + "," + value);
+            log.debug(name + "," + value);
         });
     }
 
