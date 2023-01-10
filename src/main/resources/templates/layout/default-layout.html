@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html lagn="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+
+<!--    &lt;!&ndash; config fragment 사용 &ndash;&gt;-->
+<!--    <th:block th:replace="fragment/config :: configFragment" ></th:block>-->
+</head>
+
+<body>
+<!-- header fragment 사용 -->
+<header th:replace="fragement/header :: header"></header>
+
+<!--
+    content fragment 사용
+    현재 layout을 사용하는 content fragment의 내용을 삽입한다.
+-->
+<th:block layout:fragment="content"></th:block>
+
+<!-- footer fragment 사용 -->
+<footer th:replace="fragement/footer :: footer"> </footer>
+</body>
+
+</html>

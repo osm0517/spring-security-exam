@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
   <meta charset="UTF-8">
   <title> 로그인 </title>
   <link rel="stylesheet" href="css/basic.css">
 </head>
 <body>
-  <div class="login-div">
+  <div class="login-div" layout:fragment="content">
     <div>
       <form action="/login" method="post">
 <!--        사용자 아이디 -->
@@ -16,6 +16,7 @@
         <input placeholder="password" class="password"
         name="password"/>
         <div>
+            <p> 변경5 </p>
           <button type="submit"> 로그인 </button>
           <button class="signup-btn"> 회원가입 </button>
         </div>

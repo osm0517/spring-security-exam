@@ -9,11 +9,13 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
@@ -59,6 +61,18 @@ public class MemberController {
         log.debug("login view render");
         return loginPath;
     }
+
+//    @GetMapping("/logout")
+//    public String logout(
+//            HttpServletResponse response
+//    ){
+//        log.debug("user logout");
+//
+//        response.addCookie(cookieUtils.setCookie(refreshTokenName, null, 0));
+//        response.addCookie(cookieUtils.setCookie(accessTokenName, null, 0));
+//
+//        return "redirect:/";
+//    }
 
     @GetMapping("/test")
     public void test(){

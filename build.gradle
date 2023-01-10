@@ -18,6 +18,10 @@ dependencies {
 
 //	thymeleaf config
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//	thymeleaf layout dependency
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+//	thymeleaf security dependency
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
 //	spring web config
 	implementation 'org.springframework.boot:spring-boot-starter-web'

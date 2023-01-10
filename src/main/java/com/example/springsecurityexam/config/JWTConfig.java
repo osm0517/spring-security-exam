@@ -100,25 +100,33 @@ public class JWTConfig {
      * @return token 값
      */
     public String resolveAccessToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        String accessToken = null;
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(accessTokenName)){
-                accessToken = cookie.getValue();
+        try {
+            Cookie[] cookies = request.getCookies();
+            String accessToken = null;
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(accessTokenName)) {
+                    accessToken = cookie.getValue();
+                }
             }
+            return accessToken;
+        }catch (NullPointerException e){
+            return null;
         }
-        return accessToken;
     }
 
     public String resolveRefreshToken(HttpServletRequest request) {
-        Cookie[] cookies = request.getCookies();
-        String refreshToken = null;
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(refreshTokenName)){
-                refreshToken = cookie.getValue();
+        try {
+            Cookie[] cookies = request.getCookies();
+            String refreshToken = null;
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(refreshTokenName)) {
+                    refreshToken = cookie.getValue();
+                }
             }
+            return refreshToken;
+        }catch (NullPointerException e){
+            return null;
         }
-        return refreshToken;
     }
 
     /**
@@ -138,7 +146,7 @@ public class JWTConfig {
 
     public boolean validateAccessToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(token);
+            Jws<Claims> claims = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
 //            log.debug("fuck claims = {}", claims);
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {

@@ -41,7 +41,7 @@ public class JwtFilter extends GenericFilterBean {
 //        refresh token 받아오기
         String refreshToken = jwtConfig.resolveRefreshToken((HttpServletRequest) request);
 //        access token 받아오기
-        String accessToken = jwtConfig.resolveRefreshToken((HttpServletRequest) request);
+        String accessToken = jwtConfig.resolveAccessToken((HttpServletRequest) request);
 
 //        access token 만료 안됨
         if(accessToken != null && jwtConfig.validateAccessToken(accessToken)){

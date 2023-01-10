@@ -4,6 +4,7 @@ import com.example.springsecurityexam.auth.service.CustomOAuth2UserService;
 import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,6 +25,12 @@ public class SpringSecurityConfig {
 
     private CookieUtils cookieUtils;
 
+    @Value("${jwt.access_token_name}")
+    private String accessTokenName;
+
+    @Value("${jwt.refresh_token_name}")
+    private String refreshTokenName;
+
     public SpringSecurityConfig(CustomOAuth2UserService customOAuth2UserService, JWTConfig jwtConfig, CookieUtils cookieUtils){
         this.customOAuth2UserService = customOAuth2UserService;
         this.jwtConfig = jwtConfig;
@@ -42,10 +49,15 @@ public class SpringSecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .formLogin().disable()
-                .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)
 //                    .loginPage("/login").permitAll()
 //                    .loginProcessingUrl("/login-proc")
 //                .and()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .deleteCookies(accessTokenName, refreshTokenName)
+                    .logoutSuccessUrl("/")
+                .and()
                     .oauth2Login()
                     .loginPage("/login")
                     .userInfoEndpoint()

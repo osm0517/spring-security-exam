@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>spring security exam</title>
     <link rel="stylesheet" href="css/basic.css">
 </head>
 <body>
+<div th:replace="fragment/header :: header"></div>
+<div layout:fragment="content">
     <div class="login-div">
         <div class="login-div">
             <h2>
-                hello spring security exam
+                hello spring security exam1
             </h2>
         </div>
 <!--        기능을 정리를 해놓자-->
@@ -20,5 +22,6 @@
             </ul>
         </div>
     </div>
+</div>
 </body>
 </html>

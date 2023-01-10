@@ -33,11 +33,11 @@ public class Member{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne
+//    @OneToOne
     private int id;
 
     @Column(nullable = false, unique = true)
-    @OneToOne
+//    @OneToOne
     private String userId;
 
     @Column(nullable = false)

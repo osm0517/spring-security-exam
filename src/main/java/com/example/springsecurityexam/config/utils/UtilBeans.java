@@ -1,5 +1,6 @@
 package com.example.springsecurityexam.config.utils;
 
+import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -11,5 +12,10 @@ public class UtilBeans {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public LayoutDialect layoutDialect() {
+        return new LayoutDialect();
     }
 }
