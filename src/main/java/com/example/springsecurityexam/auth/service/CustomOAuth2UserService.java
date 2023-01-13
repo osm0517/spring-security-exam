@@ -94,7 +94,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
      */
     private static OAuth2UserInfo setUserInfo(String uri, OAuth2User oAuth2User) {
         OAuth2UserInfo userInfo;
+
         log.debug("OAuth2UserInfo uri = {}", uri);
+
         if (Objects.equals(uri, "kakao")){
             userInfo = new KakaoOAuth2UserInfo(oAuth2User);
         } else if (Objects.equals(uri, "google")) {
