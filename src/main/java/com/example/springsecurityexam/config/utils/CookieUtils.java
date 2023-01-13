@@ -23,6 +23,8 @@ public class CookieUtils {
 
         cookie.setMaxAge(Math.toIntExact(maxAge));
         cookie.setHttpOnly(true);
+        cookie.setDomain("localhost");
+        cookie.setPath("/");
 
         return cookie;
     }
