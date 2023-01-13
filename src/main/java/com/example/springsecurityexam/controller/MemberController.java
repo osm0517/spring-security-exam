@@ -9,13 +9,26 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONObject;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import java.net.http.HttpClient;
 import java.security.Principal;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
@@ -43,6 +56,9 @@ public class MemberController {
 
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String clientId;
 
 //    @Value("${jwt.access_expire_time}")
     private long accessExpireTime = 1800000;
@@ -76,10 +92,51 @@ public class MemberController {
 
     @GetMapping("/test")
     public void test(){
-        log.debug("test Debug");
-        log.info("test Debug");
-        log.warn("test Debug");
-        log.error("test Debug");
+        final String kakaoUri = "https://kauth.kakao.com/oauth/authorize?client_id="+
+                clientId+
+                "&redirect_uri="+"http://localhost:8080/login/oauth2/code/kakao"+
+                "&response_type=code";
+        RestTemplate rt = new RestTemplate();
+        String result = rt.getForObject(kakaoUri, String.class);
+        log.debug("인가코드 받기 위한 get");
+        log.debug("result = {}", result);
+    }
+
+    @RequestMapping("/code/kakao")
+    public void oauthKakao(
+            String code,
+            HttpServletResponse response
+    ){
+        log.debug("login oauth2 redirect uri");
+        log.debug("client id = {}", clientId);
+        log.debug("code = {}", code);
+
+        final String kakaoUri = "https://kauth.kakao.com";
+
+        WebClient client = WebClient.builder().
+                defaultHeader("Content-type" , "application/x-www-form-urlencoded;charset=utf-8")
+                .baseUrl(kakaoUri)
+                .build();
+
+        MultiValueMap<String, String> request = new LinkedMultiValueMap<>();
+        request.put("grant_type", Collections.singletonList("authorization_code"));
+        request.put("client_id", Collections.singletonList(clientId));
+        request.put("redirect_uri", Collections.singletonList("http://localhost:8080/code/kakao"));
+        request.put("code", Collections.singletonList(code));
+
+        Mono<JSONObject> results = client.post()
+                .uri("/oauth/token")
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(request))
+                .retrieve()
+                .bodyToMono(JSONObject.class);
+
+        results.subscribe(result -> {
+            log.debug("post result = {}", result);
+        });
+
+        log.debug("token 받아보자잇");
+        log.debug("results = {}", results);
     }
 
     @PostMapping("/test")

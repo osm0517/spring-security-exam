@@ -38,6 +38,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         String uri = userRequest.getClientRegistration().getRegistrationId();
         OAuth2AccessToken token = userRequest.getAccessToken();
+
+//        ----- parameter 가 다 잘 들어왔는지 확인 start -----
         log.debug("oauth2 token = {}", token);
         log.debug("access token = {}", userRequest.getAccessToken().toString());
         userRequest.getAdditionalParameters().forEach(
@@ -45,29 +47,27 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         );
         log.debug("token value = {}",userRequest.getAccessToken().getTokenValue());
         log.debug("scope = {}", userRequest.getAccessToken().getScopes().toString());
-
+//        ----- parameter 가 다 잘 들어왔는지 확인 end -----
 
         OAuth2UserInfo userInfo = setUserInfo(uri, oAuth2User);
 //        기본적으로 저장되는 정보
         String email = "defaultEmail";
         String name = "defaultName";
-        String password = "";
 
 //        attributes 로 어떤 값이 넘어오는지 확인
 //        attributesCheckSout(userInfo.getAttributes());
 
         String providerId = userInfo.getProviderId(); // 임의의 숫자배열로 이루어진 id
-        String userId = uri + "_" + providerId;  			// 사용자가 입력한 적은 없지만 만들어준다
+        String userId = uri + "_" + providerId;  	  // 사용자가 입력한 적은 없지만 만들어준다
 
         String uuid = UUID.randomUUID().toString().substring(0, 6);
+        String password = encoder.encode("password" + uuid); // 사용자가 입력한 적은 없지만 만들어준다
+
         try {
-            password = encoder.encode("password" + uuid); // 사용자가 입력한 적은 없지만 만들어준다
-        }catch (NullPointerException e){
-            log.error("password encode input null");
-        }
-        try {
+
             email = userInfo.getEmail();
             name = userInfo.getName();
+
         }catch (NullPointerException e){
             log.error("email or nickname null \n email = {}, nickname = {}", email, name);
         }
@@ -82,6 +82,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             member = new Member(userId, password, name, email, role);
             memberRepository.save(member);
         }
+        OAuth2UserDetails userDetails = new OAuth2UserDetails(member, oAuth2User.getAttributes());
 
         return new OAuth2UserDetails(member, oAuth2User.getAttributes());
     }
