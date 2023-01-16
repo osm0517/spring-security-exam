@@ -1,6 +1,6 @@
 package com.example.springsecurityexam.auth;
 
-import com.example.springsecurityexam.entity.Member;
+import com.example.springsecurityexam.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

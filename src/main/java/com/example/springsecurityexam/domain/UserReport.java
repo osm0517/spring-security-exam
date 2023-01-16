@@ -1,4 +1,4 @@
-package com.example.springsecurityexam.entity;
+package com.example.springsecurityexam.domain;
 
 import jakarta.persistence.*;
 

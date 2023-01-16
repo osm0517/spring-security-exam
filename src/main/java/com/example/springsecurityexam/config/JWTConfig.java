@@ -2,8 +2,8 @@ package com.example.springsecurityexam.config;
 
 import com.example.springsecurityexam.auth.CustomUserDetails;
 import com.example.springsecurityexam.auth.service.CustomUserDetailsService;
-import com.example.springsecurityexam.entity.Member;
-import com.example.springsecurityexam.repository.JPAMemberRepository;
+import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import java.lang.constant.Constable;
 import java.util.*;
 
 @Configuration
@@ -39,9 +38,9 @@ public class JWTConfig {
 
     private final CustomUserDetailsService userDetailsService;
 
-    private final JPAMemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    public JWTConfig(CustomUserDetailsService userDetailsService, JPAMemberRepository memberRepository) {
+    public JWTConfig(CustomUserDetailsService userDetailsService, MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
         this.userDetailsService = userDetailsService;
     }

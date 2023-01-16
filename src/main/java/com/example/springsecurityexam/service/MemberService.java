@@ -1,10 +1,9 @@
 package com.example.springsecurityexam.service;
 
-import com.example.springsecurityexam.entity.Member;
+import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
-import com.example.springsecurityexam.repository.JPAMemberRepository;
+import com.example.springsecurityexam.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +12,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MemberService {
 
-    private JPAMemberRepository memberRepository;
+    private MemberRepository memberRepository;
 
     private BCryptPasswordEncoder encoder;
 
-    public MemberService(JPAMemberRepository memberRepository, BCryptPasswordEncoder encoder){
+    public MemberService(MemberRepository memberRepository, BCryptPasswordEncoder encoder){
         this.memberRepository = memberRepository;
         this.encoder = encoder;
     }

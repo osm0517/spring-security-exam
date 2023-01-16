@@ -1,27 +1,22 @@
 package com.example.springsecurityexam.repository;
 
-import com.example.springsecurityexam.entity.Member;
+import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
-class JPAMemberRepositoryTest {
+class MemberRepositoryTest {
 
     @Autowired
-    JPAMemberRepository memberRepository;
+    MemberRepository memberRepository;
 
     @AfterEach
     void clearRepo(){

@@ -1,9 +1,9 @@
 package com.example.springsecurityexam.auth.service;
 
 import com.example.springsecurityexam.auth.OAuth2UserInfo;
-import com.example.springsecurityexam.entity.Member;
+import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
-import com.example.springsecurityexam.repository.JPAMemberRepository;
+import com.example.springsecurityexam.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,13 +21,13 @@ import java.util.UUID;
 @Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    public CustomOAuth2UserService(BCryptPasswordEncoder encoder, JPAMemberRepository memberRepository){
+    public CustomOAuth2UserService(BCryptPasswordEncoder encoder, MemberRepository memberRepository){
         this.encoder = encoder;
         this.memberRepository = memberRepository;
     }
     BCryptPasswordEncoder encoder;
 
-    JPAMemberRepository memberRepository;
+    MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {

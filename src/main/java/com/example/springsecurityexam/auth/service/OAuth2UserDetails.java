@@ -1,6 +1,6 @@
 package com.example.springsecurityexam.auth.service;
 
-import com.example.springsecurityexam.entity.Member;
+import com.example.springsecurityexam.domain.Member;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;

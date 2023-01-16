@@ -1,8 +1,8 @@
 package com.example.springsecurityexam.auth.service;
 
 import com.example.springsecurityexam.auth.CustomUserDetails;
-import com.example.springsecurityexam.entity.Member;
-import com.example.springsecurityexam.repository.JPAMemberRepository;
+import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    JPAMemberRepository memberRepository;
+    MemberRepository memberRepository;
 
-    public CustomUserDetailsService(JPAMemberRepository memberRepository){
+    public CustomUserDetailsService(MemberRepository memberRepository){
         this.memberRepository = memberRepository;
     }
 

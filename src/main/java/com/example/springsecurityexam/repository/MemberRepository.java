@@ -1,23 +1,24 @@
 package com.example.springsecurityexam.repository;
 
-import com.example.springsecurityexam.entity.Member;
+import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.enumdata.RoleType;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
 
+@Repository
+public interface MemberRepository extends JpaRepository<Member, Integer> {
 
-public interface MemberRepository {
+    Member save(Member member);
 
-    public Member save(Member member);
+    Member findById(int id);
 
-    public Optional<Member> findById(String name);
+    List<Member> findByAuth(RoleType auth);
 
-    public Optional<Member> findByName(AtomicLong id);
+    List<Member> findAll();
 
-//    public Member login(Member member);
-
-    public void delete(Member member);
-
-    public List<Member> findAll();
+    Member findByUserId(String userId);
+    @Override
+    void deleteAllInBatch();
 }
