@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @NoArgsConstructor
 @Entity
@@ -27,6 +29,12 @@ public class Item {
 
     @Column(nullable = false)
     private int producer;
+
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Date createdDate;
+
+    @Column(nullable = false, insertable = false, updatable = false)
+    private Date updatedDate;
 
     @Builder
     public Item(String itemName, int price, int quantity){
