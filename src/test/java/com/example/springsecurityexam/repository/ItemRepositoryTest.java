@@ -27,7 +27,7 @@ class ItemRepositoryTest {
     @DisplayName("item을 저장")
     void save() {
 //        given
-        Item item = new Item("itemA", 1000, 2, 3);
+        Item item = new Item("itemA", 1000, 2);
 
 //        when
         Item savedItem = repository.save(item);
@@ -41,9 +41,9 @@ class ItemRepositoryTest {
     @DisplayName("판매자(본인)의 id로 items list를 찾음")
     void findByProducer() {
 //        given
-        Item item1 = new Item("item1", 1000, 2, 1);
-        Item item2 = new Item("item2", 1000, 2, 1);
-        Item item3 = new Item("item3", 1000, 2, 2);
+        Item item1 = new Item("item1", 1000, 2);
+        Item item2 = new Item("item2", 1000, 2);
+        Item item3 = new Item("item3", 1000, 2);
 
 //        when
         repository.save(item1);
@@ -65,8 +65,8 @@ class ItemRepositoryTest {
     @DisplayName("수량 체크")
     void findQuantityById() {
 //        given
-        Item item1 = new Item("item1", 1000, 2, 1);
-        Item item2 = new Item("item2", 1000, 1, 1);
+        Item item1 = new Item("item1", 1000, 2);
+        Item item2 = new Item("item2", 1000, 1);
 
 //        when
         Item savedItem = repository.save(item1);
@@ -83,9 +83,9 @@ class ItemRepositoryTest {
     @DisplayName("모든 품목 목록을 찾음")
     void findAll() {
 //        given
-        Item item1 = new Item("item1", 1000, 2, 1);
-        Item item2 = new Item("item2", 1000, 2, 1);
-        Item item3 = new Item("item3", 1000, 2, 2);
+        Item item1 = new Item("item1", 1000, 2);
+        Item item2 = new Item("item2", 1000, 2);
+        Item item3 = new Item("item3", 1000, 2);
 
 //        when
         repository.save(item1);
@@ -106,7 +106,7 @@ class ItemRepositoryTest {
     @Test
     void delete() {
         //        given
-        Item item1 = new Item("item1", 1000, 2, 1);
+        Item item1 = new Item("item1", 1000, 2);
 
 //        when
         repository.save(item1);

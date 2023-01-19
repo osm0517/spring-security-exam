@@ -16,18 +16,26 @@ xmlns:th="http://www.thymeleaf.org">
     <th> 상품명 </th>
     <th> 상품가격 </th>
     <th> 수량 </th>
-    <tr onclick="location.href='item.html'">
-        <td> ex1 </td>
-        <td> ex1 </td>
-        <td> ex1 </td>
-        <td> ex1 </td>
-    </tr>
-    <tr onclick="location.href='item.html'">
-        <td> ex2 </td>
-        <td> ex2 </td>
-        <td> ex2 </td>
-        <td> ex2 </td>
+<!--    <tr onclick="location.href='item.html'">-->
+<!--        <td> ex1 </td>-->
+<!--        <td> ex1 </td>-->
+<!--        <td> ex1 </td>-->
+<!--        <td> ex1 </td>-->
+<!--    </tr>-->
+<!--    <tr onclick="location.href='item.html'">-->
+<!--        <td> ex2 </td>-->
+<!--        <td> ex2 </td>-->
+<!--        <td> ex2 </td>-->
+<!--        <td> ex2 </td>-->
+<!--    </tr>-->
+    <tr th:each="item : ${items}">
+        <td th:text="${item.id}"> emptyId </td>
+        <td th:text="${item.itemName}"> emptyName </td>
+        <td th:text="${item.price}"> emptyPrice </td>
+        <td th:text="${item.quantity}"> emptyQuantity </td>
     </tr>
 </table>
+<button type="button"  onclick="location.href='./addForm.hrml'"
+        th:onclick="|location.href='@{/items/add}'|"> 상품 등록 </button>
 </body>
 </html>

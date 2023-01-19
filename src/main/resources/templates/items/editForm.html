@@ -11,27 +11,28 @@
 </head>
 <body>
 <h2> 상품 수정 </h2>
-<form action="item.html" method="post">
+<form action="item.html" th:action th:object="${updateItem}" method="post">
     <div>
         <label> 상품ID </label>
-        <input readonly value="1">
+        <input readonly value="1" th:value="${item.id}">
     </div>
     <div>
         <label> 상품명 </label>
-        <input placeholder="상품명을 입력해주세요" name="itemName">
+        <input placeholder="상품명을 입력해주세요" name="itemName" value="1" th:value="${item.itemName}">
     </div>
     <div>
         <label> 가격 </label>
-        <input placeholder="가격을 입력해주세요" name="price">
+        <input placeholder="가격을 입력해주세요" name="price" value="1" th:value="${item.price}">
     </div>
     <div>
         <label> 수량 </label>
-        <input placeholder="수량을 입력해주세요" name="quantity">
+        <input placeholder="수량을 입력해주세요" name="quantity" value="1" th:value="${item.quantity}">
     </div>
-</form>
-<div>
     <button type="submit"> 상품 수정 </button>
-    <button onclick="location.href='items.html'" type="button"> 취소 </button>
-</div>
+    <button onclick="location.href='items.html'"
+            th:onclick="|location.href='@{/items}'|" type="button"> 목록으로 </button>
+    <button onclick="location.href='items.html'"
+            th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button"> 취소 </button>
+</form>
 </body>
 </html>

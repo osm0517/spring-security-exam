@@ -10,14 +10,20 @@
     <title>Document</title>
 </head>
 <body>
+<script>
+    if (${item.itemName}==null){
+        alert(1);
+    }
+</script>
 <h2> 상품 상세 </h2>
-<div><p> 상품 ID </p></div>
-<div><p> 상품명 </p></div>
-<div><p> 상품가격 </p></div>
-<div><p> 수량 </p></div>
+<div><input th:value="${item.id}" value="1" readonly> 상품 ID </input></div>
+<div><input th:value="${item.itemName}" value="ex1" readonly> 상품명 </input></div>
+<div><input th:value="${item.price}" value="1000" readonly> 상품가격 </input></div>
+<div><input th:value="${item.quantity}" value="1" readonly> 수량 </input></div>
 <div>
     <button> 구매 </button>
-    <button> 수정 </button>
+    <button onclick="location.href='./editFrom.html'"
+    th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정 </button>
     <button> 신고 </button>
 </div>
 </body>

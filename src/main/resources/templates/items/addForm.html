@@ -11,23 +11,25 @@
 </head>
 <body>
 <h2> 상품 등록 </h2>
-<form action="item.html" method="post">
+<form action="item.html" th:action th:object="${item}" method="post">
     <div>
         <label> 상품명 </label>
-        <input placeholder="상품명을 입력해주세요" name="itemName">
+        <input type="text" placeholder="상품명을 입력해주세요" name="itemName" id="itemName">
     </div>
     <div>
         <label> 가격 </label>
-        <input placeholder="가격을 입력해주세요" name="price">
+        <input type="text" placeholder="가격을 입력해주세요" name="price" id="price">
     </div>
     <div>
         <label> 수량 </label>
-        <input placeholder="수량을 입력해주세요" name="quantity">
+        <input type="text" placeholder="수량을 입력해주세요" name="quantity" id="quantity">
     </div>
+    <button type="submit"> 상품 등록 </button>
+    <button onclick="location.href='items.html'"
+            th:onclick="|location.href='@{/items}'|" type="button"> 취소 </button>
 </form>
 <div>
-    <button type="submit"> 상품 등록 </button>
-    <button onclick="location.href='items.html'" type="button"> 취소 </button>
+
 </div>
 </body>
 </html>

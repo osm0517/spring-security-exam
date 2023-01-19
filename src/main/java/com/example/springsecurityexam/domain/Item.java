@@ -1,5 +1,6 @@
 package com.example.springsecurityexam.domain;
 
+import com.example.springsecurityexam.dto.ItemAddDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,12 +19,15 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Setter
     @Column(name = "name", nullable = false)
     private String itemName;
 
+    @Setter
     @Column(nullable = false)
     private int price;
 
+    @Setter
     @Column(nullable = false)
     private int quantity;
 
@@ -41,13 +45,14 @@ public class Item {
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
+        this.producer = 1;
     }
 
-    @Builder
-    public Item(String itemName, int price, int quantity, int producer){
-        this.itemName = itemName;
-        this.price = price;
-        this.quantity = quantity;
-        this.producer = producer;
-    }
+//    @Builder
+//    public Item(String itemName, int price, int quantity, int producer){
+//        this.itemName = itemName;
+//        this.price = price;
+//        this.quantity = quantity;
+//        this.producer = producer;
+//    }
 }
