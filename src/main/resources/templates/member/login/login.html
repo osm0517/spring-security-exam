@@ -1,33 +1,42 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" >
 <head>
-  <meta charset="UTF-8">
-  <title> 로그인 </title>
-  <link rel="stylesheet" href="css/basic.css">
+    <meta charset="UTF-8">
+    <title> 로그인 </title>
+    <link rel="stylesheet" href="../../../static/css/basic.css">
+    <link rel="stylesheet" href="../../../static/css/bootstrap.min.css">
 </head>
 <body>
   <div class="login-div" layout:fragment="content">
     <div>
-      <form action="/login" method="post">
+      <form action="../../index.html" method="post">
 <!--        사용자 아이디 -->
-        <input placeholder="id" class="user-id"
-        name="userId"/><br/>
+          <div>
+              <input placeholder="id" class="user-id"
+                     name="userId"/>
+          </div>
 <!--        사용자 비밀번호(평문) -->
-        <input placeholder="password" class="password"
-        name="password"/>
-        <div>
-            <p> 변경9 </p>
-          <button type="submit"> 로그인 </button>
-          <button class="signup-btn"> 회원가입 </button>
-        </div>
+          <div>
+              <input placeholder="password" class="password"
+                     name="password"/>
+          </div>
+          <div>
+              <button type="submit" class="btn btn-primary"> 로그인 </button>
+              <button type="button" class="btn btn-primary"
+                      onclick="location.href='../signup/signup.html'"> 회원가입 </button>
+          </div>
       </form>
     </div>
-    <a href="https://kauth.kakao.com/oauth/authorize?client_id=607142d2d7fe229e0ca1fecf63974ab7&redirect_uri=http://localhost:8080/code/kakao&response_type=code"> kakao login</a>
-    <a href="/oauth2/authorize/google"> google login </a>
-    <a href="/oauth2/authorize/naver"> naver login </a>
-      <a href="/oauth2/authorize/kakao"> login </a>
-      <br />
-      <br/>
+      <div>
+          <button type="button" class="btn btn-warning"> kakao login </button>
+          <button type="button" class="btn btn-success"> naver login </button>
+      </div>
+<!--    <a href="https://kauth.kakao.com/oauth/authorize?client_id=607142d2d7fe229e0ca1fecf63974ab7&redirect_uri=http://localhost:8080/code/kakao&response_type=code"> kakao login</a>-->
+<!--    <a href="/oauth2/authorize/google"> google login </a>-->
+<!--    <a href="/oauth2/authorize/naver"> naver login </a>-->
+<!--      <a href="/oauth2/authorize/kakao"> login </a>-->
+<!--      <br />-->
+<!--      <br/>-->
   </div>
 </body>
 </html>

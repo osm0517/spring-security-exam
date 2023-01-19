@@ -2,22 +2,26 @@ package com.example.springsecurityexam.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
 @Entity
-@Table(name = "user_report")
-public class UserReport {
+@NoArgsConstructor
+@Table(name = "item_report")
+public class ItemReport {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "user_id")
-    private int userId;
+    @Column(name = "item_id")
+    private int itemId;
 
-    @Column(name = "number_of_report")
+    @Setter
+    @Column(name = "number_of_report", insertable = false)
     private int numberOfReport;
 
     @Column(name = "first_report_date", insertable = false, nullable = false, updatable = false)
@@ -26,7 +30,8 @@ public class UserReport {
     @Column(name = "latest_report_date", insertable = false, nullable = false, updatable = false)
     private Date latestReportDate;
 
-    public UserReport(int userId){
-        this.userId = userId;
+    public ItemReport(int itemId){
+        this.itemId = itemId;
+        this.numberOfReport = 1;
     }
 }
