@@ -85,14 +85,26 @@ public class ItemController {
     @PostMapping("/add")
     public String addItem(
             ItemAddDto item,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            Model model
     ){
         log.debug("modelAttribute = {} {} {}", item.getItemName(), item.getPrice(), item.getQuantity());
+
+        if(checkAddDto(item)){
+
+            model.addAttribute("result", "등록 내용을 다시 확인해주세요!");
+
+            return "/items/fail";
+        }
 
         Item savedItem = itemService.addItem(item);
 
         redirectAttributes.addAttribute("itemId", savedItem.getId());
 
         return "redirect:/items/{itemId}";
+    }
+
+    private static boolean checkAddDto(ItemAddDto item) {
+        return item.getItemName() == null || item.getPrice() == 0 || item.getQuantity() == 0;
     }
 }

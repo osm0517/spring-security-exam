@@ -7,6 +7,7 @@ import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -74,11 +75,12 @@ public class MemberController {
 //    }
 
     @GetMapping("/test")
-    public void test(
-            HttpServletRequest request
+    public String test(
+            HttpServletRequest request,
+            HttpSession session
     ){
-        List<String> uriList = List.of(request.getRequestURI().split("/"));
-        log.debug("uri = {}", uriList);
+
+        return "index.html";
     }
 
 
