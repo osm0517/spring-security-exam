@@ -2,9 +2,17 @@
 
 .login-div {
     border : 2px black solid;
-    width : 40%;
-    margin : 0 auto;
+    width : 30%;
+    margin : 10% auto;
     text-align : center;
+}
+
+.login-div div{
+    margin : 40px auto;
+}
+
+.login-div button{
+    margin : auto 20px;
 }
 
 .oauth-div{
