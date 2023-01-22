@@ -58,6 +58,13 @@ public class MemberService {
     }
 
     /**
+     * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인
+     */
+    public Member checkSession(int userId){
+        return memberRepository.findById(userId);
+    }
+
+    /**
      * 평문을 암호화하는 로직
      * @param member
      * @param inputPassword

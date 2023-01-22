@@ -44,7 +44,7 @@ class ItemReportRepositoryTest {
 //        when
         ItemReport savedItem = repository.save(itemReport);
 
-        savedItem.setNumberOfReport(savedItem.getNumberOfReport()+2);
+//        savedItem.setNumberOfReport(savedItem.getNumberOfReport()+2);
 
         ItemReport resultItem = repository.save(savedItem);
 

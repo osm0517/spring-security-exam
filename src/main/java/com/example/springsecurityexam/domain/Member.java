@@ -1,6 +1,7 @@
 package com.example.springsecurityexam.domain;
 
 import com.example.springsecurityexam.enumdata.RoleType;
+import com.example.springsecurityexam.enumdata.StopState;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -59,9 +60,9 @@ public class Member{
     @Column(name = "updated_date", insertable = false, updatable = false, nullable = false)
     private Date updatedDate;
 
-    @Setter
+    @Enumerated(value = EnumType.STRING)
     @Column(name = "stop_state", insertable = false, nullable = false)
-    private String stopState;
+    private StopState stopState;
 
     public Member(String userId, String password, String name, String email, RoleType auth){
         this.userId = userId;
@@ -69,5 +70,9 @@ public class Member{
         this.name = name;
         this.email = email;
         this.auth = auth;
+    }
+
+    public void changeStopState(StopState state){
+        this.stopState = state;
     }
 }

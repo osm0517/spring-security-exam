@@ -20,7 +20,6 @@ public class ItemReport {
     @Column(name = "item_id")
     private int itemId;
 
-    @Setter
     @Column(name = "number_of_report", insertable = false)
     private int numberOfReport;
 
@@ -33,5 +32,9 @@ public class ItemReport {
     public ItemReport(int itemId){
         this.itemId = itemId;
         this.numberOfReport = 1;
+    }
+
+    public void changeNumber(int number){
+        this.numberOfReport = number;
     }
 }

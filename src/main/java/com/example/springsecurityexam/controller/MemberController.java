@@ -2,6 +2,7 @@ package com.example.springsecurityexam.controller;
 
 import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.config.utils.CookieUtils;
+import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.service.MemberService;
@@ -28,6 +29,8 @@ public class MemberController {
     private final String signupFailPath = "/member/signup/signup-fail";
     private final String loginPath = "/member/login/login";
     private final String loginFailPath = "/member/login/login-fail";
+
+    private final String loginSuccessPath = "/loginHome";
 
 //    --- view path end ---
 
@@ -62,6 +65,12 @@ public class MemberController {
         return loginPath;
     }
 
+    @GetMapping("/login/fail")
+    public String loginFail(){
+        log.debug("login fail");
+        return loginFailPath;
+    }
+
 //    @GetMapping("/logout")
 //    public String logout(
 //            HttpServletResponse response
@@ -74,52 +83,38 @@ public class MemberController {
 //        return "redirect:/";
 //    }
 
-    @GetMapping("/test")
-    public String test(
-            HttpServletRequest request,
-            HttpSession session
-    ){
-
-        return "index.html";
-    }
-
-
-
-
-
-    @PostMapping("/test")
-    @ResponseBody
-    public void postTest(@RequestBody String data){
-        System.out.println("data = " + data);
-        log.debug("data send test result = {}", data);
-        log.debug("ajax test");
-
-    }
-
     @PostMapping("/login")
     public String loginProcess(
             String userId,
             String password,
             HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletResponse response,
+            HttpSession session
     ){
 //        log.debug("error test");
         if(parameterNullCheck(request)){
-            return loginFailPath;
+            return "redirect:/login/fail";
         } else {
             Member member = new Member(userId, password, null, null, null);
 
             Member loginResult = memberService.login(member);
             if (loginResult != null) {
                 log.debug("login success");
-                response.addCookie(cookieUtils.setCookie(
-                        refreshTokenName,
-                        jwtConfig.createRefreshToken(userId),
-                        refreshExpireTime
-                        ));
+//                response.addCookie(cookieUtils.setCookie(
+//                        refreshTokenName,
+//                        jwtConfig.createRefreshToken(userId),
+//                        refreshExpireTime
+//                        ));
+
+                HttpSession requestSession = request.getSession();
+                requestSession.setAttribute(SessionUtils.session_login_id, loginResult.getId());
+                requestSession.setAttribute(SessionUtils.session_login_username, loginResult.getName());
+
                 return "redirect:/";
             }
+
             log.debug("login fail");
+
             return "redirect:/login";
         }
     }

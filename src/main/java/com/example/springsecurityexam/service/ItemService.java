@@ -36,9 +36,9 @@ public class ItemService {
         log.debug("addItem item = {}", itemAddDto);
 
         Item item = itemRepository.findById(itemId);
-        item.setItemName(itemAddDto.getItemName());
-        item.setPrice(itemAddDto.getPrice());
-        item.setQuantity(itemAddDto.getQuantity());
+        item.updateItem(itemAddDto.getItemName(),
+                itemAddDto.getPrice(),
+                itemAddDto.getQuantity());
 
         return itemRepository.save(item);
     }

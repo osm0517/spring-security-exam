@@ -53,7 +53,7 @@ public class ReportService {
             return savedItem;
         }
 //        돼있다면 값만 추가해서 다시 저장
-        reportItem.setNumberOfReport(reportItem.getNumberOfReport()+1);
+        reportItem.changeNumber(reportItem.getNumberOfReport()+1);
         ItemReport savedItem = itemReportRepository.save(reportItem);
 
         if(savedItem == null){
