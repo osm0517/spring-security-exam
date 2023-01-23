@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Integer> {
+public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Member save(Member member);
 
-    Member findById(int id);
+    Member findById(long id);
 
     List<Member> findByAuth(RoleType auth);
 

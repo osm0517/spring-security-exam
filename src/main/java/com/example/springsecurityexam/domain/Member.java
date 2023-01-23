@@ -35,11 +35,9 @@ public class Member{
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne(mappedBy = "userId")
-    @Column(name = "user_id")
-    private int id;
+    private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "user_id", nullable = false, unique = true)
     private String userId;
 
     @Column(nullable = false)
@@ -67,6 +65,9 @@ public class Member{
     @Enumerated(value = EnumType.STRING)
     @Column(name = "stop_state", insertable = false, nullable = false)
     private StopState stopState;
+
+    @Column(name = "number_of_report", insertable = false, nullable = false)
+    private int numberOfReport;
 
     public Member(String userId, String password, String name, String email, RoleType auth){
         this.userId = userId;

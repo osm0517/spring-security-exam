@@ -5,6 +5,7 @@ import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
+import com.example.springsecurityexam.service.ItemService;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +31,8 @@ public class MemberController {
     private final String loginFailPath = "/member/login/login-fail";
 
     private final String loginSuccessPath = "/loginHome";
+    private final String profilePath = "/member/member/profile";
+    private final String producerItemsPath = "/items/producerItems";
 
 //    --- view path end ---
 
@@ -64,10 +67,38 @@ public class MemberController {
         return loginPath;
     }
 
+    @GetMapping("/profile")
+    public String profile(
+            Model model,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("profile view render");
+
+        Member user = memberService.checkSession(userId);
+
+        model.addAttribute("user", user);
+
+        return profilePath;
+    }
+
     @GetMapping("/login/fail")
     public String loginFail(){
         log.debug("login fail");
         return loginFailPath;
+    }
+
+    @GetMapping("/{userId}/items")
+    public String produceItems(
+            Model model,
+            @PathVariable(name = "userId") long userId
+    ){
+        log.debug("produceItems view render");
+
+        Member member = memberService.checkSession(userId);
+
+        model.addAttribute("items", member.getItems());
+
+        return producerItemsPath;
     }
 
 //    @GetMapping("/logout")

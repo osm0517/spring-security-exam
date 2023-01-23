@@ -5,17 +5,16 @@ import lombok.Getter;
 
 import java.util.Date;
 
-@Getter
-@Entity
-@Table(name = "user_report")
+//@Getter
+//@Entity
+//@Table(name = "user_report")
 public class UserReport {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_report_id")
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     private int userId;
 
     @Column(name = "number_of_report")

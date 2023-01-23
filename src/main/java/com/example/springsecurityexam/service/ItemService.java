@@ -1,6 +1,7 @@
 package com.example.springsecurityexam.service;
 
 import com.example.springsecurityexam.domain.Item;
+import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.dto.ItemAddDto;
 import com.example.springsecurityexam.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,10 @@ public class ItemService {
         this.itemRepository = itemRepository;
     }
 
-    public Item addItem(ItemAddDto itemAddDto){
+    public Item addItem(ItemAddDto itemAddDto, Member member){
         log.debug("addItem item = {}", itemAddDto);
 
-        Item item = new Item(itemAddDto.getItemName(), itemAddDto.getPrice(), itemAddDto.getQuantity());
+        Item item = new Item(itemAddDto.getItemName(), itemAddDto.getPrice(), itemAddDto.getQuantity(), member);
 
         return itemRepository.save(item);
     }
@@ -51,5 +52,9 @@ public class ItemService {
     public List<Item> findItems(){
 
         return itemRepository.findAll();
+    }
+
+    public void deleteItem(long itemId){
+        itemRepository.deleteById(itemId);
     }
 }

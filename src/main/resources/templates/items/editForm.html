@@ -1,13 +1,8 @@
 <!doctype html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link th:href="@{/css/bootstrap.min.css}">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <link>
+    <title> 판매 목록 </title>
 </head>
 <body>
 <h2> 상품 수정 </h2>
@@ -30,9 +25,12 @@
     </div>
     <button type="submit"> 상품 수정 </button>
     <button onclick="location.href='items.html'"
-            th:onclick="|location.href='@{/items}'|" type="button"> 목록으로 </button>
+            th:onclick="|location.href='@{/items}'|" type="button" class="btn btn-primary"> 목록으로 </button>
     <button onclick="location.href='items.html'"
-            th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button"> 취소 </button>
+            th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button" class="btn btn-secondary"> 취소 </button>
+</form>
+<form th:action="@{/items/delete/{itemId}(itemId=${item.id})}">
+    <button type="submit" formmethod="post" class="btn btn-danger"> 삭제 </button>
 </form>
 </body>
 </html>

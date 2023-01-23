@@ -34,8 +34,9 @@ public class MemberService {
         Member encodedMember = passwordEncoder(member, inputPassword);
         memberRepository.save(encodedMember);
 
-        Member saveResult = memberRepository.findById(encodedMember.getId());
-        return !saveFalseCheck(saveResult);
+//        Member saveResult = memberRepository.findById(encodedMember.getId());
+//        return !saveFalseCheck(saveResult);
+        return true;
     }
 
     /**
@@ -60,7 +61,7 @@ public class MemberService {
     /**
      * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인
      */
-    public Member checkSession(int userId){
+    public Member checkSession(long userId){
         return memberRepository.findById(userId);
     }
 

@@ -1,13 +1,28 @@
 <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <link>
+    <title> 판매 목록 </title>
 </head>
-<body>
-<h1> producer items </h1>
+<body class="login-div">
+<h1> 나의 판매 목록 </h1>
+<table>
+    <tr>
+        <th> 번호 </th>
+        <th> 이름 </th>
+        <th> 가격 </th>
+        <th> 수량 </th>
+        <th> 수정 </th>
+    </tr>
+    <tr th:each="item, stat : ${items}">
+        <th th:text="${stat.count}"> 번호 </th>
+        <th th:text="${item.itemName}"> 이름 </th>
+        <th th:text="${item.price}"> 가격 </th>
+        <th th:text="${item.quantity}"> 수량 </th>
+        <th><button type="button" class="btn btn-secondary"
+        onclick="location.href='./editForm.html'"
+        th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정하기 </button></th>
+    </tr>
+</table>
 </body>
 </html>

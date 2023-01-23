@@ -1,8 +1,11 @@
 package com.example.springsecurityexam.controller;
 
+import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.Item;
+import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.dto.ItemAddDto;
 import com.example.springsecurityexam.service.ItemService;
+import com.example.springsecurityexam.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +19,11 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequestMapping("/items")
+@RequiredArgsConstructor
 public class ItemController {
 
-    private ItemService itemService;
-
-    @Autowired
-    public ItemController(ItemService itemService){
-        this.itemService = itemService;
-    }
+    private final ItemService itemService;
+    private final MemberService memberService;
 
     @GetMapping
     public String itemsView(
@@ -82,11 +82,26 @@ public class ItemController {
         return "redirect:/items/{itemId}";
     }
 
+    @PostMapping("/delete/{itemId}")
+    public String deleteItem(
+            @PathVariable int itemId,
+            RedirectAttributes redirectAttributes,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+
+    ){
+        itemService.deleteItem(itemId);
+
+        redirectAttributes.addAttribute("userId", userId);
+
+        return "redirect:/{userId}/items";
+    }
+
     @PostMapping("/add")
     public String addItem(
             ItemAddDto item,
             RedirectAttributes redirectAttributes,
-            Model model
+            Model model,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
     ){
         log.debug("modelAttribute = {} {} {}", item.getItemName(), item.getPrice(), item.getQuantity());
 
@@ -96,8 +111,9 @@ public class ItemController {
 
             return "/items/fail";
         }
+        Member member = memberService.checkSession(userId);
 
-        Item savedItem = itemService.addItem(item);
+        Item savedItem = itemService.addItem(item, member);
 
         redirectAttributes.addAttribute("itemId", savedItem.getId());
 

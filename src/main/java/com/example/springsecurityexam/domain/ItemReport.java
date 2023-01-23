@@ -7,19 +7,18 @@ import lombok.Setter;
 
 import java.util.Date;
 
-@Getter
-@Entity
-@NoArgsConstructor
-@Table(name = "item_report")
+//@Getter
+////@Entity
+//@NoArgsConstructor
+//@Table(name = "item_report")
+//@PrimaryKeyJoinColumn(name = "id")
 public class ItemReport {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "item_report_id")
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    private int itemId;
+    private Item item;
 
     @Column(name = "number_of_report", insertable = false)
     private int numberOfReport;
@@ -30,8 +29,11 @@ public class ItemReport {
     @Column(name = "latest_report_date", insertable = false, nullable = false, updatable = false)
     private Date latestReportDate;
 
-    public ItemReport(int itemId){
-        this.itemId = itemId;
+    public ItemReport(Item item){
+        if(item == null){
+            throw new IllegalArgumentException("item object null");
+        }
+        this.item = item;
         this.numberOfReport = 1;
     }
 

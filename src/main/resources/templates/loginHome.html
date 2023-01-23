@@ -2,10 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
     <link>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title> spring security exam </title>
 </head>
 <body>
@@ -16,6 +12,10 @@
         <div><h2 th:text="${user.auth}?: _"> 본인의 권한 </h2></div>
         <div><p> 안녕하세요. <span th:text="${user.name}?: _"> 본인의 이름 </span> </p></div>
         <div>
+            <button type="button" class="btn btn-secondary"
+            onclick="location.href='./items/items.html'"
+            th:onclick="|location.href='@{/profile}'|"> profile </button>
+
             <button type="button" class="btn btn-secondary"
             onclick="location.href='./items/items.html'"
             th:onclick="|location.href='@{/items}'|"> items </button>

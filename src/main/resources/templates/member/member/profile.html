@@ -8,16 +8,16 @@
 <div class="login-div">
     <div>
         <label> 이름 </label>
-        <span> 본인의 이름 </span>
+        <span th:text="${user.name}"> 본인의 이름 </span>
     </div>
     <div>
         <label> 권한 </label>
-        <span> 본인의 권한 </span>
+        <span th:text="${user.auth}"> 본인의 권한 </span>
     </div>
     <div>
         <button type="button" class="btn btn-primary"
         onclick="location.href='../items/producerItems.html'"
-        th:onclick=""> 판매 목록 </button>
+        th:onclick="|location.href='@{/{userId}/items(userId=${user.id})}'|"> 판매 목록 </button>
         <button type="button" class="btn btn-primary"
         onclick="location.href='../items/consumerItems.html'"
         th:onclick=""> 구매 목록 </button>

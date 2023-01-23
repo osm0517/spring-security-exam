@@ -3,10 +3,7 @@ package com.example.springsecurityexam.domain;
 import com.example.springsecurityexam.dto.ItemAddDto;
 import com.example.springsecurityexam.dto.ItemUpdateDto;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,12 +11,12 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "item")
+@EqualsAndHashCode
 public class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @OneToOne(mappedBy = "itemId")
     @Column(name = "item_id")
-    private int id;
+    private Long id;
 
     @Column(name = "name", nullable = false)
     private String itemName;
@@ -31,9 +28,8 @@ public class Item {
     private int quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
-    @Column(nullable = false)
-    private int producer;
+    @JoinColumn(name="producer")
+    private Member producer;
 
     @Column(nullable = false, insertable = false, updatable = false)
     private Date createdDate;
@@ -41,12 +37,18 @@ public class Item {
     @Column(nullable = false, insertable = false, updatable = false)
     private Date updatedDate;
 
-    @Builder
-    public Item(String itemName, int price, int quantity){
+    @Column(name = "number_of_report", insertable = false, nullable = false)
+    private int numberOfReport;
+
+    public Item(String itemName, int price, int quantity, Member member){
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;
-        this.producer = 1;
+        if(member == null){
+            throw new IllegalArgumentException("member object null");
+        }
+        this.producer = member;
+        producer.getItems().add(this);
     }
 
     public void updateItem(String itemName, int price, int quantity){
