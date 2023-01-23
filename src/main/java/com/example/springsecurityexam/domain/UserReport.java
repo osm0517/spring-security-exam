@@ -10,11 +10,12 @@ import java.util.Date;
 @Table(name = "user_report")
 public class UserReport {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_report_id")
     private int id;
 
-    @Column(name = "user_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private int userId;
 
     @Column(name = "number_of_report")

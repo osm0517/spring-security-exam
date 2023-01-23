@@ -5,7 +5,9 @@ import com.example.springsecurityexam.enumdata.StopState;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -32,13 +34,12 @@ public class Member{
         return new Member(userId, "testPwd", "testName", "testEmail", RoleType.ADMIN);
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @OneToOne
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @OneToOne(mappedBy = "userId")
+    @Column(name = "user_id")
     private int id;
 
     @Column(nullable = false, unique = true)
-//    @OneToOne
     private String userId;
 
     @Column(nullable = false)
@@ -59,6 +60,9 @@ public class Member{
 
     @Column(name = "updated_date", insertable = false, updatable = false, nullable = false)
     private Date updatedDate;
+
+    @OneToMany(mappedBy = "producer")
+    private List<Item> items = new ArrayList<>();
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "stop_state", insertable = false, nullable = false)

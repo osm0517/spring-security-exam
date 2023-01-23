@@ -16,8 +16,9 @@ import java.util.Date;
 @Table(name = "item")
 public class Item {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @OneToOne(mappedBy = "itemId")
+    @Column(name = "item_id")
     private int id;
 
     @Column(name = "name", nullable = false)
@@ -29,6 +30,8 @@ public class Item {
     @Column(nullable = false)
     private int quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
     @Column(nullable = false)
     private int producer;
 

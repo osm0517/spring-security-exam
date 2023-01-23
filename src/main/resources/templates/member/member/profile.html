@@ -1,0 +1,35 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <title> profile </title>
+    <link>
+</head>
+<body>
+<div class="login-div">
+    <div>
+        <label> 이름 </label>
+        <span> 본인의 이름 </span>
+    </div>
+    <div>
+        <label> 권한 </label>
+        <span> 본인의 권한 </span>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary"
+        onclick="location.href='../items/producerItems.html'"
+        th:onclick=""> 판매 목록 </button>
+        <button type="button" class="btn btn-primary"
+        onclick="location.href='../items/consumerItems.html'"
+        th:onclick=""> 구매 목록 </button>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary"
+        onclick="location.href='./member/editForm.html'"
+        th:onclick=""> 정보 수정 </button>
+        <button type="button" class="btn btn-danger"
+        onclick="location.href='../items/producerItems.html'"
+        th:onclick=""> 회원 탈퇴 </button>
+    </div>
+</div>
+</body>
+</html>
