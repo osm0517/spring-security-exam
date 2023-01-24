@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragment/headConfig :: headConfig(~{::link},~{::title})">
-  <title> 회원가입 </title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
     <link>
 </head>
 <body>

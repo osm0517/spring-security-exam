@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+<head th:replace="${head}">
 </head>
 <body>
-    <div th:fragment="footer">
-        <h1> footer test </h1>
-    </div>
+<div class="bg-secondary text-white header-div" th:fragment="footer(head)">
+    <h2> FOOTER </h2>
+    <!--        <div sec:authorize="hasRole('USER')">-->
+    <!--            <p> dfsdf </p>-->
+    <!--            <a href="/logout"> logout </a>-->
+    <!--        </div>-->
+    <!--        <p> header test </p>-->
+</div>
 </body>
 </html>

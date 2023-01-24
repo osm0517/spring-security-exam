@@ -7,6 +7,13 @@
     text-align : center;
 }
 
+.header-div{
+    width : 100%;
+    height : 30%;
+    padding : 10px;
+    text-align : center;
+}
+
 .login-div div{
     margin : 40px auto;
 }

@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" >
-<head>
-    <meta charset="UTF-8">
-    <title> 로그인 </title>
-    <link rel="stylesheet" href="../static/css/basic.css"
-          th:href="@{../css/basic.css}">
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css"
-          th:href="@{../css/bootstrap.min.css}">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
 </head>
 <body>
-  <div class="login-div" layout:fragment="content">
+  <div class="login-div">
     <div>
       <form action="../../index.html" th:action method="post">
 <!--        사용자 아이디 -->

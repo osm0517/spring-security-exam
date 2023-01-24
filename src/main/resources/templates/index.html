@@ -1,15 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <link rel="stylesheet" href="../static/css/basic.css"
-          th:href="@{../css/basic.css}">
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css"
-        th:href="@{../css/bootstrap.min.css}">
-    <meta charset="UTF-8">
-    <title>spring security exam</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
 </head>
 <body>
-<div th:replace="~{fragment/header :: header}"></div>
 <div >
     <div class="login-div">
         <div><h2>
