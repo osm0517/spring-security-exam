@@ -4,14 +4,18 @@ import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.dto.PasswordEditDto;
+import com.example.springsecurityexam.dto.UserInfoEditDto;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.service.ItemService;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class MemberController {
 
 //    --- view path start ---
@@ -33,14 +38,16 @@ public class MemberController {
     private final String loginSuccessPath = "/loginHome";
     private final String profilePath = "/member/member/profile";
     private final String producerItemsPath = "/items/producerItems";
+    private final String profileEditPath = "/member/member/editForm";
+    private final String passwordEditPopupPath = "/member/popup/passwordEdit";
 
 //    --- view path end ---
 
-    private MemberService memberService;
+    private final MemberService memberService;
 
-    private JWTConfig jwtConfig;
+    private final JWTConfig jwtConfig;
 
-    private CookieUtils cookieUtils;
+    private final CookieUtils cookieUtils;
 
     @Value("${jwt.access_token_name}")
     private String accessTokenName;
@@ -54,12 +61,6 @@ public class MemberController {
 
 //    @Value("${jwt.refresh_expire_time}")
     private long refreshExpireTime = 1209600000;
-
-    public MemberController(MemberService memberService, JWTConfig jwtConfig, CookieUtils cookieUtils){
-        this.jwtConfig = jwtConfig;
-        this.memberService = memberService;
-        this.cookieUtils = cookieUtils;
-    }
 
     @GetMapping("/login")
     public String login(){
@@ -79,6 +80,32 @@ public class MemberController {
         model.addAttribute("user", user);
 
         return profilePath;
+    }
+
+    @GetMapping("/profile/edit")
+    public String profileEditForm(
+            Model model,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("profile edit form render");
+
+        Member user = memberService.checkSession(userId);
+
+        model.addAttribute("dto", new UserInfoEditDto(user.getName(), user.getEmail()));
+
+        return profileEditPath;
+    }
+
+    @GetMapping("/profile/edit/password/popup")
+    public String passwordEditForm(
+            Model model,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("password edit form render");
+
+        model.addAttribute("dto", new PasswordEditDto());
+
+        return passwordEditPopupPath;
     }
 
     @GetMapping("/login/fail")
@@ -112,6 +139,38 @@ public class MemberController {
 //
 //        return "redirect:/";
 //    }
+
+    /**
+     * 정보 수정 로직을 처리
+     */
+    @PostMapping("/profile/edit")
+    public String profileEdit(
+            @ModelAttribute UserInfoEditDto dto,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+
+        Member member = memberService.updateUserInfo(userId, dto);
+
+        log.debug("name = {}, email = {}", dto.getName(), dto.getEmail());
+
+        return "redirect:/profile";
+    }
+
+    /**
+     * password를 수정함
+     * 수정할 때에 팝업창을 수정 후에 창이 닫혀서 리다이렉트는 안하는 걸로
+     */
+    @PostMapping("/profile/edit/password/popup")
+    public void passwordEdit(
+            @ModelAttribute PasswordEditDto dto,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        try {
+            memberService.updatePassword(userId, dto);
+        }catch(IllegalArgumentException e){
+            log.warn("not match");
+        }
+    }
 
     @PostMapping("/login")
     public String loginProcess(

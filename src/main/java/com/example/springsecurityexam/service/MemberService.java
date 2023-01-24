@@ -1,8 +1,11 @@
 package com.example.springsecurityexam.service;
 
 import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.dto.PasswordEditDto;
+import com.example.springsecurityexam.dto.UserInfoEditDto;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,16 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class MemberService {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    private BCryptPasswordEncoder encoder;
-
-    public MemberService(MemberRepository memberRepository, BCryptPasswordEncoder encoder){
-        this.memberRepository = memberRepository;
-        this.encoder = encoder;
-    }
+    private final BCryptPasswordEncoder encoder;
 
     /**
      * 회원가입 로직
@@ -63,6 +62,34 @@ public class MemberService {
      */
     public Member checkSession(long userId){
         return memberRepository.findById(userId);
+    }
+
+    /**
+     * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인 후
+     * 수정 폼에서 사용할 수 있도록 비밀번호를 평문으로 보내줌
+     */
+    public Member updateUserInfo(long userId, UserInfoEditDto dto){
+        Member member = memberRepository.findById(userId);
+
+        member.changeUserInfo(dto.getName(), dto.getEmail());
+
+        memberRepository.save(member);
+
+        return member;
+    }
+
+    /**
+     * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인 후
+     * password를 수정
+     */
+    public void updatePassword(long userId,PasswordEditDto dto){
+        if(dto.getPassword().equals(dto.getConfirm())){
+            String encodedPassword = encoder.encode(dto.getPassword());
+
+            Member member = memberRepository.findById(userId);
+            member.changePassword(encodedPassword);
+        }
+        throw new IllegalArgumentException("not match password and confirm");
     }
 
     /**

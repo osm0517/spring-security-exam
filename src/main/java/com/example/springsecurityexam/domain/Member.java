@@ -80,4 +80,13 @@ public class Member{
     public void changeStopState(StopState state){
         this.stopState = state;
     }
+
+    public void changePassword(String password){
+        this.password = password;
+    }
+
+    public void changeUserInfo(String name, String email){
+        this.name = name;
+        this.email = email;
+    }
 }

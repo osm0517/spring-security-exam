@@ -1,13 +1,35 @@
 <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
 </head>
 <body>
-<h1> profile edit </h1>
+<div class="login-div">
+    <form action="index.html" th:action th:object="${dto}" method="post">
+        <div>
+            <label for="name"> 이름 </label>
+            <input type="text" th:field="*{name}">
+        </div>
+        <div>
+            <label for="email"> 이메일 </label>
+            <input type="text" th:field="*{email}">
+        </div>
+        <div>
+            <label for="password"> 패스워드 </label>
+            <button type="button"
+            th:onclick="|window.open('@{/profile/edit/password/popup}', 'password edit form',
+            'width=430, height=500')|"> 수정하기 </button>
+        </div>
+        <div>
+            <button type="submit"> 정보 수정 </button>
+            <button type="button"
+            onclick="location.href='./profile.html'"
+            th:onclick="|location.href='@{/profile}'|"> 수정 취소 </button>
+        </div>
+    </form>
+</div>
 </body>
 </html>
