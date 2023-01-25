@@ -1,7 +1,11 @@
 package com.example.springsecurityexam.controller;
 
 import com.example.springsecurityexam.config.utils.CookieUtils;
+import com.example.springsecurityexam.config.utils.SessionUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,8 +20,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Collections;
 
-@Controller @RequestMapping(value = "/code")
+//@Controller @RequestMapping(value = "/code")
 @Slf4j
+@RequiredArgsConstructor
 public class OAuth2LoginController {
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
@@ -51,17 +56,14 @@ public class OAuth2LoginController {
 
 //    ----- base URL end -----
 
-    private CookieUtils cookieUtils;
-
-    public OAuth2LoginController(CookieUtils cookieUtils){
-        this.cookieUtils = cookieUtils;
-    }
+    private final CookieUtils cookieUtils;
 
     @RequestMapping("/{target}")
     public String oauthLogin(
             String code,
             @PathVariable String target,
-            HttpServletResponse response
+            HttpServletResponse response,
+            HttpServletRequest request
     ){
         log.debug("login oauth2 redirect uri");
 
@@ -105,12 +107,14 @@ public class OAuth2LoginController {
 
         log.debug("debug = {}, {}, {}, {}", accessTokenValue, accessTokenExpireTime, refreshTokenValue, refreshTokenExpireTime);
 
-        response.addCookie(cookieUtils.setCookie(accessTokenName,
-                accessTokenValue,
-                accessTokenExpireTime));
-        response.addCookie(cookieUtils.setCookie(refreshTokenName,
-                refreshTokenValue,
-                refreshTokenExpireTime));
+//        response.addCookie(cookieUtils.setCookie(accessTokenName,
+//                accessTokenValue,
+//                accessTokenExpireTime));
+//        response.addCookie(cookieUtils.setCookie(refreshTokenName,
+//                refreshTokenValue,
+//                refreshTokenExpireTime));
+        HttpSession session = request.getSession();
+//        session.setAttribute(SessionUtils.session_login_id,);
 
         return "redirect:/";
 

@@ -15,6 +15,9 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -114,6 +117,12 @@ public class MemberController {
         return loginFailPath;
     }
 
+    @GetMapping("/login/success")
+    public String loginSuccess(){
+        log.debug("login success");
+        return loginSuccessPath;
+    }
+
     @GetMapping("/{userId}/items")
     public String produceItems(
             Model model,
@@ -128,16 +137,32 @@ public class MemberController {
         return producerItemsPath;
     }
 
-//    @GetMapping("/logout")
-//    public String logout(
-//            HttpServletResponse response
+    /**
+     * 일단 로그아웃 로직으로 세션만 삭제하는 걸로 해놓음
+     * 추후에 추가를 해야함
+     */
+    @GetMapping("/logout")
+    public String logout(
+            HttpServletRequest request
+    ){
+        log.debug("user logout");
+
+        HttpSession session = request.getSession(false);
+        session.invalidate();
+
+        return "redirect:/";
+    }
+
+//    @ResponseBody
+//    @GetMapping("/overlap/{type}")
+//    public ResponseEntity<?> overlap(
+//            @PathVariable String type,
+//            @RequestParam String value
 //    ){
-//        log.debug("user logout");
+//        if(type == null){
+//            return new ResponseEntity<>("Type Null", HttpStatus.BAD_REQUEST);
+//        }
 //
-//        response.addCookie(cookieUtils.setCookie(refreshTokenName, null, 0));
-//        response.addCookie(cookieUtils.setCookie(accessTokenName, null, 0));
-//
-//        return "redirect:/";
 //    }
 
     /**
@@ -180,7 +205,7 @@ public class MemberController {
             HttpServletResponse response,
             HttpSession session
     ){
-//        log.debug("error test");
+        log.debug("error test");
         if(parameterNullCheck(request)){
             return "redirect:/login/fail";
         } else {

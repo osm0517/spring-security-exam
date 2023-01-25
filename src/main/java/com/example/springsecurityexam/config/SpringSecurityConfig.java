@@ -1,29 +1,31 @@
 package com.example.springsecurityexam.config;
 
+import com.example.springsecurityexam.auth.handler.FailHandlerImpl;
+import com.example.springsecurityexam.auth.handler.SuccessHandlerImpl;
 import com.example.springsecurityexam.auth.service.CustomOAuth2UserService;
+import com.example.springsecurityexam.auth.service.UserDetailsServiceImpl;
 import com.example.springsecurityexam.config.utils.CookieUtils;
-import com.example.springsecurityexam.config.utils.JwtFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SpringSecurityConfig {
 
-    private CustomOAuth2UserService customOAuth2UserService;
 
-    private JWTConfig jwtConfig;
-
-    private CookieUtils cookieUtils;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final JWTConfig jwtConfig;
+    private final CookieUtils cookieUtils;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final FailHandlerImpl failHandler;
+    private final SuccessHandlerImpl successHandler;
 
     @Value("${jwt.access_token_name}")
     private String accessTokenName;
@@ -31,16 +33,11 @@ public class SpringSecurityConfig {
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
 
-    public SpringSecurityConfig(CustomOAuth2UserService customOAuth2UserService, JWTConfig jwtConfig, CookieUtils cookieUtils){
-        this.customOAuth2UserService = customOAuth2UserService;
-        this.jwtConfig = jwtConfig;
-        this.cookieUtils = cookieUtils;
-    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                     .authorizeHttpRequests()
+//                    .requestMatchers("/", "/", "/css/**").permitAll()
                     .anyRequest().permitAll()
 //                    .anyRequest().authenticated()
                 .and()
@@ -48,21 +45,32 @@ public class SpringSecurityConfig {
                     .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .formLogin().disable()
-                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)
-//                    .loginPage("/login").permitAll()
-//                    .loginProcessingUrl("/login-proc")
-//                .and()
-                    .logout()
-                        .logoutUrl("/logout")
-                        .deleteCookies(accessTokenName, refreshTokenName)
-                        .logoutSuccessUrl("/")
+                    .formLogin()
+                    .usernameParameter("userId")
+                    .passwordParameter("password")
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login")
+                .successHandler(successHandler)
+//                .failureHandler(failHandler)
+                    .permitAll()
                 .and()
+//                    .usernameParameter("userId")
+//                    .passwordParameter("password")
+//                    .permitAll()
+//                .and()
+//                    .userDetailsService(userDetailsService)
+//                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)
+//                    .logout()
+//                        .logoutUrl("/logout")
+//                        .deleteCookies(accessTokenName, refreshTokenName)
+//                        .logoutSuccessUrl("/")
+//                .and()
                     .oauth2Login()
                         .loginPage("/login")
-                    .authorizationEndpoint()
-                        .baseUri("/oauth2/authorize")
-                .and()
+//                    .authorizationEndpoint()
+//                .authorizationRequestResolver()
+//                        .baseUri("/oauth2/authorize")
+//                .and()
                     .userInfoEndpoint()
                         .userService(customOAuth2UserService)
         ;

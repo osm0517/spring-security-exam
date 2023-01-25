@@ -1,29 +1,27 @@
-package com.example.springsecurityexam.auth;
+package com.example.springsecurityexam.auth.userDetails;
 
 import com.example.springsecurityexam.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
-    private Member member;
+    private final Member member;
 
-    public CustomUserDetails(Member member){
-        this.member = member;
+    public long getId(){
+        return member.getId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collect = new ArrayList<>();
-        collect.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return member.getAuth().toString();
-            }
-        });
+        GrantedAuthority grantedAuthority = () -> member.getAuth().toString();
+        collect.add(grantedAuthority);
         return collect;
     }
 

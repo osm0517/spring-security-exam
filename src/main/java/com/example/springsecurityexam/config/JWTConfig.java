@@ -1,7 +1,7 @@
 package com.example.springsecurityexam.config;
 
-import com.example.springsecurityexam.auth.CustomUserDetails;
-import com.example.springsecurityexam.auth.service.CustomUserDetailsService;
+import com.example.springsecurityexam.auth.userDetails.CustomUserDetails;
+import com.example.springsecurityexam.auth.service.UserDetailsServiceImpl;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.repository.MemberRepository;
 import io.jsonwebtoken.*;
@@ -36,11 +36,11 @@ public class JWTConfig {
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
 
-    private final CustomUserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsService;
 
     private final MemberRepository memberRepository;
 
-    public JWTConfig(CustomUserDetailsService userDetailsService, MemberRepository memberRepository) {
+    public JWTConfig(UserDetailsServiceImpl userDetailsService, MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
         this.userDetailsService = userDetailsService;
     }

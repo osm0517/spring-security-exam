@@ -1,19 +1,17 @@
-package com.example.springsecurityexam.auth.service;
+package com.example.springsecurityexam.auth.userInfo;
 
 import com.example.springsecurityexam.auth.OAuth2UserInfo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Map;
 import java.util.Objects;
 
-
+@RequiredArgsConstructor
 public class KakaoOAuth2UserInfo implements OAuth2UserInfo {
 
-    OAuth2User oAuth2User;
-
-    public KakaoOAuth2UserInfo(OAuth2User oAuth2User){
-        this.oAuth2User = oAuth2User;
-    }
+    private final OAuth2User oAuth2User;
 
     @Override
     public Map<String, Object> getAttributes() {

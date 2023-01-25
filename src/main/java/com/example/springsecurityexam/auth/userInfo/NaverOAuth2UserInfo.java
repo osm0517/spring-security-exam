@@ -1,4 +1,4 @@
-package com.example.springsecurityexam.auth.service;
+package com.example.springsecurityexam.auth.userInfo;
 
 import com.example.springsecurityexam.auth.OAuth2UserInfo;
 import lombok.extern.slf4j.Slf4j;

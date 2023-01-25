@@ -1,14 +1,18 @@
 package com.example.springsecurityexam.auth.service;
 
 import com.example.springsecurityexam.auth.OAuth2UserInfo;
+import com.example.springsecurityexam.auth.userDetails.OAuth2UserDetailsImpl;
+import com.example.springsecurityexam.auth.userInfo.GoogleOAuth2UserInfo;
+import com.example.springsecurityexam.auth.userInfo.KakaoOAuth2UserInfo;
+import com.example.springsecurityexam.auth.userInfo.NaverOAuth2UserInfo;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -19,36 +23,29 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-
-    public CustomOAuth2UserService(BCryptPasswordEncoder encoder, MemberRepository memberRepository){
-        this.encoder = encoder;
-        this.memberRepository = memberRepository;
-    }
-    BCryptPasswordEncoder encoder;
-
-    MemberRepository memberRepository;
+    private final BCryptPasswordEncoder encoder;
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-        log.debug("oauth2 loadUser");
-
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
         String uri = userRequest.getClientRegistration().getRegistrationId();
-        OAuth2AccessToken token = userRequest.getAccessToken();
-
-//        ----- parameter 가 다 잘 들어왔는지 확인 start -----
-        log.debug("oauth2 token = {}", token);
-        log.debug("access token = {}", userRequest.getAccessToken().toString());
-        userRequest.getAdditionalParameters().forEach(
-                (key, value) -> log.debug("key = {}, value = {}", key, value)
-        );
-        log.debug("token value = {}",userRequest.getAccessToken().getTokenValue());
-        log.debug("scope = {}", userRequest.getAccessToken().getScopes().toString());
-//        ----- parameter 가 다 잘 들어왔는지 확인 end -----
-
+//        OAuth2AccessToken token = userRequest.getAccessToken();
+//
+////        ----- parameter 가 다 잘 들어왔는지 확인 start -----
+//        log.debug("oauth2 token = {}", token);
+//        log.debug("access token = {}", userRequest.getAccessToken().toString());
+//        userRequest.getAdditionalParameters().forEach(
+//                (key, value) -> log.debug("key = {}, value = {}", key, value)
+//        );
+//        log.debug("token value = {}",userRequest.getAccessToken().getTokenValue());
+//        log.debug("scope = {}", userRequest.getAccessToken().getScopes().toString());
+////        ----- parameter 가 다 잘 들어왔는지 확인 end -----
+//
         OAuth2UserInfo userInfo = setUserInfo(uri, oAuth2User);
 //        기본적으로 저장되는 정보
         String email = "defaultEmail";
@@ -82,9 +79,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             member = new Member(userId, password, name, email, role);
             memberRepository.save(member);
         }
-        OAuth2UserDetails userDetails = new OAuth2UserDetails(member, oAuth2User.getAttributes());
 
-        return new OAuth2UserDetails(member, oAuth2User.getAttributes());
+        return new OAuth2UserDetailsImpl(member, oAuth2User.getAttributes(), providerId);
     }
 
     /**

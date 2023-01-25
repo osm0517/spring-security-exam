@@ -1,4 +1,4 @@
-package com.example.springsecurityexam.auth.service;
+package com.example.springsecurityexam.auth.userDetails;
 
 import com.example.springsecurityexam.domain.Member;
 import lombok.Getter;
@@ -13,21 +13,23 @@ import java.util.Map;
 
 @Getter
 @ToString
-public class OAuth2UserDetails implements UserDetails, OAuth2User {
+public class OAuth2UserDetailsImpl implements OAuth2UserDetails {
 
     private Member member;
     private Map<String, Object> attributes;
+    private String providerId;
 
     //UserDetails : Form 로그인 시 사용
-    public OAuth2UserDetails(Member member) {
+    public OAuth2UserDetailsImpl(Member member) {
         this.member = member;
     }
 
     //OAuth2User : OAuth2 로그인 시 사용
-    public OAuth2UserDetails(Member member, Map<String, Object> attributes) {
+    public OAuth2UserDetailsImpl(Member member, Map<String, Object> attributes, String providerId) {
         //PrincipalOauth2UserService 참고
         this.member = member;
         this.attributes = attributes;
+        this.providerId = providerId;
     }
 
     /**
@@ -121,7 +123,6 @@ public class OAuth2UserDetails implements UserDetails, OAuth2User {
      */
     @Override
     public String getName() {
-        String sub = attributes.get("sub").toString();
-        return sub;
+        return providerId;
     }
 }
