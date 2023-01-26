@@ -4,7 +4,8 @@
 </head>
 <body>
     <div class="bg-secondary text-white header-div" th:fragment="header(head)">
-        <h2> SEONGMIN </h2>
+        <h2 onclick="location.href='../index.html'" class="header-title"
+            th:onclick="|location.href='@{/}'|"> SEONGMIN </h2>
 <!--        <div sec:authorize="hasRole('USER')">-->
 <!--            <p> dfsdf </p>-->
 <!--            <a href="/logout"> logout </a>-->

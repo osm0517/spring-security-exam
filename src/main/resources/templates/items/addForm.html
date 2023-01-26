@@ -1,37 +1,48 @@
 <!doctype html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link th:href="@{/css/bootstrap.min.css}">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
 </head>
 <body>
-<h2 th:text="${result}?: _"> 상품 등록 </h2>
-<form action="item.html" th:action th:object="${item}" method="post">
-    <div>
-        <label> 상품명 </label><br/>
-        <input type="text" placeholder="상품명을 입력해주세요" name="itemName" id="itemName">
+<div class="items-container">
+    <div class="items-etc">
+        <h2 th:text="${result}?: _"> 상품 등록 </h2>
     </div>
-    <div>
-        <label> 가격 </label><br/>
-        <input type="text" placeholder="가격을 입력해주세요" name="price" id="price"
-       value th:value="${item.price}">
+    <div class="items-div">
+        <form action="item.html" th:action th:object="${item}" method="post">
+            <div>
+                <div>
+                    <label class="fs-3">상품명</label>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                           placeholder="상품명을 입력해주세요" th:field="*{itemName}">
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label class="fs-3">가격</label>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                           placeholder="가격을 입력해주세요" th:field="*{price}">
+                </div>
+            </div>
+            <div>
+                <div>
+                    <label class="fs-3">수량</label>
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                           placeholder="수량을 입력해주세요" th:field="*{quantity}">
+                </div>
+            </div>
+            <div class="items-etc">
+                <button type="submit" class="btn btn-primary"> 상품 등록 </button>
+                <button onclick="location.href='items.html'" class="btn btn-primary"
+                        th:onclick="|location.href='@{/items}'|" type="button"> 취소 </button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label> 수량 </label><br/>
-        <input type="text" placeholder="수량을 입력해주세요" name="quantity" id="quantity"
-       value th:value="${item.quantity}">
-    </div>
-    <button type="submit"> 상품 등록 </button>
-    <button onclick="location.href='items.html'"
-            th:onclick="|location.href='@{/items}'|" type="button"> 취소 </button>
-</form>
+</div>
 <div>
-
 </div>
 </body>
 </html>

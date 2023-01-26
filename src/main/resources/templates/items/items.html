@@ -1,37 +1,47 @@
 <!doctype html>
-<html lang="ko"
-xmlns:th="http://www.thymeleaf.org" >
-<head>
-    <link th:href="@{/css/bootstrap.min.css}">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
 </head>
 <body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<h2> 상품 목록 </h2>
-<table border="1">
-    <tr>
-        <th> 번호 </th>
-        <th> 상품 ID </th>
-        <th> 상품명 </th>
-        <th> 상품가격 </th>
-        <th> 수량 </th>
-    </tr>
-    <tr th:each="item : ${items}">
-        <td th:text="${itemStat.count}"> emptyCount </td>
-        <td th:text="${item.id}" onclick="./item.html"
-        th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|"> emptyId </td>
-        <td th:text="${item.itemName}"> emptyName </td>
-        <td th:text="${item.price}"> emptyPrice </td>
-        <td th:text="${item.quantity}"> emptyQuantity </td>
-    </tr>
-</table>
-<button type="button"  onclick="location.href='./addForm.hrml'"
+<div class="items-container">
+    <div class="items-etc">
+        <h2> 상품 목록 </h2>
+    </div>
+    <div class="items-div">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"> 번호 </th>
+                    <th scope="col"> 상품 ID </th>
+                    <th scope="col"> 상품명 </th>
+                    <th scope="col"> 상품가격 </th>
+                    <th scope="col"> 수량 </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${items}">
+                    <th scope="row" th:text="${itemStat.count}"> emptyCount </th>
+                    <td th:text="${item.id}" onclick="./item.html"
+                    th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|"> emptyId </td>
+                    <td th:text="${item.itemName}"> emptyName </td>
+                    <td th:text="${item.price}"> emptyPrice </td>
+                    <td th:text="${item.quantity}"> emptyQuantity </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="items-etc">
+        <button type="button" class="btn btn-primary"
+        onclick="location.href='./addForm.hrml'"
         th:onclick="|location.href='@{/items/add}'|"> 상품 등록 </button>
+    </div>
+</div>
 <!--<script th:inline="javascript">-->
 <!--</script>-->
 </body>

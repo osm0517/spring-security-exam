@@ -27,3 +27,15 @@
     margin-top : 10%;
     text-align : center;
 }
+
+.items-div{
+    padding : 10% 5%
+}
+
+.items-etc{
+    text-align : center
+}
+
+.header-title{
+    cursor : pointer;
+}

@@ -1,30 +1,49 @@
 <!doctype html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <link th:href="@{/css/bootstrap.min.css}">
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
 </head>
 <body>
-<script>
-    if (${item.itemName}==null){
-        alert(1);
-    }
-</script>
-<h2> 상품 상세 </h2>
-<div><input th:value="${item.id}" value="1" readonly> 상품 ID </input></div>
-<div><input th:value="${item.itemName}" value="ex1" readonly> 상품명 </input></div>
-<div><input th:value="${item.price}" value="1000" readonly> 상품가격 </input></div>
-<div><input th:value="${item.quantity}" value="1" readonly> 수량 </input></div>
-<div>
-    <button> 구매 </button>
-    <button onclick="location.href='./editFrom.html'"
-    th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정 </button>
-    <button> 신고 </button>
+<div class="items-container">
+    <div class="items-etc">
+        <h2> 상품 상세 </h2>
+    </div>
+    <div class="items-div">
+        <div>
+            <label class="fs-3"> 상품 ID </label>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    th:value="${item.id}" value="1" readonly>
+        </div>
+        <div>
+            <label class="fs-3"> 상품명 </label>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    th:value="${item.itemName}" value="ex1" readonly>
+        </div>
+        <div>
+            <label class="fs-3"> 상품가격 </label>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    th:value="${item.price}" value="1000" readonly>
+        </div>
+        <div>
+            <label class="fs-3"> 수량 </label>
+            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    th:value="${item.quantity}" value="1" readonly>
+        </div>
+    </div>
+    <div class="items-etc">
+        <button class="btn btn-primary"> 구매 </button>
+
+        <button onclick="location.href='./editFrom.html'" class="btn btn-primary"
+                th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정 </button>
+
+        <button class="btn btn-primary" onclick="location.href='./items.html'"
+                th:onclick="|location.href='@{/items}'|"> 목록으로 </button>
+
+        <button class="btn btn-danger"> 신고 </button>
+    </div>
 </div>
 </body>
 </html>
