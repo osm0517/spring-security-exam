@@ -66,8 +66,14 @@ public class MemberController {
     private long refreshExpireTime = 1209600000;
 
     @GetMapping("/login")
-    public String login(){
+    public String login(
+            @RequestParam(required = false) boolean result,
+            Model model
+    ){
         log.debug("login view render");
+
+        model.addAttribute("result", result);
+
         return loginPath;
     }
 

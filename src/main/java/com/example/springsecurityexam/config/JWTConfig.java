@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.*;
 
@@ -55,7 +56,12 @@ public class JWTConfig {
 
         String userId = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(refreshToken).getBody().getSubject();
 
-        Member member = memberRepository.findByUserId(userId);
+        Optional<Member> wrapMember = memberRepository.findByUserId(userId);
+        if (wrapMember.isEmpty()) {
+            throw new UsernameNotFoundException("username not found");
+        }
+
+        Member member = wrapMember.get();
 
         Claims payload = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
         payload.put("name", member.getName());

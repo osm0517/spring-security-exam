@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,12 +28,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public CustomUserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         log.debug("loadUserByUserName");
-        Member member = memberRepository.findByUserId(userId);
-        if(member != null){
+
+        Optional<Member> member = memberRepository.findByUserId(userId);
+        if(member.isPresent()){
             log.debug("member");
-            return new CustomUserDetails(member);
+            return new CustomUserDetails(member.get());
+        }else{
+            throw new UsernameNotFoundException("username not found");
         }
-        log.debug("member not found");
-        throw new UsernameNotFoundException("username not found");
+
     }
 }

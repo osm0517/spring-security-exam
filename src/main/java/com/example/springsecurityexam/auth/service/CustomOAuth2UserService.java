@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -71,7 +72,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         RoleType role = RoleType.USER;
 
-        Member member = memberRepository.findByUserId(userId);
+        Member member = memberRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
 
         //DB에 없는 사용자라면 회원가입처리
         if(member == null){

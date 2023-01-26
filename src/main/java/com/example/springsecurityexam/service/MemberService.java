@@ -7,8 +7,12 @@ import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 
 @Service
@@ -49,7 +53,8 @@ public class MemberService {
         String userId = member.getUserId();
         String inputPassword = member.getPassword();
 
-        Member findResult = memberRepository.findByUserId(userId);
+        Member findResult = memberRepository.findByUserId(userId)
+                .orElseThrow(NoSuchElementException::new);
 
         if (encoder.matches(inputPassword, findResult.getPassword())){
             return findResult;
@@ -61,7 +66,8 @@ public class MemberService {
      * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인
      */
     public Member checkSession(long userId){
-        return memberRepository.findById(userId);
+        return memberRepository.findById(userId)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     /**
@@ -69,7 +75,8 @@ public class MemberService {
      * 수정 폼에서 사용할 수 있도록 비밀번호를 평문으로 보내줌
      */
     public Member updateUserInfo(long userId, UserInfoEditDto dto){
-        Member member = memberRepository.findById(userId);
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(NoSuchElementException::new);
 
         member.changeUserInfo(dto.getName(), dto.getEmail());
 
@@ -86,7 +93,8 @@ public class MemberService {
         if(dto.getPassword().equals(dto.getConfirm())){
             String encodedPassword = encoder.encode(dto.getPassword());
 
-            Member member = memberRepository.findById(userId);
+            Member member = memberRepository.findById(userId)
+                    .orElseThrow(NoSuchElementException::new);
             member.changePassword(encodedPassword);
         }
         throw new IllegalArgumentException("not match password and confirm");

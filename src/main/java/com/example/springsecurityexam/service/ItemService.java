@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Service
@@ -33,10 +34,11 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public Item editItem(int itemId, ItemAddDto itemAddDto){
+    public Item editItem(long itemId, ItemAddDto itemAddDto){
         log.debug("addItem item = {}", itemAddDto);
 
-        Item item = itemRepository.findById(itemId);
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(NoSuchElementException::new);
         item.updateItem(itemAddDto.getItemName(),
                 itemAddDto.getPrice(),
                 itemAddDto.getQuantity());
@@ -44,9 +46,10 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
-    public Item findItem(int itemId){
+    public Item findItem(long itemId){
 
-        return itemRepository.findById(itemId);
+        return itemRepository.findById(itemId)
+                .orElseThrow(NoSuchElementException::new);
     }
 
     public List<Item> findItems(){

@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="login-div">
+    <h1 th:if="${result}" style="color:red"> 로그인 실패 </h1>
     <div>
       <form action="../../index.html" th:action method="post">
 <!--        사용자 아이디 -->
