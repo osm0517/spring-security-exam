@@ -19,17 +19,16 @@ public class OAuth2UserDetailsImpl implements OAuth2UserDetails {
     private Map<String, Object> attributes;
     private String providerId;
 
-    //UserDetails : Form 로그인 시 사용
-    public OAuth2UserDetailsImpl(Member member) {
-        this.member = member;
-    }
-
     //OAuth2User : OAuth2 로그인 시 사용
     public OAuth2UserDetailsImpl(Member member, Map<String, Object> attributes, String providerId) {
         //PrincipalOauth2UserService 참고
         this.member = member;
         this.attributes = attributes;
         this.providerId = providerId;
+    }
+
+    public long getId(){
+        return member.getId();
     }
 
     /**
