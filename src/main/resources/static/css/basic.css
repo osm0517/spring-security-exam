@@ -2,7 +2,7 @@
 
 .login-div {
     border : 2px black solid;
-    width : 30%;
+    width : 50%;
     margin : 10% auto;
     text-align : center;
 }
@@ -16,6 +16,10 @@
 
 .login-div div{
     margin : 40px auto;
+}
+
+.login-div h2{
+    margin-top : 4%;
 }
 
 .login-div button{

@@ -62,8 +62,10 @@ public class ItemController {
             Model model
     ){
         Item findItem = itemService.findItem(itemId);
+
         model.addAttribute("item", findItem);
         model.addAttribute("updateItem", item);
+
         return "/items/editForm";
     }
 

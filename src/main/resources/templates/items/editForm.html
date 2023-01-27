@@ -1,36 +1,38 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <link>
-    <title> 판매 목록 </title>
-</head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
 <body>
-<h2> 상품 수정 </h2>
-<form action="item.html" th:action th:object="${updateItem}" method="post">
-    <div>
-        <label> 상품ID </label>
-        <input readonly value="1" th:value="${item.id}">
+    <div class="login-div">
+        <h2> 상품 수정 </h2>
+        <hr />
+        <form action="item.html" th:action th:object="${updateItem}" method="post">
+            <div>
+                <label> 상품ID </label>
+                <input readonly value="1" th:value="${item.id}">
+            </div>
+            <div>
+                <label> 상품명 </label>
+                <input placeholder="상품명을 입력해주세요" name="itemName" value="1" th:value="${item.itemName}">
+            </div>
+            <div>
+                <label> 가격 </label>
+                <input placeholder="가격을 입력해주세요" name="price" value="1" th:value="${item.price}">
+            </div>
+            <div>
+                <label> 수량 </label>
+                <input placeholder="수량을 입력해주세요" name="quantity" value="1" th:value="${item.quantity}">
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-primary"> 상품 수정 </button>
+            <button onclick="location.href='items.html'"
+                    th:onclick="|location.href='@{/items}'|" type="button" class="btn btn-primary"> 목록으로 </button>
+            <button onclick="location.href='items.html'"
+                    th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button" class="btn btn-secondary"> 취소 </button>
+        </form>
+        <hr />
+        <form th:action="@{/items/delete/{itemId}(itemId=${item.id})}">
+            <button type="submit" formmethod="post" class="btn btn-danger btn-bottom"> 삭제 </button>
+        </form>
     </div>
-    <div>
-        <label> 상품명 </label>
-        <input placeholder="상품명을 입력해주세요" name="itemName" value="1" th:value="${item.itemName}">
-    </div>
-    <div>
-        <label> 가격 </label>
-        <input placeholder="가격을 입력해주세요" name="price" value="1" th:value="${item.price}">
-    </div>
-    <div>
-        <label> 수량 </label>
-        <input placeholder="수량을 입력해주세요" name="quantity" value="1" th:value="${item.quantity}">
-    </div>
-    <button type="submit"> 상품 수정 </button>
-    <button onclick="location.href='items.html'"
-            th:onclick="|location.href='@{/items}'|" type="button" class="btn btn-primary"> 목록으로 </button>
-    <button onclick="location.href='items.html'"
-            th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button" class="btn btn-secondary"> 취소 </button>
-</form>
-<form th:action="@{/items/delete/{itemId}(itemId=${item.id})}">
-    <button type="submit" formmethod="post" class="btn btn-danger"> 삭제 </button>
-</form>
 </body>
 </html>

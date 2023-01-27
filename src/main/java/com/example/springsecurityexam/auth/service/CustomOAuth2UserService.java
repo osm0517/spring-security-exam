@@ -73,7 +73,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         RoleType role = RoleType.USER;
 
         Member member = memberRepository.findByUserId(userId)
-                .orElseThrow(NoSuchElementException::new);
+                .orElse(null);
 
         //DB에 없는 사용자라면 회원가입처리
         if(member == null){
