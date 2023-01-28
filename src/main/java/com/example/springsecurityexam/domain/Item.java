@@ -1,11 +1,11 @@
 package com.example.springsecurityexam.domain;
 
-import com.example.springsecurityexam.dto.ItemAddDto;
-import com.example.springsecurityexam.dto.ItemUpdateDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -54,6 +54,10 @@ public class Item {
     public void updateItem(String itemName, int price, int quantity){
         this.itemName = itemName;
         this.price = price;
+        this.quantity = quantity;
+    }
+
+    public void buyItem(int quantity){
         this.quantity = quantity;
     }
 

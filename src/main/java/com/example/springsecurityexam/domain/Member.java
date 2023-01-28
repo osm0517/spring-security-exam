@@ -62,6 +62,9 @@ public class Member{
     @OneToMany(mappedBy = "producer")
     private List<Item> items = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<BuyItem> buyItems = new ArrayList<>();
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "stop_state", insertable = false, nullable = false)
     private StopState stopState;
@@ -88,5 +91,9 @@ public class Member{
     public void changeUserInfo(String name, String email){
         this.name = name;
         this.email = email;
+    }
+
+    public void buyItem(BuyItem buyItem){
+        this.buyItems.add(buyItem);
     }
 }

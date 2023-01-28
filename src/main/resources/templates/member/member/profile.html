@@ -20,7 +20,7 @@
         th:onclick="|location.href='@{/{userId}/items(userId=${user.id})}'|"> 판매 목록 </button>
         <button type="button" class="btn btn-primary"
         onclick="location.href='../items/consumerItems.html'"
-        th:onclick=""> 구매 목록 </button>
+        th:onclick="|location.href='@{/profile/consume/items}'|"> 구매 목록 </button>
     </div>
     <div>
         <button type="button" class="btn btn-primary"

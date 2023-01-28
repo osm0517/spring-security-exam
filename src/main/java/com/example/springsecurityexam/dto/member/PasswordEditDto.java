@@ -1,4 +1,4 @@
-package com.example.springsecurityexam.dto;
+package com.example.springsecurityexam.dto.member;
 
 import lombok.Data;
 import lombok.Getter;

@@ -3,11 +3,11 @@ package com.example.springsecurityexam.controller;
 import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
+import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.PasswordEditDto;
-import com.example.springsecurityexam.dto.UserInfoEditDto;
+import com.example.springsecurityexam.dto.member.PasswordEditDto;
+import com.example.springsecurityexam.dto.member.UserInfoEditDto;
 import com.example.springsecurityexam.enumdata.RoleType;
-import com.example.springsecurityexam.service.ItemService;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,14 +15,11 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
@@ -32,17 +29,18 @@ public class MemberController {
 
 //    --- view path start ---
 
-    private final String signupPath = "/member/signup/signup";
-    private final String signupResultPath = "/member/signup/signup-result";
-    private final String signupFailPath = "/member/signup/signup-fail";
-    private final String loginPath = "/member/login/login";
-    private final String loginFailPath = "/member/login/login-fail";
+    private static final String signupPath = "/member/signup/signup";
+    private static final String signupResultPath = "/member/signup/signup-result";
+    private static final String signupFailPath = "/member/signup/signup-fail";
+    private static final String loginPath = "/member/login/login";
+    private static final String loginFailPath = "/member/login/login-fail";
 
-    private final String loginSuccessPath = "/loginHome";
-    private final String profilePath = "/member/member/profile";
-    private final String producerItemsPath = "/items/producerItems";
-    private final String profileEditPath = "/member/member/editForm";
-    private final String passwordEditPopupPath = "/member/popup/passwordEdit";
+    private static final String loginSuccessPath = "/loginHome";
+    private static final String profilePath = "/member/member/profile";
+    private static final String producerItemsPath = "/items/producerItems";
+    private static final String profileEditPath = "/member/member/editForm";
+    private static final String passwordEditPopupPath = "/member/popup/passwordEdit";
+    private static final String buyItemsPath = "/member/consume/items";
 
 //    --- view path end ---
 
@@ -58,12 +56,6 @@ public class MemberController {
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
 
-
-//    @Value("${jwt.access_expire_time}")
-    private long accessExpireTime = 1800000;
-
-//    @Value("${jwt.refresh_expire_time}")
-    private long refreshExpireTime = 1209600000;
 
     @GetMapping("/login")
     public String login(
@@ -117,6 +109,20 @@ public class MemberController {
         return passwordEditPopupPath;
     }
 
+    @GetMapping("/profile/consume/items")
+    public String buyItemsForm(
+            Model model,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("buyItemsView form render");
+
+        List<BuyItem> buyItems = memberService.findBuyItems(userId);
+
+        model.addAttribute("items", buyItems);
+
+        return buyItemsPath;
+    }
+
     @GetMapping("/login/fail")
     public String loginFail(){
         log.debug("login fail");
@@ -159,18 +165,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-//    @ResponseBody
-//    @GetMapping("/overlap/{type}")
-//    public ResponseEntity<?> overlap(
-//            @PathVariable String type,
-//            @RequestParam String value
-//    ){
-//        if(type == null){
-//            return new ResponseEntity<>("Type Null", HttpStatus.BAD_REQUEST);
-//        }
-//
-//    }
-
     /**
      * 정보 수정 로직을 처리
      */
@@ -196,6 +190,7 @@ public class MemberController {
             @ModelAttribute PasswordEditDto dto,
             @SessionAttribute(name = SessionUtils.session_login_id) long userId
     ){
+        log.debug("popup debug");
         try {
             memberService.updatePassword(userId, dto);
         }catch(IllegalArgumentException e){
@@ -220,11 +215,6 @@ public class MemberController {
             Member loginResult = memberService.login(member);
             if (loginResult != null) {
                 log.debug("login success");
-//                response.addCookie(cookieUtils.setCookie(
-//                        refreshTokenName,
-//                        jwtConfig.createRefreshToken(userId),
-//                        refreshExpireTime
-//                        ));
 
                 HttpSession requestSession = request.getSession();
                 requestSession.setAttribute(SessionUtils.session_login_id, loginResult.getId());
@@ -275,8 +265,6 @@ public class MemberController {
     /**
      * 입력한 파라미터 중에서 null이 존재하는지 확인함
      * null이 존재하면 true 없으면 false
-     * @param request
-     * @return
      */
     private static boolean parameterNullCheck(HttpServletRequest request) {
         AtomicBoolean result = new AtomicBoolean();

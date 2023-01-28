@@ -3,18 +3,19 @@ package com.example.springsecurityexam.controller;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.Item;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.ItemAddDto;
+import com.example.springsecurityexam.dto.item.ItemAddDto;
+import com.example.springsecurityexam.dto.item.ItemBuyDto;
 import com.example.springsecurityexam.service.ItemService;
 import com.example.springsecurityexam.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @Slf4j
@@ -53,6 +54,35 @@ public class ItemController {
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
         return "/items/item";
+    }
+
+    @GetMapping("/{itemId}/buy/popup")
+    public String buyForm(
+            @PathVariable int itemId,
+            Model model
+    ){
+        Item item = itemService.findItem(itemId);
+
+        model.addAttribute("item", item);
+        model.addAttribute("dto", new ItemBuyDto());
+
+        return "/items/buyForm";
+    }
+
+    @PostMapping("/{itemId}/buy/popup")
+    public void buyItem(
+            @PathVariable long itemId,
+            @ModelAttribute ItemBuyDto dto,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("buy debug");
+        try {
+            itemService.buyItem(itemId, userId, dto);
+        }catch (NoSuchElementException e) {
+            log.debug("db에 해당하는 id가 없음");
+        }catch (Exception e){
+            log.debug(e.getMessage());
+        }
     }
 
     @GetMapping("/edit/{itemId}")

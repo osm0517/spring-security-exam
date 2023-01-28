@@ -1,0 +1,46 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
+    <link>
+</head>
+<body>
+<form name="buyItem" th:action th:object="${dto}" method="post">
+    <div>
+        <label> 상품명 </label>
+        <input type="text" th:field="${item.itemName}" disabled>
+    </div>
+    <div>
+        <label> 가격 </label>
+        <input type="text" th:field="${item.price}" disabled>
+    </div>
+    <div>
+        <label> 수량 </label>
+        <input type="text" th:field="${item.quantity}" disabled>
+    </div>
+    <div>
+        <label for="buyQuantity"> 구매 수량 </label>
+        <input type="text" th:field="*{buyQuantity}">
+    </div>
+    <div>
+        <label> 총액 </label>
+        <label> empty </label>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" id="btn"> 구매 </button>
+        <button type="button" class="btn btn-primary"
+        th:onclick="|window.open('about:blank', '_self').close()|"> 취소 </button>
+    </div>
+</form>
+<script th:inline="javascript">
+    $("#btn").on('click', function() {
+        document.buyItem.submit();
+        $(document).ready(function(){
+            alert("구매하셨습니다");
+            window.open("about:blank", "_self").close();
+        });
+    });
+</script>
+</body>
+</html>

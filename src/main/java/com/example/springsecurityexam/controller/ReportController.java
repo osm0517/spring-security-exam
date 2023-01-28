@@ -2,7 +2,7 @@
 //
 //import com.example.springsecurityexam.domain.Item;
 //import com.example.springsecurityexam.domain.ItemReport;
-//import com.example.springsecurityexam.dto.ItemReportDto;
+//import com.example.springsecurityexam.dto.item.ItemReportDto;
 //import com.example.springsecurityexam.repository.ItemRepository;
 //import com.example.springsecurityexam.repository.MemberRepository;
 //import com.example.springsecurityexam.service.ReportService;

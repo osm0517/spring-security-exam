@@ -1,16 +1,17 @@
 package com.example.springsecurityexam.service;
 
+import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.PasswordEditDto;
-import com.example.springsecurityexam.dto.UserInfoEditDto;
+import com.example.springsecurityexam.dto.member.PasswordEditDto;
+import com.example.springsecurityexam.dto.member.UserInfoEditDto;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -98,6 +99,13 @@ public class MemberService {
             member.changePassword(encodedPassword);
         }
         throw new IllegalArgumentException("not match password and confirm");
+    }
+
+    public List<BuyItem> findBuyItems(long userId){
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(NoSuchElementException::new);
+
+        return member.getBuyItems();
     }
 
     /**

@@ -34,8 +34,9 @@
         </div>
     </div>
     <div class="items-etc">
-        <button class="btn btn-primary"> 구매 </button>
-
+        <button class="btn btn-primary"
+        th:onclick="|window.open('@{/items/{itemId}/buy/popup(itemId=${item.id})}', '구매',
+        'width=400, height=430, left=300, top=300')|"> 구매 </button>
         <button onclick="location.href='./editFrom.html'" class="btn btn-primary"
                 th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정 </button>
 
