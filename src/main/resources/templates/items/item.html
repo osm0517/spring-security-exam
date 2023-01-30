@@ -7,38 +7,34 @@
     <link>
 </head>
 <body>
-<div class="items-container">
-    <div class="items-etc">
-        <h2> 상품 상세 </h2>
+<div class="item-container">
+    <h2> 상품 상세 </h2>
+    <hr/>
+    <div class="input-div">
+        <label class="fs-3"> 상품 ID </label>
+        <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                th:value="${item.id}" value="1" readonly>
     </div>
-    <div class="items-div">
-        <div>
-            <label class="fs-3"> 상품 ID </label>
-            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    th:value="${item.id}" value="1" readonly>
-        </div>
-        <div>
-            <label class="fs-3"> 상품명 </label>
-            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    th:value="${item.itemName}" value="ex1" readonly>
-        </div>
-        <div>
-            <label class="fs-3"> 상품가격 </label>
-            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    th:value="${item.price}" value="1000" readonly>
-        </div>
-        <div>
-            <label class="fs-3"> 수량 </label>
-            <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
-                    th:value="${item.quantity}" value="1" readonly>
-        </div>
+    <div class="input-div">
+        <label class="fs-3"> 상품명 </label>
+        <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                th:value="${item.itemName}" value="ex1" readonly>
     </div>
+    <div class="input-div">
+        <label class="fs-3"> 상품가격 </label>
+        <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                th:value="${item.price}" value="1000" readonly>
+    </div>
+    <div class="input-div">
+        <label class="fs-3"> 수량 </label>
+        <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                th:value="${item.quantity}" value="1" readonly>
+    </div>
+    <hr/>
     <div class="item-etc">
         <button class="btn btn-primary"
         th:onclick="|window.open('@{/items/{itemId}/buy/popup(itemId=${item.id})}', '구매',
         'width=400, height=430, left=300, top=300')|"> 구매 </button>
-        <button onclick="location.href='./editFrom.html'" class="btn btn-primary"
-                th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정 </button>
 
         <button class="btn btn-primary" onclick="location.href='./items.html'"
                 th:onclick="|location.href='@{/items}'|"> 목록으로 </button>

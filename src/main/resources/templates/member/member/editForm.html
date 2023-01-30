@@ -7,25 +7,28 @@
     <link>
 </head>
 <body>
-<div class="login-div">
+<div class="item-container">
+    <h2> 회원정보 </h2>
+    <hr/>
     <form action="index.html" th:action th:object="${dto}" method="post">
-        <div>
-            <label for="name"> 이름 </label>
-            <input type="text" th:field="*{name}">
+        <div class="input-div">
+            <label for="name" class="fs-3"> 이름 </label>
+            <input type="text" th:field="*{name}" class="form-control">
         </div>
-        <div>
-            <label for="email"> 이메일 </label>
-            <input type="text" th:field="*{email}">
+        <div class="input-div">
+            <label for="email" class="fs-3"> 이메일 </label>
+            <input type="text" th:field="*{email}" class="form-control">
         </div>
-        <div>
-            <label for="password"> 패스워드 </label>
-            <button type="button"
+        <div class="input-div">
+            <label for="password" class="fs-3"> 패스워드 </label>
+            <button type="button" class="btn btn-secondary"
             th:onclick="|window.open('@{/profile/edit/password/popup}', 'password edit form',
             'width=430, height=500')|"> 수정하기 </button>
         </div>
-        <div>
-            <button type="submit"> 정보 수정 </button>
-            <button type="button"
+        <hr/>
+        <div class="item-etc">
+            <button type="submit" class="btn btn-danger"> 정보 수정 </button>
+            <button type="button" class="btn btn-secondary"
             onclick="location.href='./profile.html'"
             th:onclick="|location.href='@{/profile}'|"> 수정 취소 </button>
         </div>

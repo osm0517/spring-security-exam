@@ -1,21 +1,17 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="/layout/default-layout :: layout(~{::body})">
-<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <meta charset="UTF-8" />
-    <title> seongmin </title>
-    <link>
-</head>
 <body>
-<div class="login-div">
-    <h1> 나의 판매 목록 </h1>
-    <table>
+<div class="item-container">
+    <h2> 나의 판매 목록 </h2>
+    <hr/>
+    <table class="table">
         <tr>
-            <th> 번호 </th>
-            <th> 이름 </th>
-            <th> 가격 </th>
-            <th> 수량 </th>
-            <th> 수정 </th>
+            <th scope="col"> 번호 </th>
+            <th scope="col"> 이름 </th>
+            <th scope="col"> 가격 </th>
+            <th scope="col"> 수량 </th>
+            <th scope="col"> 수정 </th>
         </tr>
         <tr th:each="item, stat : ${items}">
             <th th:text="${stat.count}"> 번호 </th>
