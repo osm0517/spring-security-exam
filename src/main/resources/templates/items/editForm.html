@@ -2,36 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="/layout/default-layout :: layout(~{::body})">
 <body>
-    <div class="login-div">
+    <div class="item-container">
         <h2> 상품 수정 </h2>
         <hr />
-        <form action="item.html" th:action th:object="${updateItem}" method="post">
+        <form action="item.html" th:action th:object="${item}" method="post">
             <div>
-                <label> 상품ID </label>
-                <input readonly value="1" th:value="${item.id}">
+                <label class="fs-3"> 상품ID </label>
+                <input class="form-control" readonly value="1" th:field="*{id}">
             </div>
             <div>
-                <label> 상품명 </label>
-                <input placeholder="상품명을 입력해주세요" name="itemName" value="1" th:value="${item.itemName}">
+                <label class="fs-3"> 상품명 </label>
+                <input placeholder="상품명을 입력해주세요" class="form-control" th:errorclass="field-error"
+                       value="1" th:field="*{itemName}">
+                <div class="field-error" th:errors="*{itemName}">
+                    validation error
+                </div>
             </div>
             <div>
-                <label> 가격 </label>
-                <input placeholder="가격을 입력해주세요" name="price" value="1" th:value="${item.price}">
+                <label class="fs-3"> 가격 </label>
+                <input placeholder="가격을 입력해주세요" class="form-control" th:errorclass="field-error"
+                       value="1" th:field="*{price}">
+                <div class="field-error" th:errors="*{price}">
+                    validation error
+                </div>
             </div>
             <div>
-                <label> 수량 </label>
-                <input placeholder="수량을 입력해주세요" name="quantity" value="1" th:value="${item.quantity}">
+                <label class="fs-3"> 수량 </label>
+                <input placeholder="수량을 입력해주세요" class="form-control" th:errorclass="field-error"
+                       value="1" th:field="*{quantity}">
+                <div class="field-error" th:errors="*{quantity}">
+                    validation error
+                </div>
             </div>
             <hr />
-            <button type="submit" class="btn btn-primary"> 상품 수정 </button>
-            <button onclick="location.href='items.html'"
-                    th:onclick="|location.href='@{/items}'|" type="button" class="btn btn-primary"> 목록으로 </button>
-            <button onclick="location.href='items.html'"
-                    th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button" class="btn btn-secondary"> 취소 </button>
+            <div class="item-etc">
+                <button type="submit" class="btn btn-primary"> 상품 수정 </button>
+                <button onclick="location.href='items.html'"
+                        th:onclick="|location.href='@{/items}'|" type="button" class="btn btn-primary"> 목록으로 </button>
+                <button onclick="location.href='items.html'"
+                        th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|" type="button" class="btn btn-secondary"> 취소 </button>
+            </div>
         </form>
         <hr />
         <form th:action="@{/items/delete/{itemId}(itemId=${item.id})}">
-            <button type="submit" formmethod="post" class="btn btn-danger btn-bottom"> 삭제 </button>
+            <div class="item-etc">
+                <button type="submit" formmethod="post" class="btn btn-danger btn-bottom"> 삭제 </button>
+            </div>
         </form>
     </div>
 </body>

@@ -3,14 +3,17 @@ package com.example.springsecurityexam.controller;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.Item;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.item.ItemAddDto;
+import com.example.springsecurityexam.dto.item.ItemSaveDto;
 import com.example.springsecurityexam.dto.item.ItemBuyDto;
+import com.example.springsecurityexam.dto.item.ItemUpdateDto;
 import com.example.springsecurityexam.service.ItemService;
 import com.example.springsecurityexam.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -37,10 +40,11 @@ public class ItemController {
 
     @GetMapping("/add")
     public String addItemView(
-            ItemAddDto item,
             Model model
     ){
-        model.addAttribute("item", item);
+
+        model.addAttribute("item", new ItemSaveDto());
+
         return "/items/addForm";
     }
 
@@ -88,13 +92,11 @@ public class ItemController {
     @GetMapping("/edit/{itemId}")
     public String editView(
             @PathVariable int itemId,
-            ItemAddDto item,
             Model model
     ){
         Item findItem = itemService.findItem(itemId);
 
-        model.addAttribute("item", findItem);
-        model.addAttribute("updateItem", item);
+        model.addAttribute("item", new ItemUpdateDto(findItem.getId(), findItem.getItemName(), findItem.getPrice(), findItem.getQuantity()));
 
         return "/items/editForm";
     }
@@ -102,13 +104,21 @@ public class ItemController {
     @PostMapping("/edit/{itemId}")
     public String editItem(
             @PathVariable int itemId,
-            ItemAddDto updateItem,
+            @Validated @ModelAttribute(name = "item") ItemUpdateDto updateItem,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
             Model model
 
     ){
+        if(bindingResult.hasErrors()){
+            log.debug("error = {}", bindingResult);
+            return "/items/editForm";
+        }
+
         Item updatedItem = itemService.editItem(itemId, updateItem);
+
         model.addAttribute("item", updatedItem);
+
         redirectAttributes.addAttribute("itemId", updatedItem.getId());
 
         return "redirect:/items/{itemId}";
@@ -130,29 +140,25 @@ public class ItemController {
 
     @PostMapping("/add")
     public String addItem(
-            ItemAddDto item,
+            @Validated @ModelAttribute(name = "item") ItemSaveDto dto,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
-            Model model,
             @SessionAttribute(name = SessionUtils.session_login_id) long userId
     ){
-        log.debug("modelAttribute = {} {} {}", item.getItemName(), item.getPrice(), item.getQuantity());
 
-        if(checkAddDto(item)){
-
-            model.addAttribute("result", "등록 내용을 다시 확인해주세요!");
-
-            return "/items/fail";
+        if(bindingResult.hasErrors()){
+            log.debug("error = {}", bindingResult);
+            return "/items/addForm";
         }
+
         Member member = memberService.checkSession(userId);
+
+        Item item = new Item(dto.getItemName(), dto.getPrice(), dto.getQuantity(), member);
 
         Item savedItem = itemService.addItem(item, member);
 
         redirectAttributes.addAttribute("itemId", savedItem.getId());
 
         return "redirect:/items/{itemId}";
-    }
-
-    private static boolean checkAddDto(ItemAddDto item) {
-        return item.getItemName() == null || item.getPrice() == 0 || item.getQuantity() == 0;
     }
 }

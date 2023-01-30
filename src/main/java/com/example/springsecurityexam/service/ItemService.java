@@ -3,14 +3,14 @@ package com.example.springsecurityexam.service;
 import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Item;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.item.ItemAddDto;
+import com.example.springsecurityexam.dto.item.ItemSaveDto;
 import com.example.springsecurityexam.dto.item.ItemBuyDto;
+import com.example.springsecurityexam.dto.item.ItemUpdateDto;
 import com.example.springsecurityexam.repository.BuyItemRepository;
 import com.example.springsecurityexam.repository.ItemRepository;
 import com.example.springsecurityexam.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,22 +25,19 @@ public class ItemService {
     private final BuyItemRepository buyItemRepository;
     private final MemberRepository memberRepository;
 
-    public Item addItem(ItemAddDto itemAddDto, Member member){
-        log.debug("addItem item = {}", itemAddDto);
-
-        Item item = new Item(itemAddDto.getItemName(), itemAddDto.getPrice(), itemAddDto.getQuantity(), member);
-
+    public Item addItem(Item item, Member member){
         return itemRepository.save(item);
     }
 
-    public Item editItem(long itemId, ItemAddDto itemAddDto){
-        log.debug("addItem item = {}", itemAddDto);
+    public Item editItem(long itemId, ItemUpdateDto itemSaveDto){
+        log.debug("addItem item = {}", itemSaveDto);
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NoSuchElementException::new);
-        item.updateItem(itemAddDto.getItemName(),
-                itemAddDto.getPrice(),
-                itemAddDto.getQuantity());
+
+        item.updateItem(itemSaveDto.getItemName(),
+                itemSaveDto.getPrice(),
+                itemSaveDto.getQuantity());
 
         return itemRepository.save(item);
     }

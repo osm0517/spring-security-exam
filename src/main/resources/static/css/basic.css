@@ -36,10 +36,24 @@
     padding : 10% 5%
 }
 
-.items-etc{
-    text-align : center
-}
-
 .header-title{
     cursor : pointer;
+}
+
+.field-error{
+    color : red;
+    border-color : red;
+}
+
+.item-container{
+    width : 60%;
+    margin : 7% auto;
+}
+
+.item-container label{
+    margin-left : 3%;
+}
+
+.item-etc{
+    text-align : center;
 }

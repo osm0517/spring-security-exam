@@ -1,34 +1,41 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
 <head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <title> profile </title>
+    <meta charset="UTF-8" />
+    <title> seongmin </title>
     <link>
 </head>
 <body>
 <div class="login-div">
     <div>
-        <label> 이름 </label>
+        <label th:text="#{profile.label.name}"> 이름 </label>
         <span th:text="${user.name}"> 본인의 이름 </span>
     </div>
     <div>
-        <label> 권한 </label>
+        <label th:text="#{profile.role}"> 권한 </label>
         <span th:text="${user.auth}"> 본인의 권한 </span>
     </div>
     <div>
         <button type="button" class="btn btn-primary"
         onclick="location.href='../items/producerItems.html'"
-        th:onclick="|location.href='@{/{userId}/items(userId=${user.id})}'|"> 판매 목록 </button>
+        th:onclick="|location.href='@{/{userId}/items(userId=${user.id})}'|"
+        th:text="#{profile.btn.producer}"> 판매 목록 </button>
         <button type="button" class="btn btn-primary"
         onclick="location.href='../items/consumerItems.html'"
-        th:onclick="|location.href='@{/profile/consume/items}'|"> 구매 목록 </button>
+        th:onclick="|location.href='@{/profile/consume/items}'|"
+        th:text="#{profile.btn.consumer}"> 구매 목록 </button>
     </div>
     <div>
         <button type="button" class="btn btn-primary"
         onclick="location.href='./member/editForm.html'"
-        th:onclick="|location.href='@{/profile/edit}'|"> 정보 수정 </button>
+        th:onclick="|location.href='@{/profile/edit}'|"
+        th:text="#{profile.btn.edit}"> 정보 수정 </button>
+
         <button type="button" class="btn btn-danger"
         onclick="location.href='../items/producerItems.html'"
-        th:onclick=""> 회원 탈퇴 </button>
+        th:onclick=""
+        th:text="#{profile.btn.withdrawal}"> 회원 탈퇴 </button>
     </div>
 </div>
 </body>

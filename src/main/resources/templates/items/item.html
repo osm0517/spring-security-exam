@@ -33,7 +33,7 @@
                     th:value="${item.quantity}" value="1" readonly>
         </div>
     </div>
-    <div class="items-etc">
+    <div class="item-etc">
         <button class="btn btn-primary"
         th:onclick="|window.open('@{/items/{itemId}/buy/popup(itemId=${item.id})}', '구매',
         'width=400, height=430, left=300, top=300')|"> 구매 </button>

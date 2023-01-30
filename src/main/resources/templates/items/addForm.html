@@ -7,42 +7,47 @@
     <link>
 </head>
 <body>
-<div class="items-container">
-    <div class="items-etc">
+    <div class="item-container">
         <h2 th:text="${result}?: _"> 상품 등록 </h2>
-    </div>
-    <div class="items-div">
+        <hr />
         <form action="item.html" th:action th:object="${item}" method="post">
             <div>
                 <div>
                     <label class="fs-3">상품명</label>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    <input type="text" class="form-control" th:errorclass="field-error"
                            placeholder="상품명을 입력해주세요" th:field="*{itemName}">
+                    <div class="field-error" th:errors="*{itemName}">
+                        validation error
+                    </div>
                 </div>
             </div>
             <div>
                 <div>
                     <label class="fs-3">가격</label>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    <input type="text" class="form-control" th:errorclass="field-error"
                            placeholder="가격을 입력해주세요" th:field="*{price}">
+                    <div class="field-error" th:errors="*{price}">
+                        validation error
+                    </div>
                 </div>
             </div>
             <div>
                 <div>
                     <label class="fs-3">수량</label>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
+                    <input type="text" th:errorclass="field-error" class="form-control"
                            placeholder="수량을 입력해주세요" th:field="*{quantity}">
+                    <div class="field-error" th:errors="*{quantity}">
+                        validation error
+                    </div>
                 </div>
             </div>
-            <div class="items-etc">
+            <hr />
+            <div class="item-etc">
                 <button type="submit" class="btn btn-primary"> 상품 등록 </button>
                 <button onclick="location.href='items.html'" class="btn btn-primary"
                         th:onclick="|location.href='@{/items}'|" type="button"> 취소 </button>
             </div>
         </form>
     </div>
-</div>
-<div>
-</div>
 </body>
 </html>
