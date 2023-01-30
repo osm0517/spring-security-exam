@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="/layout/default-layout :: layout(~{::body})">
-<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <meta charset="UTF-8" />
-    <title> seongmin </title>
-    <link>
-</head>
 <body>
-  <div class="login-div">
+  <div class="item-container">
     <h1 th:if="${result}" style="color:red"> 로그인 실패 </h1>
     <div>
-      <form action="../../index.html" th:action method="post">
+      <form action="../../index.html" th:action th:object="${member}" method="post">
 <!--        사용자 아이디 -->
-          <div>
-              <input placeholder="id" class="user-id"
-                     name="userId"/>
+          <div class="input-div">
+              <label class="fs-3"> ID </label>
+              <input placeholder="id" class="form-control"
+                     th:field="*{userId}"/>
+              <div class="field-error" th:errors="*{userId}">
+                  validation error
+              </div>
           </div>
 <!--        사용자 비밀번호(평문) -->
-          <div>
-              <input placeholder="password" class="password"
-                     name="password"/>
+          <div class="input-div">
+              <label class="fs-3"> 비밀번호 </label>
+              <input placeholder="password" class="form-control"
+                     th:field="*{password}"/>
+              <div class="field-error" th:errors="*{password}">
+                  validation error
+              </div>
           </div>
-          <div>
+          <hr/>
+          <div class="item-etc">
               <button type="submit" class="btn btn-primary"> 로그인 </button>
               <button type="button" class="btn btn-primary"
                       onclick="location.href='../signup/signup.html'"
@@ -29,7 +33,8 @@
           </div>
       </form>
     </div>
-      <div>
+      <hr/>
+      <div class="item-etc">
           <button type="button" class="btn btn-warning"
           th:onclick="|location.href='@{/oauth2/authorization/kakao}'|"> kakao login </button>
           <button type="button" class="btn btn-danger"
@@ -37,12 +42,6 @@
           <button type="button" class="btn btn-success"
           th:onclick="|location.href='@{/oauth2/authorization/naver}'|"> naver login </button>
       </div>
-<!--    <a href="https://kauth.kakao.com/oauth/authorize?client_id=607142d2d7fe229e0ca1fecf63974ab7&redirect_uri=http://localhost:8080/code/kakao&response_type=code"> kakao login</a>-->
-<!--    <a href="/oauth2/authorize/google"> google login </a>-->
-<!--    <a href="/oauth2/authorize/naver"> naver login </a>-->
-<!--      <a href="/oauth2/authorize/kakao"> login </a>-->
-<!--      <br />-->
-<!--      <br/>-->
   </div>
 </body>
 </html>

@@ -5,6 +5,8 @@ import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.dto.member.LoginDto;
+import com.example.springsecurityexam.dto.member.MemberSaveDto;
 import com.example.springsecurityexam.dto.member.PasswordEditDto;
 import com.example.springsecurityexam.dto.member.UserInfoEditDto;
 import com.example.springsecurityexam.enumdata.RoleType;
@@ -17,9 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
@@ -65,6 +70,7 @@ public class MemberController {
         log.debug("login view render");
 
         model.addAttribute("result", result);
+        model.addAttribute("member", new LoginDto());
 
         return loginPath;
     }
@@ -198,68 +204,65 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/login")
-    public String loginProcess(
-            String userId,
-            String password,
-            HttpServletRequest request,
-            HttpServletResponse response,
-            HttpSession session
-    ){
-        log.debug("error test");
-        if(parameterNullCheck(request)){
-            return "redirect:/login/fail";
-        } else {
-            Member member = new Member(userId, password, null, null, null);
-
-            Member loginResult = memberService.login(member);
-            if (loginResult != null) {
-                log.debug("login success");
-
-                HttpSession requestSession = request.getSession();
-                requestSession.setAttribute(SessionUtils.session_login_id, loginResult.getId());
-                requestSession.setAttribute(SessionUtils.session_login_username, loginResult.getName());
-
-                return "redirect:/";
-            }
-
-            log.debug("login fail");
-
-            return "redirect:/login";
-        }
-    }
+//    @PostMapping("/login")
+//    public String loginProcess(
+//            @ModelAttribute(name = "member") LoginDto dto,
+//            HttpServletRequest request
+//    ){
+//
+//        Member loginResult = memberService.login(dto);
+//        if (loginResult != null) {
+//            log.debug("login success");
+//
+//            HttpSession requestSession = request.getSession();
+//            requestSession.setAttribute(SessionUtils.session_login_id, loginResult.getId());
+//            requestSession.setAttribute(SessionUtils.session_login_username, loginResult.getName());
+//
+//            return "redirect:/";
+//        }
+//
+//        log.debug("login fail");
+//
+//        return "redirect:/login";
+//
+//    }
 
     @GetMapping("/signup")
-    public String signup(){
+    public String signup(
+            Model model
+    ){
         log.info("signup view render");
+
+        model.addAttribute("member", new MemberSaveDto());
+
         return signupPath;
     }
 
     @PostMapping("/signup")
     public String signupProcess(
-            @RequestParam("userId") String userId,
-            @RequestParam("password") String password,
-            @RequestParam("name") String name,
-            @RequestParam("email") String email,
+            @Validated @ModelAttribute(name = "member") MemberSaveDto dto,
+            BindingResult bindingResult,
             Model model,
             HttpServletRequest request
     ){
-//        input check
-        if(parameterNullCheck(request)){
-            model.addAttribute("result", "fail");
-            return signupResultPath;
-        }else {
-//            given
-            Member member = new Member(userId, password, name, email, RoleType.USER);
-//            when
-            if(memberService.signup(member)){
-//            then
-                model.addAttribute("result", "success");
-                return signupResultPath;
-            }else{
-                return signupFailPath;
-            }
+        if(!Objects.equals(dto.getPassword(), dto.getPasswordConfirm())){
+            bindingResult.reject("isSamePassword", "비밀번호가 동일하지 않습니다.");
         }
+        if(bindingResult.hasErrors()){
+            log.debug("error = {}", bindingResult);
+            return signupPath;
+        }
+//            given
+        Member member = new Member(dto.getUserId(), dto.getPassword(), dto.getName(), dto.getEmail(), RoleType.USER);
+//            when
+        if(memberService.signup(member)){
+//            then
+            model.addAttribute("result", "success");
+            return signupResultPath;
+        }else{
+            return signupFailPath;
+        }
+
     }
 
     /**

@@ -2,6 +2,7 @@ package com.example.springsecurityexam.service;
 
 import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Member;
+import com.example.springsecurityexam.dto.member.LoginDto;
 import com.example.springsecurityexam.dto.member.PasswordEditDto;
 import com.example.springsecurityexam.dto.member.UserInfoEditDto;
 import com.example.springsecurityexam.enumdata.RoleType;
@@ -49,7 +50,7 @@ public class MemberService {
      * @param member
      * @return
      */
-    public Member login(Member member){
+    public Member login(LoginDto member){
 //        사용자가 입력한 비밀번호(평문)
         String userId = member.getUserId();
         String inputPassword = member.getPassword();
