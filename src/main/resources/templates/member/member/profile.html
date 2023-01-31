@@ -35,7 +35,7 @@
 
         <button type="button" class="btn btn-danger"
         onclick="location.href='../items/producerItems.html'"
-        th:onclick=""
+        th:onclick="|location.href='@{/member/withdrawal}'|"
         th:text="#{profile.btn.withdrawal}"> 회원 탈퇴 </button>
     </div>
 </div>

@@ -26,6 +26,8 @@ public class MemberService {
 
     private final BCryptPasswordEncoder encoder;
 
+    private final List<DeleteAccount> deleteAccounts;
+
     /**
      * 회원가입 로직
      * 성공하면 true, 실패하면 false
@@ -68,8 +70,17 @@ public class MemberService {
      * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인
      */
     public Member checkSession(long userId){
+        log.debug("no such");
         return memberRepository.findById(userId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    public void delete(String type, long userId, String value){
+        for (DeleteAccount clazz : deleteAccounts) {
+            if(clazz.support(type)){
+                clazz.delete(userId, value);
+            }
+        }
     }
 
     /**

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.security.Principal;
+import java.util.NoSuchElementException;
 
 @Controller
 @Slf4j
@@ -38,22 +39,27 @@ public class HomeController {
             return "index";
         }
 
-        Member member = memberService.checkSession(userId);
+        try {
+            Member member = memberService.checkSession(userId);
 
-        log.debug("userId = {}", userId);
-        log.debug("member = {}", member);
+            log.debug("userId = {}", userId);
+            log.debug("member = {}", member);
 
-        HttpSession h = request.getSession(false);
-        h.getAttributeNames().asIterator()
-                .forEachRemaining(name -> log.debug("attributes = {}", h.getAttribute(name)));
+            HttpSession h = request.getSession(false);
+            h.getAttributeNames().asIterator()
+                    .forEachRemaining(name -> log.debug("attributes = {}", h.getAttribute(name)));
 
-        if(member == null){
-            log.debug("not login");
+            if (member == null) {
+                log.debug("not login");
+                return "index";
+            }
+
+            model.addAttribute("user", member);
+
+            return "loginHome";
+        }catch (NoSuchElementException e){
+            log.debug("delete member");
             return "index";
         }
-
-        model.addAttribute("user", member);
-
-        return "loginHome";
     }
 }

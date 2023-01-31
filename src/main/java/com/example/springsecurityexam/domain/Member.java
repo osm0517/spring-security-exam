@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Getter
+@Getter @ToString
 @NoArgsConstructor
 @Entity
 @Table(name = "user")

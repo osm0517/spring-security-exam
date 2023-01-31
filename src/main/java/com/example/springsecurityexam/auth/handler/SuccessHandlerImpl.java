@@ -22,8 +22,6 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         log.debug("login success");
-        log.debug("principal = {}", authentication.getPrincipal());
-        log.debug("principal = {}", authentication.getName());
 
         Object principal = authentication.getPrincipal();
 

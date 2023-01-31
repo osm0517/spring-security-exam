@@ -1,0 +1,25 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<body>
+<div class="item-container">
+    <h2> 회원탈퇴 </h2>
+    <hr/>
+    <form th:action="@{/member/withdrawal/oauth}" th:object="${dto}" method="post">
+        <div class="input-div">
+            <label> 본인확인을 위해서 이메일을 입력해주세요. </label>
+            <input class="form-control" placeholder="이메일을 입력해주세요"
+                   th:field="*{value}">
+            <div th:errors="*{value}" class="field-error">
+                validation error
+            </div>
+        </div>
+        <hr/>
+        <div class="item-etc">
+            <button type="submit" class="btn btn-danger"
+                    th:text="#{profile.btn.withdrawal}"> 회원 탈퇴 </button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

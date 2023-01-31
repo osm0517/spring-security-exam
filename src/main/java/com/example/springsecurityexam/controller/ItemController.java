@@ -54,9 +54,10 @@ public class ItemController {
             Model model
     ){
 
-
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
+        model.addAttribute("producer", item.getProducer().getName());
+
         return "/items/item";
     }
 

@@ -5,15 +5,14 @@ import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.member.LoginDto;
-import com.example.springsecurityexam.dto.member.MemberSaveDto;
-import com.example.springsecurityexam.dto.member.PasswordEditDto;
-import com.example.springsecurityexam.dto.member.UserInfoEditDto;
+import com.example.springsecurityexam.dto.member.*;
 import com.example.springsecurityexam.enumdata.RoleType;
+import com.example.springsecurityexam.service.DeleteAccount;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,6 +45,8 @@ public class MemberController {
     private static final String profileEditPath = "/member/member/editForm";
     private static final String passwordEditPopupPath = "/member/popup/passwordEdit";
     private static final String buyItemsPath = "/member/consume/items";
+    private static final String withdrawalFormPath = "/member/member/withdrawalForm";
+    private static final String withdrawalOAuthPath = "/member/member/withdrawalOAuth";
 
 //    --- view path end ---
 
@@ -139,6 +140,49 @@ public class MemberController {
     public String loginSuccess(){
         log.debug("login success");
         return loginSuccessPath;
+    }
+
+    @GetMapping("/member/withdrawal")
+    public String withdrawalFrom(
+            Model model,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("userId = {}", userId);
+
+        Member member = memberService.checkSession(userId);
+        model.addAttribute("dto", new DeleteMemberDto());
+        if(member.getUserId().contains("_")){
+            return withdrawalOAuthPath;
+        }
+
+        return withdrawalFormPath;
+    }
+
+    @PostMapping("/member/withdrawal/{type}")
+    public String withdrawalMember(
+            @Validated @ModelAttribute(name = "dto") DeleteMemberDto dto,
+            BindingResult bindingResult,
+            @PathVariable String type,
+            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    ){
+        log.debug("type = {}", type);
+
+        if(bindingResult.hasErrors()){
+            log.debug("error = {}", bindingResult);
+            switch (type){
+                case "form" -> {
+                    return withdrawalFormPath;
+                }
+                case "oauth" -> {
+                    return withdrawalOAuthPath;
+                }
+                default -> log.error("not exist type");
+            }
+        }
+
+        memberService.delete(type, userId, dto.getValue());
+
+        return "redirect:/";
     }
 
     @GetMapping("/{userId}/items")

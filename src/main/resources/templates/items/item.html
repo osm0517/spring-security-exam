@@ -10,6 +10,7 @@
 <div class="item-container">
     <h2> 상품 상세 </h2>
     <hr/>
+<!--    물품의 정보 -->
     <div class="input-div">
         <label class="fs-3"> 상품 ID </label>
         <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
@@ -29,6 +30,17 @@
         <label class="fs-3"> 수량 </label>
         <input class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"
                 th:value="${item.quantity}" value="1" readonly>
+    </div>
+    <hr/>
+<!--    판매자의 정보 -->
+    <h4> 판매자 정보 </h4>
+    <hr/>
+    <div>
+        <label> 판매자 </label>
+        <span th:text="${producer}"> 판매자의 이름 </span>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary"> 판매자의 다른 물건도 보러가기 </button>
     </div>
     <hr/>
     <div class="item-etc">
