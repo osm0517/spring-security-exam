@@ -10,6 +10,7 @@ import com.example.springsecurityexam.service.ItemService;
 import com.example.springsecurityexam.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @Slf4j
@@ -29,12 +32,23 @@ public class ItemController {
     private final ItemService itemService;
     private final MemberService memberService;
 
+    private int size = 5;
+
     @GetMapping
     public String itemsView(
+            @RequestParam int page,
             Model model
     ){
-        List<Item> items = itemService.findItems();
+        Page<Item> items = itemService.findItems(page-1, size);
+        int paging = itemService.paginationAll(size);
+
+        List<Integer> range = IntStream.rangeClosed(1, paging)
+                .boxed()
+                .collect(Collectors.toList());
+
         model.addAttribute("items", items);
+        model.addAttribute("paging", range);
+
         return "/items/items";
     }
 

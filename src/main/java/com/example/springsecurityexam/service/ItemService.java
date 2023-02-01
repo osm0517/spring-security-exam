@@ -11,6 +11,8 @@ import com.example.springsecurityexam.repository.ItemRepository;
 import com.example.springsecurityexam.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -76,9 +78,16 @@ public class ItemService {
         member.getBuyItems().add(buyItem);
     }
 
-    public List<Item> findItems(){
+    public Page<Item> findItems(int page, int size){
 
-        return itemRepository.findAll();
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return itemRepository.findAll(pageRequest);
+    }
+
+    public int paginationAll(int number){
+
+        return (int)Math.ceil((float)itemRepository.count()/number);
     }
 
     public void deleteItem(long itemId){

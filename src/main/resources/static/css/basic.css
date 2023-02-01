@@ -70,3 +70,8 @@
 .item-etc{
     text-align : center;
 }
+
+.pagination-wrap{
+    width : fit-content;
+    margin : 0 auto;
+}

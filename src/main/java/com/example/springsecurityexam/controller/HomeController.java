@@ -32,8 +32,6 @@ public class HomeController {
             @SessionAttribute(name = SessionUtils.session_login_id, required = false) Integer userId
     ){
 
-        log.debug("home");
-
         if(userId == null){
             log.debug("not login");
             return "index";

@@ -33,6 +33,30 @@
             </tr>
         </tbody>
     </table>
+    <hr/>
+<!--    pagination -->
+    <div class="pagination-wrap">
+        <nav aria-label="Page navigation example" class="item-etc">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page : ${paging}">
+                    <div class="page-link" th:onclick="|location.href='@{/items(page=${page})}'|"
+                         th:text="${page}">1</div>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <hr/>
     <div class="item-etc">
         <button type="button" class="btn btn-primary"
         onclick="location.href='./addForm.hrml'"
