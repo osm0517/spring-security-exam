@@ -114,6 +114,7 @@ public class MemberService {
     }
 
     public List<BuyItem> findBuyItems(long userId){
+
         Member member = memberRepository.findById(userId)
                 .orElseThrow(NoSuchElementException::new);
 

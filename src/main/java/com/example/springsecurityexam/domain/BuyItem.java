@@ -3,7 +3,10 @@ package com.example.springsecurityexam.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -28,7 +31,8 @@ public class BuyItem {
 
     @Column(name = "created_date",nullable = false,
             insertable = false, updatable = false)
-    private Date buyDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate buyDate;
 
     public BuyItem(Member member, Item item, int quantity){
         item.buyItem(item.getQuantity() - quantity);
