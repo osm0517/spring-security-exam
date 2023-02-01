@@ -37,10 +37,11 @@
     <hr/>
     <div>
         <label> 판매자 </label>
-        <span th:text="${producer}"> 판매자의 이름 </span>
+        <span th:text="${producer.name}"> 판매자의 이름 </span>
     </div>
     <div>
-        <button type="button" class="btn btn-primary"> 판매자의 다른 물건도 보러가기 </button>
+        <button type="button" class="btn btn-primary"
+        th:onclick="|location.href='@{/items/{itemId}/producer/info(itemId=${item.id})}'|"> 판매자 정보 보기 </button>
     </div>
     <hr/>
     <div class="item-etc">

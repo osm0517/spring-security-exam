@@ -56,9 +56,36 @@ public class ItemController {
 
         Item item = itemService.findItem(itemId);
         model.addAttribute("item", item);
-        model.addAttribute("producer", item.getProducer().getName());
+        model.addAttribute("producer", item.getProducer());
 
         return "/items/item";
+    }
+
+    @GetMapping("/{itemId}/producer/info")
+    public String producerInfoForm(
+            @PathVariable int itemId,
+            Model model
+    ){
+
+        Item item = itemService.findItem(itemId);
+
+        model.addAttribute("itemId", itemId);
+        model.addAttribute("producer", item.getProducer());
+
+        return "/member/producer/info";
+    }
+
+    @GetMapping("/{itemId}/producer/info/items")
+    public String producerItemsForm(
+            @PathVariable int itemId,
+            Model model
+    ){
+
+        Item item = itemService.findItem(itemId);
+
+        model.addAttribute("producer", item.getProducer());
+
+        return "/member/producer/items";
     }
 
     @GetMapping("/{itemId}/buy/popup")

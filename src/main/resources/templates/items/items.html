@@ -23,10 +23,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="item : ${items}">
+            <tr th:each="item : ${items}" onclick="./item.html" class="header-title"
+                th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|">
                 <th scope="row" th:text="${itemStat.count}"> emptyCount </th>
-                <td th:text="${item.id}" onclick="./item.html"
-                th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|"> emptyId </td>
+                <td th:text="${item.id}"> emptyId </td>
                 <td th:text="${item.itemName}"> emptyName </td>
                 <td th:text="${item.price}"> emptyPrice </td>
                 <td th:text="${item.quantity}"> emptyQuantity </td>

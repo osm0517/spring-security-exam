@@ -1,0 +1,25 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="/layout/default-layout :: layout(~{::body})">
+<body>
+<div class="item-container">
+    <h2> [[${producer.name}]]의 판매 목록 </h2>
+    <hr/>
+    <table class="table">
+        <tr>
+            <th scope="col"> 번호 </th>
+            <th scope="col"> 이름 </th>
+            <th scope="col"> 가격 </th>
+            <th scope="col"> 수량 </th>
+        </tr>
+        <tr th:each="item, stat : ${producer.items}" onclick="./item.html" class="header-title"
+            th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|">
+            <th th:text="${stat.count}"> 번호 </th>
+            <th th:text="${item.itemName}"> 이름 </th>
+            <th th:text="${item.price}"> 가격 </th>
+            <th th:text="${item.quantity}"> 수량 </th>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
