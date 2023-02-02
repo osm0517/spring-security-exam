@@ -1,34 +1,30 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="/layout/default-layout :: layout(~{::body})">
-<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <meta charset="UTF-8" />
-    <title> seongmin </title>
-    <link>
-</head>
 <body>
 <div>
     <div class="login-div">
         <!--        기능을 정리를 해놓자-->
         <div><h2 th:text="${user.auth}?: _"> 본인의 권한 </h2></div>
         <div><p> 안녕하세요. <span th:text="${user.name}?: _"> 본인의 이름 </span> </p></div>
+        <div><p> 회원님의 머니는 <span th:text="${user.money}?: _"> 본인의 머니 </span> </p></div>
         <div>
             <button type="button" class="btn btn-secondary"
-            onclick="location.href='./items/items.html'"
-            th:onclick="|location.href='@{/profile}'|"> profile </button>
+                    onclick="location.href='./items/items.html'"
+                    th:onclick="|location.href='@{/profile}'|"> profile </button>
 
             <button type="button" class="btn btn-secondary"
-            onclick="location.href='./items/items.html'"
-            th:onclick="|location.href='@{/items(page=1)}'|"> items </button>
+                    onclick="location.href='./items/items.html'"
+                    th:onclick="|location.href='@{/items(page=1)}'|"> items </button>
+
+            <button type="button" class="btn btn-primary"
+                    onclick="location.href='./items/items.html'"
+                    th:onclick="|window.open('@{}', '금액 충전', 'width=430, height=500')|"> 머니 충전하기 </button>
 
             <button type="button" class="btn btn-warning"
-            onclick="location.href='../static/html/login/logout.html'"
-            th:onclick="|location.href='@{/logout}'|"> logout </button>
+                    onclick="location.href='../static/html/login/logout.html'"
+                    th:onclick="|location.href='@{/logout}'|"> logout </button>
         </div>
-<!--            <div><a href="./member/login/login.html"-->
-<!--                    th:href="@{/login}"> member( ex) login) </a></div>-->
-<!--            <div><a href="./items/info.html"-->
-<!--                    th:href="@{/items}"> items </a></div>-->
     </div>
 </div>
 </body>

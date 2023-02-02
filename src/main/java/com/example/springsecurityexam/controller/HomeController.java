@@ -53,7 +53,6 @@ public class HomeController {
             }
 
             model.addAttribute("user", member);
-
             return "loginHome";
         }catch (NoSuchElementException e){
             log.debug("delete member");

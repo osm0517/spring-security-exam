@@ -12,7 +12,7 @@
     <div class="item-etc">
         <button type="button" class="btn btn-primary"
                 onclick="location.href='../items/producerItems.html'"
-                th:onclick="|location.href='@{/items/{itemId}/producer/info/items(itemId=${itemId})}'|"
+                th:onclick="|location.href='@{/items/{itemId}/producer/info/items(itemId=${itemId}, page=1)}'|"
                 th:text="#{profile.btn.producer}"> 판매 목록 </button>
 </div>
 </div>

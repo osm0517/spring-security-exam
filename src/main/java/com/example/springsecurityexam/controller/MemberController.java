@@ -7,12 +7,8 @@ import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.dto.member.*;
 import com.example.springsecurityexam.enumdata.RoleType;
-import com.example.springsecurityexam.service.DeleteAccount;
 import com.example.springsecurityexam.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,12 +37,13 @@ public class MemberController {
 
     private static final String loginSuccessPath = "/loginHome";
     private static final String profilePath = "/member/member/profile";
-    private static final String producerItemsPath = "/items/producerItems";
+    private static final String producerItemsPath = "/items/myProducingItems";
     private static final String profileEditPath = "/member/member/editForm";
     private static final String passwordEditPopupPath = "/member/popup/passwordEdit";
     private static final String buyItemsPath = "/member/consume/items";
     private static final String withdrawalFormPath = "/member/member/withdrawalForm";
     private static final String withdrawalOAuthPath = "/member/member/withdrawalOAuth";
+    private static final String moneyPath = "/member/popup/money";
 
 //    --- view path end ---
 
@@ -203,17 +200,17 @@ public class MemberController {
      * 일단 로그아웃 로직으로 세션만 삭제하는 걸로 해놓음
      * 추후에 추가를 해야함
      */
-    @GetMapping("/logout")
-    public String logout(
-            HttpServletRequest request
-    ){
-        log.debug("user logout");
-
-        HttpSession session = request.getSession(false);
-        session.invalidate();
-
-        return "redirect:/";
-    }
+//    @GetMapping("/logout")
+//    public String logout(
+//            HttpServletRequest request
+//    ){
+//        log.debug("user logout");
+//
+//        HttpSession session = request.getSession(false);
+//        session.invalidate();
+//
+//        return "redirect:/";
+//    }
 
     /**
      * 정보 수정 로직을 처리

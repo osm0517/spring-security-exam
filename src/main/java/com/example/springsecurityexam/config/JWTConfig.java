@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.time.Duration;
 import java.util.*;
 
 @Configuration
@@ -37,6 +38,9 @@ public class JWTConfig {
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
 
+    @Value("${jwt.issuer}")
+    private String issuer;
+
     private final UserDetailsServiceImpl userDetailsService;
 
     private final MemberRepository memberRepository;
@@ -54,55 +58,63 @@ public class JWTConfig {
 
     public String createAccessToken(String refreshToken) {
 
-        String userId = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(refreshToken).getBody().getSubject();
+        Date now = new Date();
+        String userId = Jwts.parser()
+                .setSigningKey(refreshSecretKey)
+                .parseClaimsJws(refreshToken)
+                .getBody()
+                .get("userId").toString();
 
         Optional<Member> wrapMember = memberRepository.findByUserId(userId);
+
         if (wrapMember.isEmpty()) {
             throw new UsernameNotFoundException("username not found");
         }
 
         Member member = wrapMember.get();
 
-        Claims payload = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
-        payload.put("name", member.getName());
-        payload.put("role", member.getAuth().toString());
-
-        Date now = new Date();
-        log.debug("create userId = {}", userId);
         return Jwts.builder()
-                .setClaims(payload) // 정보 저장
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + accessExpireTime)) // set Expire Time
-                .signWith(SignatureAlgorithm.HS256, accessSecretKey)  // 사용할 암호화 알고리즘과
-                // signature 에 들어갈 secret값 세팅
+//                발급자를 지정해서 혹시라도 조작했을 때 확인할 수 있도록 함
+                .setIssuer(issuer)
+                .setIssuedAt(now)
+//                만료시간 30분
+                .setExpiration(new Date(now.getTime() + accessExpireTime))
+//                body에 사용자의 정보를 담음
+                .claim("userId", member.getUserId())
+                .claim("email", member.getEmail())
+//                암호화를 할 알고리즘과 key를 설정
+                .signWith(SignatureAlgorithm.HS256, accessSecretKey)
                 .compact();
     }
 
     public String createRefreshToken(String userId) {
-        log.debug("expireTime = {}", refreshExpireTime);
-        log.debug("key = {}", refreshSecretKey);
-        Claims claims = Jwts.claims().setSubject(userId); // JWT payload 에 저장되는 정보단위
+
         Date now = new Date();
+
         return Jwts.builder()
-                .setClaims(claims) // 정보 저장
-                .setIssuedAt(now) // 토큰 발행 시간 정보
-                .setExpiration(new Date(now.getTime() + refreshExpireTime)) // set Expire Time
-                .signWith(SignatureAlgorithm.HS256, refreshSecretKey)  // 사용할 암호화 알고리즘과
-                // signature 에 들어갈 secret값 세팅
+                .setIssuer(issuer)
+                .claim("userId", userId)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + refreshExpireTime))
+                .signWith(SignatureAlgorithm.HS256, refreshSecretKey)
                 .compact();
     }
 
     // JWT 토큰에서 인증 정보 조회
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        String userId = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token).getBody().getSubject();
+
+        String userId = Jwts.parser()
+                .setSigningKey(accessSecretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId").toString();
+
         CustomUserDetails userDetails = userDetailsService.loadUserByUsername(userId);
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     /**
      * Request의 Header에서 token 값을 가져옵니다. "X-AUTH-TOKEN" : "TOKEN값'
-     * @param request
-     * @return token 값
      */
     public String resolveAccessToken(HttpServletRequest request) {
         try {
@@ -137,25 +149,27 @@ public class JWTConfig {
     /**
      * refresh 토큰의 유효성 + 만료일자 확인
      * token 시간이 현재 시간보다 이전이면 false
-     * @param token
-     * @return boolean
      */
     public boolean validateRefreshToken(String token) {
+        Date now = new Date();
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(token);
-            return !claims.getBody().getExpiration().before(new Date());
+
+            Claims body = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(token).getBody();
+            return body.getIssuer().equals(issuer) && body.getExpiration().after(now);
+
         } catch (Exception e) {
             return false;
         }
     }
 
     public boolean validateAccessToken(String token) {
+        Date now = new Date();
         try {
-            Jws<Claims> claims = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
-//            log.debug("fuck claims = {}", claims);
-            return !claims.getBody().getExpiration().before(new Date());
+
+            Claims body = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token).getBody();
+            return body.getIssuer().equals(issuer) && body.getExpiration().after(now);
+
         } catch (Exception e) {
-//            log.debug("fuck signature");
             return false;
         }
     }

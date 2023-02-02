@@ -8,6 +8,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,25 +20,24 @@ import java.io.IOException;
 import java.lang.constant.Constable;
 
 @Slf4j
+@RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
-    private JWTConfig jwtConfig;
+    private final JWTConfig jwtConfig;
 
-    private CookieUtils cookieUtils;
+    private final CookieUtils cookieUtils;
 
     private String accessTokenName = "X-AUTH-TOKEN";
 
 //    @Value("${jwt.access_expire_time}")
     private long accessExpireTime = 1800000;
 
-    public JwtFilter(JWTConfig jwtConfig, CookieUtils cookieUtils){
-        this.cookieUtils = cookieUtils;
-        this.jwtConfig = jwtConfig;
-    }
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
+        log.debug("dofilter");
+
+//        없으면 null
 //        refresh token 받아오기
         String refreshToken = jwtConfig.resolveRefreshToken((HttpServletRequest) request);
 //        access token 받아오기
@@ -56,7 +56,8 @@ public class JwtFilter extends GenericFilterBean {
 //                log.debug("access token expire");
 //                log.debug("access token name = {}", accessTokenName);
                 String newToken = jwtConfig.createAccessToken(refreshToken);
-                ((HttpServletResponse) response).addCookie(cookieUtils.setCookie(accessTokenName, newToken, accessExpireTime));
+                cookieUtils.setCookie((HttpServletResponse) response, accessTokenName, newToken, null);
+//                ((HttpServletResponse) response).addCookie(cookieUtils.setCookie(accessTokenName, newToken, accessExpireTime));
             } else{
 //                refresh token 만료됨
                 log.debug("refresh token expire");

@@ -1,10 +1,11 @@
 package com.example.springsecurityexam.config;
 
-import com.example.springsecurityexam.auth.handler.FailHandlerImpl;
-import com.example.springsecurityexam.auth.handler.SuccessHandlerImpl;
+import com.example.springsecurityexam.auth.handler.loginHandler.FailHandlerImpl;
+import com.example.springsecurityexam.auth.handler.loginHandler.SuccessHandlerImpl;
 import com.example.springsecurityexam.auth.service.CustomOAuth2UserService;
 import com.example.springsecurityexam.auth.service.UserDetailsServiceImpl;
 import com.example.springsecurityexam.config.utils.CookieUtils;
+import com.example.springsecurityexam.config.utils.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -44,20 +46,26 @@ public class SpringSecurityConfig {
                     .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                    .logout()
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                    .permitAll()
+                .and()
+                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)
                     .formLogin()
-                    .usernameParameter("userId")
-                    .passwordParameter("password")
-                    .loginPage("/login")
-                    .loginProcessingUrl("/login")
-                .successHandler(successHandler)
-                .failureHandler(failHandler)
+                        .usernameParameter("userId")
+                        .passwordParameter("password")
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(successHandler)
+                        .failureHandler(failHandler)
                     .permitAll()
                 .and()
                     .oauth2Login()
                         .loginPage("/login")
-                .successHandler(successHandler)
-                .failureHandler(failHandler)
-                    .userInfoEndpoint()
+                        .successHandler(successHandler)
+                        .failureHandler(failHandler)
+                        .userInfoEndpoint()
                         .userService(customOAuth2UserService)
         ;
         return http.build();

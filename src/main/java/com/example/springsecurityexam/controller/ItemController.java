@@ -39,15 +39,10 @@ public class ItemController {
             @RequestParam int page,
             Model model
     ){
-        Page<Item> items = itemService.findItems(page-1, size);
-        int paging = itemService.paginationAll(size);
+        Page<Item> items = itemService.findItems(page-1, size, null);
+        int paging = itemService.paginationCount(size, null);
 
-        List<Integer> range = IntStream.rangeClosed(1, paging)
-                .boxed()
-                .collect(Collectors.toList());
-
-        model.addAttribute("items", items);
-        model.addAttribute("paging", range);
+        toPagingSetModel(model, items, paging);
 
         return "/items/items";
     }
@@ -92,12 +87,18 @@ public class ItemController {
     @GetMapping("/{itemId}/producer/info/items")
     public String producerItemsForm(
             @PathVariable int itemId,
+            @RequestParam int page,
             Model model
     ){
 
         Item item = itemService.findItem(itemId);
+        Member producer = item.getProducer();
+        Page<Item> items = itemService.findItems(page-1, size, producer);
+        int paging = itemService.paginationCount(size, producer);
 
-        model.addAttribute("producer", item.getProducer());
+        toPagingSetModel(model, items, paging);
+
+        model.addAttribute("producer", producer);
 
         return "/member/producer/items";
     }
@@ -202,5 +203,15 @@ public class ItemController {
         redirectAttributes.addAttribute("itemId", savedItem.getId());
 
         return "redirect:/items/{itemId}";
+    }
+
+    private static void toPagingSetModel(Model model, Page<Item> items, int paging) {
+        List<Integer> range = IntStream.rangeClosed(1, paging)
+                .boxed()
+                .collect(Collectors.toList());
+
+        model.addAttribute("items", items);
+        model.addAttribute("paging", range);
+        model.addAttribute("max", paging);
     }
 }

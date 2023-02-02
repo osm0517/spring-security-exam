@@ -15,12 +15,12 @@
         </tr>
         <tr th:each="item, stat : ${items}">
             <th th:text="${stat.count}"> 번호 </th>
-            <th th:text="${item.itemName}"> 이름 </th>
-            <th th:text="${item.price}"> 가격 </th>
-            <th th:text="${item.quantity}"> 수량 </th>
-            <th><button type="button" class="btn btn-secondary"
+            <td th:text="${item.itemName}"> 이름 </td>
+            <td th:text="${item.price}"> 가격 </td>
+            <td th:text="${item.quantity}"> 수량 </td>
+            <td><button type="button" class="btn btn-secondary"
             onclick="location.href='./editForm.html'"
-            th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정하기 </button></th>
+            th:onclick="|location.href='@{/items/edit/{itemId}(itemId=${item.id})}'|"> 수정하기 </button></td>
         </tr>
     </table>
 </div>

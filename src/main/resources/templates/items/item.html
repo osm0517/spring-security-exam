@@ -50,7 +50,7 @@
         'width=400, height=430, left=300, top=300')|"> 구매 </button>
 
         <button class="btn btn-primary" onclick="location.href='./items.html'"
-                th:onclick="|location.href='@{/items}'|"> 목록으로 </button>
+                th:onclick="|location.href='@{/items(page=1)}'|"> 목록으로 </button>
 
         <button class="btn btn-danger"> 신고 </button>
     </div>

@@ -17,6 +17,10 @@ public class CustomUserDetails implements UserDetails {
         return member.getId();
     }
 
+    public String getEmail(){
+        return member.getEmail();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collect = new ArrayList<>();

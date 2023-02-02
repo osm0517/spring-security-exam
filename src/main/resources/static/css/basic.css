@@ -75,3 +75,13 @@
     width : fit-content;
     margin : 0 auto;
 }
+
+.page-item{
+    cursor : pointer;
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

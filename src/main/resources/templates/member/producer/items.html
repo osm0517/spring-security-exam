@@ -12,14 +12,38 @@
             <th scope="col"> 가격 </th>
             <th scope="col"> 수량 </th>
         </tr>
-        <tr th:each="item, stat : ${producer.items}" onclick="./item.html" class="header-title"
+        <tr th:each="item, stat : ${items}" onclick="./item.html" class="header-title"
             th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|">
             <th th:text="${stat.count}"> 번호 </th>
-            <th th:text="${item.itemName}"> 이름 </th>
-            <th th:text="${item.price}"> 가격 </th>
-            <th th:text="${item.quantity}"> 수량 </th>
+            <td th:text="${item.itemName}"> 이름 </td>
+            <td th:text="${item.price}"> 가격 </td>
+            <td th:text="${item.quantity}"> 수량 </td>
         </tr>
     </table>
+    <hr/>
+    <!--    pagination -->
+    <div class="pagination-wrap">
+        <nav aria-label="Page navigation example" class="item-etc">
+            <ul class="pagination">
+                <li class="page-item">
+                    <div class="page-link" th:onclick="|location.href='@{/items/{itemId}/producer/info/items(itemId=${itemId}, page=1)}'|"
+                         aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </div>
+                </li>
+                <li class="page-item" th:each="page : ${paging}">
+                    <div class="page-link" th:onclick="|location.href='@{/items/{itemId}/producer/info/items(itemId=${itemId}, page=${page})}'|"
+                         th:text="${page}">1</div>
+                </li>
+                <li class="page-item">
+                    <div class="page-link" th:onclick="|location.href='@{/items/{itemId}/producer/info/items(itemId=${itemId}, page=1)}'|"
+                         aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
 </body>
 </html>

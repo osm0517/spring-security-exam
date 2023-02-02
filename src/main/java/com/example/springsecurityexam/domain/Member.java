@@ -59,6 +59,9 @@ public class Member{
     @Column(name = "updated_date", insertable = false, updatable = false, nullable = false)
     private Date updatedDate;
 
+    @Column
+    private long money;
+
     @OneToMany(mappedBy = "producer")
     private List<Item> items = new ArrayList<>();
 

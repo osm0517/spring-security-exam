@@ -1,4 +1,4 @@
-package com.example.springsecurityexam.auth.handler;
+package com.example.springsecurityexam.auth.handler.loginHandler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

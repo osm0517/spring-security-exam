@@ -3,19 +3,19 @@ package com.example.springsecurityexam.service;
 import com.example.springsecurityexam.domain.BuyItem;
 import com.example.springsecurityexam.domain.Item;
 import com.example.springsecurityexam.domain.Member;
-import com.example.springsecurityexam.dto.item.ItemSaveDto;
 import com.example.springsecurityexam.dto.item.ItemBuyDto;
 import com.example.springsecurityexam.dto.item.ItemUpdateDto;
 import com.example.springsecurityexam.repository.BuyItemRepository;
 import com.example.springsecurityexam.repository.ItemRepository;
 import com.example.springsecurityexam.repository.MemberRepository;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -78,16 +78,29 @@ public class ItemService {
         member.getBuyItems().add(buyItem);
     }
 
-    public Page<Item> findItems(int page, int size){
+    public Page<Item> findItems(
+            @Nonnull int page, @Nonnull int size, @Nullable Member producer
+    ){
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return itemRepository.findAll(pageRequest);
+        if(producer == null) {
+            return itemRepository.findAll(pageRequest);
+        }else{
+            return itemRepository.findAllByProducer(producer, pageRequest);
+        }
     }
 
-    public int paginationAll(int number){
-
-        return (int)Math.ceil((float)itemRepository.count()/number);
+    public int paginationCount(
+            @Nonnull int number, @Nullable Member producer
+    ){
+        long countValue;
+        if(producer == null){
+            countValue = itemRepository.count();
+        }else{
+            countValue = itemRepository.countByProducer(producer);
+        }
+        return (int)Math.ceil((float)countValue/number);
     }
 
     public void deleteItem(long itemId){

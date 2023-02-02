@@ -1,6 +1,7 @@
 package com.example.springsecurityexam.config.utils;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -8,20 +9,24 @@ public class CookieUtils {
 
     /**
      * cookie를 생성해주는 메소드
-     * @param key
-     * @param value
-     * @param maxAge
-     * @return
      */
-    public Cookie setCookie(String key, String value, long maxAge){
+    public void setCookie(HttpServletResponse response, String key, String value, Long maxAge){
 
         if (key == null){
             key = "defaultKey";
         }
+        Cookie cookie =  addCookie(key, value, maxAge);
 
+        response.addCookie(cookie);
+    }
+
+    private Cookie addCookie(String key, String value, Long maxAge){
         Cookie cookie = new Cookie(key, value);
 
-        cookie.setMaxAge(Math.toIntExact(maxAge));
+        if(maxAge != null){
+            cookie.setMaxAge(Math.toIntExact(maxAge));
+        }
+
         cookie.setHttpOnly(true);
         cookie.setDomain("localhost");
         cookie.setPath("/");
