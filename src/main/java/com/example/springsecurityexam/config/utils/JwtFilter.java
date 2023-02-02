@@ -14,6 +14,7 @@ import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.web.filter.GenericFilterBean;
 
 import java.io.IOException;
@@ -48,23 +49,16 @@ public class JwtFilter extends GenericFilterBean {
             UsernamePasswordAuthenticationToken authentication = jwtConfig.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }else{
-//            log.debug("refresh token = {}", refreshToken);
-//            log.debug("valideate result = {}", jwtConfig.validateRefreshToken(refreshToken));
 //            access token 만료되고 refresh token 만료안됨
             if(refreshToken != null && jwtConfig.validateRefreshToken(refreshToken)){
-//            if(true){
-//                log.debug("access token expire");
-//                log.debug("access token name = {}", accessTokenName);
                 String newToken = jwtConfig.createAccessToken(refreshToken);
                 cookieUtils.setCookie((HttpServletResponse) response, accessTokenName, newToken, null);
-//                ((HttpServletResponse) response).addCookie(cookieUtils.setCookie(accessTokenName, newToken, accessExpireTime));
             } else{
 //                refresh token 만료됨
+                SecurityContextHolder.clearContext();
                 log.debug("refresh token expire");
             }
         }
-//        refresh token
-
         chain.doFilter(request, response);
     }
 }

@@ -70,9 +70,16 @@ public class MemberService {
      * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인
      */
     public Member checkSession(long userId){
-        log.debug("no such");
         return memberRepository.findById(userId)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    /**
+     * 없으면 null을 반환
+     */
+    public Member checkUsername(String username){
+        return memberRepository.findByUserId(username)
+                .orElse(null);
     }
 
     public void delete(String type, long userId, String value){

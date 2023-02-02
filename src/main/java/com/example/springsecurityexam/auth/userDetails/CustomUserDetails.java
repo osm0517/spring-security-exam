@@ -2,11 +2,13 @@ package com.example.springsecurityexam.auth.userDetails;
 
 import com.example.springsecurityexam.domain.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
@@ -23,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> collect = new ArrayList<>();
+        List<GrantedAuthority> collect = new ArrayList<>();
         GrantedAuthority grantedAuthority = () -> member.getAuth().toString();
         collect.add(grantedAuthority);
         return collect;

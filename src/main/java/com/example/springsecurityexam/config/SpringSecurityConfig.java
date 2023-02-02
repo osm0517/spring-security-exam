@@ -39,8 +39,8 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                     .authorizeHttpRequests()
-                    .requestMatchers("/", "/css/**").permitAll()
-                    .anyRequest().permitAll()
+                    .requestMatchers("/css/**", "/").permitAll()
+                    .anyRequest().hasAnyAuthority("USER")
                 .and()
                     .csrf().disable()
                     .sessionManagement()
@@ -49,6 +49,7 @@ public class SpringSecurityConfig {
                     .logout()
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/")
+                        .deleteCookies(accessTokenName, refreshTokenName)
                     .permitAll()
                 .and()
                     .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)

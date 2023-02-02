@@ -30,6 +30,8 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
+    @Value("${jwt.access_token_name}")
+    private String accessTokenName;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -48,8 +50,10 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
             username = ((OAuth2UserDetailsImpl) principal).getUsername();
         }
         String refreshToken = jwtConfig.createRefreshToken(username);
+        String accessToken = jwtConfig.createAccessToken(refreshToken);
 
         cookieUtils.setCookie(response, refreshTokenName, refreshToken, null);
+        cookieUtils.setCookie(response, accessTokenName, accessToken, null);
 
         response.sendRedirect("/");
     }

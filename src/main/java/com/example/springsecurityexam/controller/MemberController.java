@@ -133,12 +133,6 @@ public class MemberController {
         return loginFailPath;
     }
 
-    @GetMapping("/login/success")
-    public String loginSuccess(){
-        log.debug("login success");
-        return loginSuccessPath;
-    }
-
     @GetMapping("/member/withdrawal")
     public String withdrawalFrom(
             Model model,
