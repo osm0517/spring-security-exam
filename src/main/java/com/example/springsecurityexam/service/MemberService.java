@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Service
@@ -69,8 +68,8 @@ public class MemberService {
     /**
      * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인
      */
-    public Member checkSession(long userId){
-        return memberRepository.findById(userId)
+    public Member checkUserId(String userId){
+        return memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
     }
 
@@ -120,9 +119,9 @@ public class MemberService {
         throw new IllegalArgumentException("not match password and confirm");
     }
 
-    public List<BuyItem> findBuyItems(long userId){
+    public List<BuyItem> findBuyItems(String userId){
 
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
 
         return member.getBuyItems();

@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -186,7 +187,7 @@ public class ItemController {
             @Validated @ModelAttribute(name = "item") ItemSaveDto dto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+            Principal principal
     ){
 
         if(bindingResult.hasErrors()){
@@ -194,7 +195,9 @@ public class ItemController {
             return "/items/addForm";
         }
 
-        Member member = memberService.checkSession(userId);
+        String userId = principal.getName();
+
+        Member member = memberService.checkUserId(userId);
 
         Item item = new Item(dto.getItemName(), dto.getPrice(), dto.getQuantity(), member);
 

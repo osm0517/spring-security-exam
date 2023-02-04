@@ -18,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -76,11 +77,13 @@ public class MemberController {
     @GetMapping("/profile")
     public String profile(
             Model model,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+            Principal principal
     ){
         log.debug("profile view render");
 
-        Member user = memberService.checkSession(userId);
+        String userId = principal.getName();
+
+        Member user = memberService.checkUserId(userId);
 
         model.addAttribute("user", user);
 
@@ -90,11 +93,13 @@ public class MemberController {
     @GetMapping("/profile/edit")
     public String profileEditForm(
             Model model,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+            Principal principal
     ){
         log.debug("profile edit form render");
 
-        Member user = memberService.checkSession(userId);
+        String userId = principal.getName();
+
+        Member user = memberService.checkUserId(userId);
 
         model.addAttribute("dto", new UserInfoEditDto(user.getName(), user.getEmail()));
 
@@ -116,9 +121,11 @@ public class MemberController {
     @GetMapping("/profile/consume/items")
     public String buyItemsForm(
             Model model,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+            Principal principal
     ){
         log.debug("buyItemsView form render");
+
+        String userId = principal.getName();
 
         List<BuyItem> buyItems = memberService.findBuyItems(userId);
 
@@ -136,11 +143,12 @@ public class MemberController {
     @GetMapping("/member/withdrawal")
     public String withdrawalFrom(
             Model model,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+            Principal principal
     ){
-        log.debug("userId = {}", userId);
 
-        Member member = memberService.checkSession(userId);
+        String userId = principal.getName();
+
+        Member member = memberService.checkUserId(userId);
         model.addAttribute("dto", new DeleteMemberDto());
         if(member.getUserId().contains("_")){
             return withdrawalOAuthPath;
@@ -179,11 +187,13 @@ public class MemberController {
     @GetMapping("/{userId}/items")
     public String produceItems(
             Model model,
-            @PathVariable(name = "userId") long userId
+            Principal principal
     ){
         log.debug("produceItems view render");
 
-        Member member = memberService.checkSession(userId);
+        String userId = principal.getName();
+
+        Member member = memberService.checkUserId(userId);
 
         model.addAttribute("items", member.getItems());
 
