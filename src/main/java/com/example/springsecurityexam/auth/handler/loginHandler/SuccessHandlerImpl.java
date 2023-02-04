@@ -5,6 +5,8 @@ import com.example.springsecurityexam.auth.userDetails.OAuth2UserDetailsImpl;
 import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
+import com.example.springsecurityexam.domain.RefreshToken;
+import com.example.springsecurityexam.repository.RefreshTokenRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +29,8 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     private final JWTConfig jwtConfig;
     private final CookieUtils cookieUtils;
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
@@ -51,6 +55,8 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
         }
         String refreshToken = jwtConfig.createRefreshToken(username);
         String accessToken = jwtConfig.createAccessToken(refreshToken);
+
+        refreshTokenRepository.save(new RefreshToken(username, refreshToken));
 
         cookieUtils.setCookie(response, refreshTokenName, refreshToken, null);
         cookieUtils.setCookie(response, accessTokenName, accessToken, null);

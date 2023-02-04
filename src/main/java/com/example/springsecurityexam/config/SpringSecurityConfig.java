@@ -6,6 +6,7 @@ import com.example.springsecurityexam.auth.service.CustomOAuth2UserService;
 import com.example.springsecurityexam.auth.service.UserDetailsServiceImpl;
 import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.JwtFilter;
+import com.example.springsecurityexam.repository.RefreshTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -23,6 +25,7 @@ public class SpringSecurityConfig {
 
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final JWTConfig jwtConfig;
     private final CookieUtils cookieUtils;
     private final UserDetailsServiceImpl userDetailsService;
@@ -52,7 +55,7 @@ public class SpringSecurityConfig {
                         .deleteCookies(accessTokenName, refreshTokenName)
                     .permitAll()
                 .and()
-                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils, refreshTokenRepository), UsernamePasswordAuthenticationFilter.class)
                     .formLogin()
                         .usernameParameter("userId")
                         .passwordParameter("password")
@@ -62,6 +65,7 @@ public class SpringSecurityConfig {
                         .failureHandler(failHandler)
                     .permitAll()
                 .and()
+//                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), OAuth2LoginAuthenticationFilter.class)
                     .oauth2Login()
                         .loginPage("/login")
                         .successHandler(successHandler)

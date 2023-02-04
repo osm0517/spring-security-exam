@@ -10,7 +10,7 @@ public class CookieUtils {
     /**
      * cookie를 생성해주는 메소드
      */
-    public void setCookie(HttpServletResponse response, String key, String value, Long maxAge){
+    public void setCookie(HttpServletResponse response, String key, String value, Integer maxAge){
 
         if (key == null){
             key = "defaultKey";
@@ -20,7 +20,7 @@ public class CookieUtils {
         response.addCookie(cookie);
     }
 
-    private Cookie addCookie(String key, String value, Long maxAge){
+    private Cookie addCookie(String key, String value, Integer maxAge){
         Cookie cookie = new Cookie(key, value);
 
         if(maxAge != null){

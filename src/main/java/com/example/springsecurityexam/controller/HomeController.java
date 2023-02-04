@@ -38,13 +38,14 @@ public class HomeController {
             Principal principal
     ) {
 
+        if(principal == null){
+            return "index";
+        }
+
         log.debug("username = {}", principal.getName());
         String username = principal.getName();
         Member member = memberService.checkUsername(username);
 
-        if(member == null){
-            return "index";
-        }
         model.addAttribute("user", member);
         return "loginHome";
 
