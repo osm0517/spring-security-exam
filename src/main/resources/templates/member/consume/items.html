@@ -19,7 +19,7 @@
         <tbody>
         <tr th:each="item : ${items}">
             <th scope="row" th:text="${itemStat.count}"> emptyCount </th>
-            <td th:text="${item.item.itemName}"> emptyName </td>
+            <td th:text="${item.item.itemName}?: test"> emptyName </td>
             <td th:text="${item.quantity}"> emptyPrice </td>
             <td th:text="${item.buyDate}"> emptyQuantity </td>
         </tr>

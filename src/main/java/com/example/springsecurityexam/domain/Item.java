@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "item")
-@EqualsAndHashCode
+@ToString
 public class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

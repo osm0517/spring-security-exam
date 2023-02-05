@@ -4,6 +4,7 @@ import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.config.utils.CookieUtils;
 import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.BuyItem;
+import com.example.springsecurityexam.domain.Item;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.dto.member.*;
 import com.example.springsecurityexam.enumdata.RoleType;

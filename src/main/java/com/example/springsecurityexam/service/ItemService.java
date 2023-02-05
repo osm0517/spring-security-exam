@@ -58,7 +58,7 @@ public class ItemService {
         return new ItemBuyDto(item.getItemName(), item.getPrice(), item.getQuantity());
     }
 
-    public void buyItem(long itemId, long userId, ItemBuyDto dto) throws Exception {
+    public void buyItem(long itemId, String userId, ItemBuyDto dto) throws Exception {
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NoSuchElementException::new);
@@ -67,7 +67,7 @@ public class ItemService {
             throw new Exception("재고보다 큰 수를 입력함");
         }
 
-        Member member = memberRepository.findById(userId)
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
 
         BuyItem buyItem = new BuyItem(member, item, dto.getBuyQuantity());
@@ -96,15 +96,23 @@ public class ItemService {
         return itemRepository.findAllByProducer(producer, pageRequest);
     }
 
-    public int paginationCount(
+    /**
+     * 페이지를 옮길 수 있는 버튼이 어디까지 표시를 해줘야하는지 구해줌
+     */
+    public int otherItemsPaginationCount(
             @Nonnull int number, @Nullable Member producer
     ){
-        long countValue;
-        if(producer == null){
-            countValue = itemRepository.count();
-        }else{
-            countValue = itemRepository.countByProducer(producer);
-        }
+        long countValue = itemRepository.countByProducerNot(producer);
+        return (int)Math.ceil((float)countValue/number);
+    }
+
+    /**
+     * 페이지를 옮길 수 있는 버튼이 어디까지 표시를 해줘야하는지 구해줌
+     */
+    public int myItemsPaginationCount(
+            @Nonnull int number, @Nullable Member producer
+    ){
+        long countValue = itemRepository.countByProducer(producer);
         return (int)Math.ceil((float)countValue/number);
     }
 
