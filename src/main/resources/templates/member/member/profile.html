@@ -14,7 +14,7 @@
     <div>
         <button type="button" class="btn btn-primary"
         onclick="location.href='../items/producerItems.html'"
-        th:onclick="|location.href='@{/{userId}/items(userId=${user.id})}'|"
+        th:onclick="|location.href='@{/profile/produce/items}'|"
         th:text="#{profile.btn.producer}"> 판매 목록 </button>
 
         <button type="button" class="btn btn-primary"
@@ -30,8 +30,8 @@
 
         <button type="button" class="btn btn-danger"
         onclick="location.href='../items/producerItems.html'"
-        th:onclick="|location.href='@{/member/withdrawal}'|"
-        th:text="#{profile.btn.withdrawal}"> 회원 탈퇴 </button>
+        th:onclick="|location.href='@{/member/delete}'|"
+        th:text="#{profile.btn.delete}"> 회원 탈퇴 </button>
     </div>
 </div>
 </body>

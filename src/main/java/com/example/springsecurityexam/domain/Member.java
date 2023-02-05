@@ -95,6 +95,11 @@ public class Member{
         this.name = name;
         this.email = email;
     }
+    public void changeUserInfo(String name, String email, String password){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 
     public void buyItem(BuyItem buyItem){
         this.buyItems.add(buyItem);

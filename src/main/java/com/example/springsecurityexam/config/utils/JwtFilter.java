@@ -4,6 +4,7 @@ import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.domain.RefreshToken;
 import com.example.springsecurityexam.repository.RefreshTokenRepository;
 import com.nimbusds.oauth2.sdk.dpop.verifiers.AccessTokenValidationException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;

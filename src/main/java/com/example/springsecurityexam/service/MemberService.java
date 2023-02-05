@@ -30,8 +30,6 @@ public class MemberService {
     /**
      * 회원가입 로직
      * 성공하면 true, 실패하면 false
-     * @param member
-     * @return
      */
     public boolean signup(Member member){
 //        사용자가 입력한 비밀번호(평문)
@@ -48,8 +46,6 @@ public class MemberService {
     /**
      * 성공하면 true, 실패하면 false
      * 실패하면 redirection
-     * @param member
-     * @return
      */
     public Member login(LoginDto member){
 //        사용자가 입력한 비밀번호(평문)
@@ -81,7 +77,7 @@ public class MemberService {
                 .orElse(null);
     }
 
-    public void delete(String type, long userId, String value){
+    public void delete(String type, String userId, String value){
         for (DeleteAccount clazz : deleteAccounts) {
             if(clazz.support(type)){
                 clazz.delete(userId, value);
@@ -93,8 +89,9 @@ public class MemberService {
      * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인 후
      * 수정 폼에서 사용할 수 있도록 비밀번호를 평문으로 보내줌
      */
-    public Member updateUserInfo(long userId, UserInfoEditDto dto){
-        Member member = memberRepository.findById(userId)
+    public Member updateUserInfo(String userId, UserInfoEditDto dto){
+
+        Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
 
         member.changeUserInfo(dto.getName(), dto.getEmail());
@@ -129,9 +126,6 @@ public class MemberService {
 
     /**
      * 평문을 암호화하는 로직
-     * @param member
-     * @param inputPassword
-     * @return
      */
     private Member passwordEncoder(Member member, String inputPassword) {
 //        암호화가 된 비밀번호
@@ -142,8 +136,6 @@ public class MemberService {
 
     /**
      * db에 정상적으로 저장됐는지 확인함
-     * @param saveResult
-     * @return
      */
     private static boolean saveFalseCheck(Member saveResult) {
         log.warn("member save fail");

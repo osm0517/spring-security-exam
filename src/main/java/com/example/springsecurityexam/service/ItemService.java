@@ -78,17 +78,22 @@ public class ItemService {
         member.getBuyItems().add(buyItem);
     }
 
-    public Page<Item> findItems(
-            @Nonnull int page, @Nonnull int size, @Nullable Member producer
+    public Page<Item> findOtherItems(
+            @Nonnull int page, @Nonnull int size, @Nonnull Member producer
     ){
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        if(producer == null) {
-            return itemRepository.findAll(pageRequest);
-        }else{
-            return itemRepository.findAllByProducer(producer, pageRequest);
-        }
+        return itemRepository.findAllByProducerNot(producer, pageRequest);
+    }
+
+    public Page<Item> findMyItems(
+            @Nonnull int page, @Nonnull int size, @Nonnull Member producer
+    ){
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return itemRepository.findAllByProducer(producer, pageRequest);
     }
 
     public int paginationCount(

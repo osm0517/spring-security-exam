@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="/layout/default-layout :: layout(~{::body})">
-<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <meta charset="UTF-8" />
-    <title> seongmin </title>
-    <link>
-</head>
 <body>
 <div >
     <div class="login-div">
         <div><h2>
             hello spring security exam
         </h2></div>
-        <div><button type="button" class="btn btn-success"
-                onclick="location.href='./member/login/login.html'"
-        th:onclick="|location.href='@{/login}'|"> login </button></div>
-        <button type="button" class="btn btn-warning"
-                onclick="location.href='../static/html/login/logout.html'"
-                th:onclick="|location.href='@{/logout}'|"> logout </button>
+        <div>
+            <button type="button" class="btn btn-success"
+                    onclick="location.href='./member/login/login.html'"
+                    th:onclick="|location.href='@{/login}'|"> login </button>
+
+            <button type="button" class="btn btn-primary"
+                    onclick="location.href='../static/html/login/logout.html'"
+                    th:onclick="|location.href='@{/signup}'|"> signup </button>
+        </div>
     </div>
 </div>
 </body>

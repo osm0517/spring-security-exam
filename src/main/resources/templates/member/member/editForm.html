@@ -1,11 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org"
       th:replace="/layout/default-layout :: layout(~{::body})">
-<head th:replace="/fragment/headConfig :: headConfig(~{::title},~{::link})">
-    <meta charset="UTF-8" />
-    <title> seongmin </title>
-    <link>
-</head>
 <body>
 <div class="item-container">
     <h2> 회원정보 </h2>
@@ -14,17 +9,28 @@
         <div class="input-div">
             <label for="name" class="fs-3"> 이름 </label>
             <input type="text" th:field="*{name}" class="form-control">
+            <div th:errors="*{name}" class="field-error">
+                binding error
+            </div>
         </div>
         <div class="input-div">
             <label for="email" class="fs-3"> 이메일 </label>
             <input type="text" th:field="*{email}" class="form-control" disabled>
+            <div th:errors="*{name}">
+                binding error
+            </div>
         </div>
-        <div class="input-div">
-            <label for="password" class="fs-3"> 패스워드 </label>
-            <button type="button" class="btn btn-secondary"
-            th:onclick="|window.open('@{/profile/edit/password/popup}', 'password edit form',
-            'width=430, height=500')|"> 수정하기 </button>
-        </div>
+<!--        <div class="input-div">-->
+<!--            <label for="password" class="fs-3"> 비밀번호 </label>-->
+<!--            <input type="text" th:field="*{password}" class="form-control" disabled>-->
+<!--        </div>-->
+<!--        <div class="input-div">-->
+<!--            <label for="confirm" class="fs-3"> 비밀번호 확인 </label>-->
+<!--            <input type="text" th:field="*{confirm}" class="form-control" disabled>-->
+<!--            <div th:if="${#fields.hasGlobalErrors()}">-->
+<!--                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}"> global error </p>-->
+<!--            </div>-->
+<!--        </div>-->
         <hr/>
         <div class="item-etc">
             <button type="submit" class="btn btn-danger"> 정보 수정 </button>

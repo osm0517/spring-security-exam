@@ -8,6 +8,7 @@ import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -156,6 +157,22 @@ public class JWTConfig {
 
             Claims body = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(token).getBody();
             return body.getIssuer().equals(issuer) && body.getExpiration().after(now);
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * 파라미터로 넘어온 값 두 개를 더해서 현재 시간보다 이후인지를 판단함
+     * 이후이면 true
+     */
+    public boolean validateRefreshTokenFromDB(Date createdDate, @NotNull long expire) {
+        Date now = new Date();
+        try {
+
+            Date expireDate = new Date(createdDate.getTime() + expire);
+            return expireDate.after(now);
 
         } catch (Exception e) {
             return false;

@@ -35,22 +35,17 @@ public class MemberController {
     private static final String signupFailPath = "/member/signup/signup-fail";
     private static final String loginPath = "/member/login/login";
     private static final String loginFailPath = "/member/login/login-fail";
-
-    private static final String loginSuccessPath = "/loginHome";
     private static final String profilePath = "/member/member/profile";
     private static final String producerItemsPath = "/items/myProducingItems";
     private static final String profileEditPath = "/member/member/editForm";
     private static final String passwordEditPopupPath = "/member/popup/passwordEdit";
     private static final String buyItemsPath = "/member/consume/items";
-    private static final String withdrawalFormPath = "/member/member/withdrawalForm";
-    private static final String withdrawalOAuthPath = "/member/member/withdrawalOAuth";
-    private static final String moneyPath = "/member/popup/money";
+    private static final String deleteFormPath = "/member/member/deleteForm";
+    private static final String deleteOAuthPath = "/member/member/deleteOAuth";
 
 //    --- view path end ---
 
     private final MemberService memberService;
-
-    private final JWTConfig jwtConfig;
 
     private final CookieUtils cookieUtils;
 
@@ -60,13 +55,18 @@ public class MemberController {
     @Value("${jwt.refresh_token_name}")
     private String refreshTokenName;
 
+    /**
+     * controller 역할
+     * - 요청을 받고 응답을 함
+     * - 적절한 요청인지 확인함
+     */
 
     @GetMapping("/login")
     public String login(
             @RequestParam(required = false) boolean result,
             Model model
     ){
-        log.debug("login view render");
+        log.debug("login form render");
 
         model.addAttribute("result", result);
         model.addAttribute("member", new LoginDto());
@@ -106,17 +106,67 @@ public class MemberController {
         return profileEditPath;
     }
 
-    @GetMapping("/profile/edit/password/popup")
-    public String passwordEditForm(
-            Model model,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+    /**
+     * 정보 수정 로직을 처리
+     */
+    @PostMapping("/profile/edit")
+    public String profileEdit(
+            @Validated @ModelAttribute(name = "dto") UserInfoEditDto dto,
+            BindingResult bindingResult,
+            Principal principal
     ){
-        log.debug("password edit form render");
 
-        model.addAttribute("dto", new PasswordEditDto());
+        if(bindingResult.hasErrors()){
+            log.debug("error = {}", bindingResult);
+            return profileEditPath;
+        }
 
-        return passwordEditPopupPath;
+        String userId = principal.getName();
+
+        memberService.updateUserInfo(userId, dto);
+
+        log.debug("name = {}, email = {}", dto.getName(), dto.getEmail());
+
+        return "redirect:/profile";
     }
+
+//    @GetMapping("/profile/edit/password/popup")
+//    public String passwordEditForm(
+//            Model model
+//    ){
+//        log.debug("password edit form render");
+//
+//        model.addAttribute("dto", new PasswordEditDto());
+//
+//        return passwordEditPopupPath;
+//    }
+//
+//    /**
+//     * password를 수정함
+//     * 수정할 때에 팝업창을 수정 후에 창이 닫혀서 리다이렉트는 안하는 걸로
+//     */
+//    @PostMapping("/profile/edit/password/popup")
+//    public void passwordEdit(
+//            @Validated @ModelAttribute PasswordEditDto dto,
+//            BindingResult bindingResult,
+//            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+//    ){
+//        log.debug("popup debug");
+//
+//        if(!Objects.equals(dto.getPassword(), dto.getConfirm())){
+//            bindingResult.reject("passwordNotEquals");
+//        }
+//
+//        if(bindingResult.hasErrors()){
+////            return passwordEditPopupPath;
+//        }
+//
+//        try {
+//            memberService.updatePassword(userId, dto);
+//        }catch(IllegalArgumentException e){
+//            log.warn("not match");
+//        }
+//    }
 
     @GetMapping("/profile/consume/items")
     public String buyItemsForm(
@@ -134,14 +184,8 @@ public class MemberController {
         return buyItemsPath;
     }
 
-    @GetMapping("/login/fail")
-    public String loginFail(){
-        log.debug("login fail");
-        return loginFailPath;
-    }
-
-    @GetMapping("/member/withdrawal")
-    public String withdrawalFrom(
+    @GetMapping("/member/delete")
+    public String deleteFrom(
             Model model,
             Principal principal
     ){
@@ -150,19 +194,20 @@ public class MemberController {
 
         Member member = memberService.checkUserId(userId);
         model.addAttribute("dto", new DeleteMemberDto());
+
         if(member.getUserId().contains("_")){
-            return withdrawalOAuthPath;
+            return deleteOAuthPath;
         }
 
-        return withdrawalFormPath;
+        return deleteFormPath;
     }
 
-    @PostMapping("/member/withdrawal/{type}")
-    public String withdrawalMember(
+    @PostMapping("/member/delete/{type}")
+    public String deleteMember(
             @Validated @ModelAttribute(name = "dto") DeleteMemberDto dto,
             BindingResult bindingResult,
             @PathVariable String type,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
+            Principal principal
     ){
         log.debug("type = {}", type);
 
@@ -170,21 +215,23 @@ public class MemberController {
             log.debug("error = {}", bindingResult);
             switch (type){
                 case "form" -> {
-                    return withdrawalFormPath;
+                    return deleteFormPath;
                 }
                 case "oauth" -> {
-                    return withdrawalOAuthPath;
+                    return deleteOAuthPath;
                 }
                 default -> log.error("not exist type");
             }
         }
+
+        String userId = principal.getName();
 
         memberService.delete(type, userId, dto.getValue());
 
         return "redirect:/";
     }
 
-    @GetMapping("/{userId}/items")
+    @GetMapping("/profile/produce/items")
     public String produceItems(
             Model model,
             Principal principal
@@ -199,78 +246,6 @@ public class MemberController {
 
         return producerItemsPath;
     }
-
-    /**
-     * 일단 로그아웃 로직으로 세션만 삭제하는 걸로 해놓음
-     * 추후에 추가를 해야함
-     */
-//    @GetMapping("/logout")
-//    public String logout(
-//            HttpServletRequest request
-//    ){
-//        log.debug("user logout");
-//
-//        HttpSession session = request.getSession(false);
-//        session.invalidate();
-//
-//        return "redirect:/";
-//    }
-
-    /**
-     * 정보 수정 로직을 처리
-     */
-    @PostMapping("/profile/edit")
-    public String profileEdit(
-            @ModelAttribute UserInfoEditDto dto,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
-    ){
-
-        Member member = memberService.updateUserInfo(userId, dto);
-
-        log.debug("name = {}, email = {}", dto.getName(), dto.getEmail());
-
-        return "redirect:/profile";
-    }
-
-    /**
-     * password를 수정함
-     * 수정할 때에 팝업창을 수정 후에 창이 닫혀서 리다이렉트는 안하는 걸로
-     */
-    @PostMapping("/profile/edit/password/popup")
-    public void passwordEdit(
-            @ModelAttribute PasswordEditDto dto,
-            @SessionAttribute(name = SessionUtils.session_login_id) long userId
-    ){
-        log.debug("popup debug");
-        try {
-            memberService.updatePassword(userId, dto);
-        }catch(IllegalArgumentException e){
-            log.warn("not match");
-        }
-    }
-
-//    @PostMapping("/login")
-//    public String loginProcess(
-//            @ModelAttribute(name = "member") LoginDto dto,
-//            HttpServletRequest request
-//    ){
-//
-//        Member loginResult = memberService.login(dto);
-//        if (loginResult != null) {
-//            log.debug("login success");
-//
-//            HttpSession requestSession = request.getSession();
-//            requestSession.setAttribute(SessionUtils.session_login_id, loginResult.getId());
-//            requestSession.setAttribute(SessionUtils.session_login_username, loginResult.getName());
-//
-//            return "redirect:/";
-//        }
-//
-//        log.debug("login fail");
-//
-//        return "redirect:/login";
-//
-//    }
 
     @GetMapping("/signup")
     public String signup(
@@ -287,8 +262,7 @@ public class MemberController {
     public String signupProcess(
             @Validated @ModelAttribute(name = "member") MemberSaveDto dto,
             BindingResult bindingResult,
-            Model model,
-            HttpServletRequest request
+            Model model
     ){
         if(!Objects.equals(dto.getPassword(), dto.getPasswordConfirm())){
             bindingResult.reject("isSamePassword", "비밀번호가 동일하지 않습니다.");
@@ -308,21 +282,5 @@ public class MemberController {
             return signupFailPath;
         }
 
-    }
-
-    /**
-     * 입력한 파라미터 중에서 null이 존재하는지 확인함
-     * null이 존재하면 true 없으면 false
-     */
-    private static boolean parameterNullCheck(HttpServletRequest request) {
-        AtomicBoolean result = new AtomicBoolean();
-        request.getParameterNames().asIterator()
-                .forEachRemaining(param -> {
-                    if(request.getParameter(param) == null){
-                        log.warn("parameterNull");
-                        result.set(true);
-                    }
-                });
-        return result.get();
     }
 }

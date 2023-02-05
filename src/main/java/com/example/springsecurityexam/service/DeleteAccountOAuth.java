@@ -21,8 +21,8 @@ public class DeleteAccountOAuth implements DeleteAccount{
     }
 
     @Override
-    public boolean delete(long userId, String value) {
-        Member user = memberRepository.findById(userId)
+    public boolean delete(String userId, String value) {
+        Member user = memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
         if(Objects.equals(user.getEmail(), value)){
             memberRepository.delete(user);

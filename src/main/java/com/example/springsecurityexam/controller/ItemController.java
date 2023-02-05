@@ -38,9 +38,12 @@ public class ItemController {
     @GetMapping
     public String itemsView(
             @RequestParam int page,
-            Model model
+            Model model,
+            Principal principal
     ){
-        Page<Item> items = itemService.findItems(page-1, size, null);
+        String userId = principal.getName();
+        Member member = memberService.checkUserId(userId);
+        Page<Item> items = itemService.findOtherItems(page-1, size, member);
         int paging = itemService.paginationCount(size, null);
 
         toPagingSetModel(model, items, paging);
@@ -94,7 +97,7 @@ public class ItemController {
 
         Item item = itemService.findItem(itemId);
         Member producer = item.getProducer();
-        Page<Item> items = itemService.findItems(page-1, size, producer);
+        Page<Item> items = itemService.findMyItems(page-1, size, producer);
         int paging = itemService.paginationCount(size, producer);
 
         toPagingSetModel(model, items, paging);
