@@ -12,9 +12,6 @@ public class CookieUtils {
      */
     public void setCookie(HttpServletResponse response, String key, String value, Integer maxAge){
 
-        if (key == null){
-            key = "defaultKey";
-        }
         Cookie cookie =  addCookie(key, value, maxAge);
 
         response.addCookie(cookie);

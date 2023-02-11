@@ -9,16 +9,17 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.time.Duration;
 import java.util.*;
 
 @Configuration
+@RequiredArgsConstructor
 @Slf4j
 public class JWTConfig {
     @Value("${jwt.access_secret_key}")
@@ -27,11 +28,11 @@ public class JWTConfig {
     @Value("${jwt.refresh_secret_key}")
     private String refreshSecretKey;
 
-//    @Value("${jwt.access_expire_time}")
-    private static long accessExpireTime = 1800000;
+    @Value("${jwt.access_expire_time}")
+    private long accessExpireTime;
 
-//    @Value("${jwt.refresh_expire_time}")
-    private static long refreshExpireTime = 1209600000;
+    @Value("${jwt.refresh_expire_time}")
+    private long refreshExpireTime;
 
     @Value("${jwt.access_token_name}")
     private String accessTokenName;
@@ -46,11 +47,6 @@ public class JWTConfig {
 
     private final MemberRepository memberRepository;
 
-    public JWTConfig(UserDetailsServiceImpl userDetailsService, MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-        this.userDetailsService = userDetailsService;
-    }
-
     @PostConstruct
     protected void init() {
         refreshSecretKey = Base64.getEncoder().encodeToString(refreshSecretKey.getBytes());
@@ -60,6 +56,7 @@ public class JWTConfig {
     public String createAccessToken(String refreshToken) {
 
         Date now = new Date();
+
         String userId = Jwts.parser()
                 .setSigningKey(refreshSecretKey)
                 .parseClaimsJws(refreshToken)
@@ -156,6 +153,7 @@ public class JWTConfig {
         try {
 
             Claims body = Jwts.parser().setSigningKey(refreshSecretKey).parseClaimsJws(token).getBody();
+
             return body.getIssuer().equals(issuer) && body.getExpiration().after(now);
 
         } catch (Exception e) {
@@ -179,15 +177,26 @@ public class JWTConfig {
         }
     }
 
-    public boolean validateAccessToken(String token) {
+    public Boolean validateAccessToken(String token) {
         Date now = new Date();
         try {
 
             Claims body = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token).getBody();
+
             return body.getIssuer().equals(issuer) && body.getExpiration().after(now);
 
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public String getUserIdByRefreshToken(String refreshToken){
+
+        return (String) Jwts.parser()
+                .setSigningKey(refreshSecretKey)
+                .parseClaimsJws(refreshToken)
+                .getBody()
+                .get("userId");
+
     }
 }

@@ -21,6 +21,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -56,10 +58,23 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
         String refreshToken = jwtConfig.createRefreshToken(username);
         String accessToken = jwtConfig.createAccessToken(refreshToken);
 
-        refreshTokenRepository.save(new RefreshToken(username, refreshToken));
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByUserId(username);
 
+//        이미 해당 서비스에서 1회 이상 로그인을 했었던 사용자
+        if(optionalRefreshToken.isPresent()){
+            RefreshToken findRefreshToken = optionalRefreshToken.get();
+
+            findRefreshToken.changRefreshToken(refreshToken);
+
+            refreshTokenRepository.save(findRefreshToken);
+        }else {
+//            최초 로그인
+            refreshTokenRepository.save(new RefreshToken(username, refreshToken));
+        }
         cookieUtils.setCookie(response, refreshTokenName, refreshToken, null);
         cookieUtils.setCookie(response, accessTokenName, accessToken, null);
+//      jsessionid cookie는 사용하지 않기 때문에 삭제함
+        cookieUtils.setCookie(response, "JSESSIONID", null, 0);
 
         response.sendRedirect("/");
     }
