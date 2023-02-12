@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      th:replace="/layout/default-layout :: layout(~{::body})">
+      th:replace="~{layout/default-layout :: layout(~{::body})}">
 <body>
   <div class="item-container">
     <h1 th:if="${result}" style="color:red"> 로그인 실패 </h1>

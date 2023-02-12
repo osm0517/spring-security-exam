@@ -58,7 +58,6 @@ public class SpringSecurityConfig {
                         .failureHandler(failHandler)
                     .permitAll()
                 .and()
-//                    .addFilterBefore(new JwtFilter(jwtConfig, cookieUtils), OAuth2LoginAuthenticationFilter.class)
                     .oauth2Login()
                         .loginPage("/login")
                         .successHandler(successHandler)

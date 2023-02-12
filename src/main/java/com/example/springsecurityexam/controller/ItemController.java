@@ -32,13 +32,13 @@ public class ItemController {
 
 //    ----- view path start -----
 
-    String otherItemsPath = "/items/items";
-    String addFormPath = "/items/addForm";
-    String itemFormPath = "/items/item";
-    String producerInfoPath = "/member/producer/info";
-    String producerItemsPath = "/member/producer/items";
-    String itemBuyPath = "/items/buyForm";
-    String itemEditFormPath = "/items/editForm";
+    String otherItemsPath = "items/items";
+    String addFormPath = "items/addForm";
+    String itemFormPath = "items/item";
+    String producerInfoPath = "member/producer/info";
+    String producerItemsPath = "member/producer/items";
+    String itemBuyPath = "items/buyForm";
+    String itemEditFormPath = "items/editForm";
     String errorFormPath = "error";
 
 //    ----- view path end -----

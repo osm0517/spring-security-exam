@@ -1,19 +1,14 @@
 package com.example.springsecurityexam.controller;
 
-import com.example.springsecurityexam.config.JWTConfig;
 import com.example.springsecurityexam.config.utils.CookieUtils;
-import com.example.springsecurityexam.config.utils.SessionUtils;
 import com.example.springsecurityexam.domain.BuyItem;
-import com.example.springsecurityexam.domain.Item;
 import com.example.springsecurityexam.domain.Member;
 import com.example.springsecurityexam.dto.member.*;
 import com.example.springsecurityexam.enumdata.RoleType;
 import com.example.springsecurityexam.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 @Slf4j
@@ -32,18 +26,16 @@ public class MemberController {
 
 //    --- view path start ---
 
-    private static final String signupPath = "/member/signup/signup";
-    private static final String signupResultPath = "/member/signup/signup-result";
-    private static final String signupFailPath = "/member/signup/signup-fail";
-    private static final String loginPath = "/member/login/login";
-    private static final String loginFailPath = "/member/login/login-fail";
-    private static final String profilePath = "/member/member/profile";
-    private static final String producerItemsPath = "/items/myProducingItems";
-    private static final String profileEditPath = "/member/member/editForm";
-    private static final String passwordEditPopupPath = "/member/popup/passwordEdit";
-    private static final String buyItemsPath = "/member/consume/items";
-    private static final String deleteFormPath = "/member/member/deleteForm";
-    private static final String deleteOAuthPath = "/member/member/deleteOAuth";
+    private static final String signupPath = "member/signup/signup";
+    private static final String signupResultPath = "member/signup/signup-result";
+    private static final String signupFailPath = "member/signup/signup-fail";
+    private static final String loginPath = "member/login/login";
+    private static final String profilePath = "member/member/profile";
+    private static final String producerItemsPath = "items/myProducingItems";
+    private static final String profileEditPath = "member/member/editForm";
+    private static final String buyItemsPath = "member/consume/items";
+    private static final String deleteFormPath = "member/member/deleteForm";
+    private static final String deleteOAuthPath = "member/member/deleteOAuth";
 
 //    --- view path end ---
 
