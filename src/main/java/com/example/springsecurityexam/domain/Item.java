@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "item")
-@ToString
 public class Item {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -61,11 +60,11 @@ public class Item {
         this.quantity = quantity;
     }
 
-//    @Builder
-//    public Item(String itemName, int price, int quantity, int producer){
-//        this.itemName = itemName;
-//        this.price = price;
-//        this.quantity = quantity;
-//        this.producer = producer;
-//    }
+    public Item createTestItem(String itemName, Member producer){
+        this.itemName = itemName;
+        this.price = 1000;
+        this.quantity = 1000;
+        this.producer = producer;
+        return this;
+    }
 }

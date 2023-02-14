@@ -84,7 +84,7 @@ public class ItemService {
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return itemRepository.findAllByProducerNot(producer, pageRequest);
+        return itemRepository.findByProducerNot(producer, pageRequest);
     }
 
     public Page<Item> findMyItems(
@@ -93,7 +93,7 @@ public class ItemService {
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return itemRepository.findAllByProducer(producer, pageRequest);
+        return itemRepository.findByProducer(producer, pageRequest);
     }
 
     /**
