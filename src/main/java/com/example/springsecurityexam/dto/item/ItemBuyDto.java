@@ -21,9 +21,9 @@ public class ItemBuyDto {
     @Min(1)
     private int buyQuantity;
 
-    public ItemBuyDto(String itemName, int price, int quantity){
+    public ItemBuyDto(String itemName, int price, int buyQuantity){
         this.itemName = itemName;
         this.price = price;
-        this.quantity = quantity;
+        this.buyQuantity = buyQuantity;
     }
 }

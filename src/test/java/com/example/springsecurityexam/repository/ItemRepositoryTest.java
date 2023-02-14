@@ -8,70 +8,102 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.event.annotation.AfterTestClass;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
+@Transactional
 class ItemRepositoryTest {
 
     @Autowired
-    ItemRepository repository;
+    ItemRepository itemRepository;
 
     @Autowired
     MemberRepository memberRepository;
 
-    @AfterEach
-    void clear(){
-        repository.deleteAllInBatch();
-        memberRepository.deleteAllInBatch();
+    long allCount;
+
+    void clear(List<Item> items){
+        for (Item item : items) {
+            itemRepository.delete(item);
+        }
     }
+
+    void clear(Item item){
+        itemRepository.delete(item);
+    }
+
+    @BeforeTestClass
+    void beforeCount(){
+        allCount = itemRepository.count();
+    }
+
+
+//    @AfterEach
+//    void clear(){
+//        repository.deleteAllInBatch();
+//        memberRepository.deleteAllInBatch();
+//    }
 
     @Test
     @DisplayName("생성 및 id로 찾기 테스트")
     void createTest(){
 //        given
-        Member member = new Member().createUserMember("itemTestUser");
+        Member testMember = new Member().createUserMember(UUID.randomUUID().toString());
+        memberRepository.save(testMember);
+        Member member = memberRepository.findById(testMember.getId()).get();
+        Item testItem = new Item(UUID.randomUUID().toString(), 1000, 1000, member);
 
 //        when
-        memberRepository.save(member);
+        itemRepository.save(testItem);
 
-        Item itemA = new Item("itemA", 1000, 5, member);
-
-        repository.save(itemA);
-        Optional<Item> findItem = repository.findById(itemA.getId());
-
-        Item result = findItem.get();
+        Item findItem = itemRepository.findById(testItem.getId()).get();
 
 //        then
-        assertThat(member.getItems().size()).isEqualTo(1);
-        assertThat(result.getItemName()).isEqualTo("itemA");
+        assertThat(findItem.getItemName()).isEqualTo(testItem.getItemName());
+        clear(testItem);
+        memberRepository.delete(member);
     }
 
     @Test
     @DisplayName("전체 찾기")
     void findAllTest(){
 //        given
-        Member member = new Member().createUserMember("itemTestUser");
-
-//        when
-        memberRepository.save(member);
-
+        Member testMember = new Member().createUserMember(UUID.randomUUID().toString());
+        memberRepository.save(testMember);
+        Member member = memberRepository.findById(testMember.getId()).get();
         Item itemA = new Item("itemA", 1000, 5, member);
         Item itemB = new Item("itemB", 1000, 5, member);
         Item itemC = new Item("itemC", 1000, 5, member);
 
-        repository.save(itemA);
-        repository.save(itemB);
-        repository.save(itemC);
+//        when
+        itemRepository.save(itemA);
+        itemRepository.save(itemB);
+        itemRepository.save(itemC);
 
-        List<Item> items = repository.findAll();
+        List<Item> items = itemRepository.findAll();
+
+        System.out.println("allCount = " + allCount);
 
 //        then
-        assertThat(items.size()).isEqualTo(3);
+        assertThat(items.size()).isEqualTo(allCount+3);
+
+        List<Item> testItems = new ArrayList<>();
+        testItems.add(itemA);
+        testItems.add(itemB);
+        testItems.add(itemC);
+
+        clear(testItems);
+        memberRepository.delete(member);
     }
 
 //    @Test

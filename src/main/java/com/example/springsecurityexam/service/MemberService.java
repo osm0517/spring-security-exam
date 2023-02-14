@@ -38,8 +38,6 @@ public class MemberService {
         Member encodedMember = passwordEncoder(member, inputPassword);
         memberRepository.save(encodedMember);
 
-//        Member saveResult = memberRepository.findById(encodedMember.getId());
-//        return !saveFalseCheck(saveResult);
         return true;
     }
 
@@ -86,8 +84,7 @@ public class MemberService {
     }
 
     /**
-     * home 에서 session을 받고 거기서 받은 아이디에 정보가 정확한지를 확인 후
-     * 수정 폼에서 사용할 수 있도록 비밀번호를 평문으로 보내줌
+     * userId로 계정을 찾아서 이름과 이메일을 변경할 수 있음
      */
     public Member updateUserInfo(String userId, UserInfoEditDto dto){
 
@@ -96,9 +93,7 @@ public class MemberService {
 
         member.changeUserInfo(dto.getName(), dto.getEmail());
 
-        memberRepository.save(member);
-
-        return member;
+        return memberRepository.save(member);
     }
 
     /**
@@ -112,8 +107,9 @@ public class MemberService {
             Member member = memberRepository.findById(userId)
                     .orElseThrow(NoSuchElementException::new);
             member.changePassword(encodedPassword);
+        }else {
+            throw new IllegalArgumentException("not match password and confirm");
         }
-        throw new IllegalArgumentException("not match password and confirm");
     }
 
     public List<BuyItem> findBuyItems(String userId){

@@ -21,4 +21,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     Page<Item> findAllByProducer(Member producer, Pageable pageable);
 
     Page<Item> findAllByProducerNot(Member member, Pageable pageable);
+
+    Optional<Item> findByItemName(String itemName);
 }

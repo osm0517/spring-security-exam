@@ -185,7 +185,7 @@ public class ItemController {
     ){
         log.debug("buy debug");
 
-        if(dto.getQuantity() > 1 && dto.getBuyQuantity() > dto.getQuantity()){
+        if(dto.getQuantity() < 1 && dto.getBuyQuantity() > dto.getQuantity()){
             bindingResult.reject("soldOut");
         }
 

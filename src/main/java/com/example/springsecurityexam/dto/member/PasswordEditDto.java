@@ -1,11 +1,11 @@
 package com.example.springsecurityexam.dto.member;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class PasswordEditDto {
 
     @NotBlank

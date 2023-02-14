@@ -63,7 +63,7 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NoSuchElementException::new);
 
-        if(item.getQuantity() - dto.getBuyQuantity() < 0){
+        if(item.getQuantity() < dto.getBuyQuantity()){
             throw new Exception("재고보다 큰 수를 입력함");
         }
 

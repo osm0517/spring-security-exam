@@ -36,7 +36,6 @@ public class BuyItem {
 
     public BuyItem(Member member, Item item, int quantity){
         item.buyItem(item.getQuantity() - quantity);
-        member.getBuyItems().add(this);
         this.quantity = quantity;
         this.member = member;
         this.item = item;
