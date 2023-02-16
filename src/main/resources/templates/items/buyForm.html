@@ -9,15 +9,15 @@
 <form name="buyItem" th:action th:object="${dto}" method="post">
     <div>
         <label> 상품명 </label>
-        <input type="text" th:field="${item.itemName}" disabled>
+        <input type="text" th:field="*{itemName}" disabled>
     </div>
     <div>
         <label> 가격 </label>
-        <input type="text" th:field="${item.price}" disabled>
+        <input type="text" th:field="*{price}" disabled>
     </div>
     <div>
         <label> 수량 </label>
-        <input type="text" th:field="${item.quantity}" disabled>
+        <input type="text" th:field="*{quantity}" disabled>
     </div>
     <div>
         <label for="buyQuantity"> 구매 수량 </label>

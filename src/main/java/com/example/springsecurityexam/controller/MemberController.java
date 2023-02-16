@@ -258,6 +258,7 @@ public class MemberController {
             BindingResult bindingResult,
             Model model
     ){
+//        입력 오류 처리
         if(!Objects.equals(dto.getPassword(), dto.getPasswordConfirm())){
             bindingResult.reject("isSamePassword", "비밀번호가 동일하지 않습니다.");
         }
@@ -265,12 +266,14 @@ public class MemberController {
             log.debug("error = {}", bindingResult);
             return signupPath;
         }
-//            given
+
         Member member = new Member(dto.getUserId(), dto.getPassword(), dto.getName(), dto.getEmail(), RoleType.USER);
-//            when
+
         if(memberService.signup(member)){
-//            then
+
             model.addAttribute("result", "success");
+            model.addAttribute("name", member.getName());
+
             return signupResultPath;
         }else{
             return signupFailPath;

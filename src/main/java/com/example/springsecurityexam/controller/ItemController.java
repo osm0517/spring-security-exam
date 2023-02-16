@@ -166,8 +166,9 @@ public class ItemController {
     ){
         Item item = itemService.findItem(itemId);
 
-        model.addAttribute("item", item);
-        model.addAttribute("dto", new ItemBuyDto());
+        model.addAttribute("dto", new ItemBuyDto(
+                item.getId(), item.getItemName(), item.getPrice(),item.getQuantity(), 0
+        ));
 
         return itemBuyPath;
     }
@@ -179,19 +180,20 @@ public class ItemController {
     @PostMapping("/{itemId}/buy/popup")
     public void buyItem(
             @PathVariable long itemId,
-            @Validated @ModelAttribute ItemBuyDto dto,
+            @Validated @ModelAttribute(name = "dto") ItemBuyDto dto,
             BindingResult bindingResult,
             Principal principal
     ){
-        log.debug("buy debug");
 
-        if(dto.getQuantity() < 1 && dto.getBuyQuantity() > dto.getQuantity()){
+        Item item = itemService.findItem(itemId);
+
+        if(dto.getQuantity() < 1 && dto.getBuyQuantity() > item.getQuantity()){
             bindingResult.reject("soldOut");
         }
 
         if(bindingResult.hasErrors()){
             log.debug("error = {}", bindingResult);
-            return;
+            return ;
         }
 
         try {

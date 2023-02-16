@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -40,6 +41,13 @@ class ItemServiceTest {
 
     private ItemService itemService;
     private Member member;
+
+    @BeforeTestClass
+    void clear(){
+        itemRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
+        buyItemRepository.deleteAllInBatch();
+    }
 
     @BeforeEach
     void init(){

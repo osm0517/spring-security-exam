@@ -1,6 +1,7 @@
 package com.example.springsecurityexam.dto.member;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,6 +12,6 @@ public class UserInfoEditDto {
     @NotBlank
     private String name;
 
-    @NotBlank
+    @Null
     private String email;
 }

@@ -91,7 +91,7 @@ public class MemberService {
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);
 
-        member.changeUserInfo(dto.getName(), dto.getEmail());
+        member.changeUserName(dto.getName());
 
         return memberRepository.save(member);
     }

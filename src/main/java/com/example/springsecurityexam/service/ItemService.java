@@ -50,22 +50,10 @@ public class ItemService {
                 .orElseThrow(NoSuchElementException::new);
     }
 
-    public ItemBuyDto findBuyItem(long itemId){
-
-         Item item = itemRepository.findById(itemId)
-                .orElseThrow(NoSuchElementException::new);
-
-        return new ItemBuyDto(item.getItemName(), item.getPrice(), item.getQuantity());
-    }
-
-    public void buyItem(long itemId, String userId, ItemBuyDto dto) throws Exception {
+    public void buyItem(long itemId, String userId, ItemBuyDto dto) {
 
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(NoSuchElementException::new);
-
-        if(item.getQuantity() < dto.getBuyQuantity()){
-            throw new Exception("재고보다 큰 수를 입력함");
-        }
 
         Member member = memberRepository.findByUserId(userId)
                 .orElseThrow(NoSuchElementException::new);

@@ -91,9 +91,8 @@ public class Member{
         this.password = password;
     }
 
-    public void changeUserInfo(String name, String email){
+    public void changeUserName(String name){
         this.name = name;
-        this.email = email;
     }
     public void changeUserInfo(String name, String email, String password){
         this.name = name;

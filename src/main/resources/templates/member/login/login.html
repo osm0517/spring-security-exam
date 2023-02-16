@@ -19,7 +19,7 @@
           <div class="input-div">
               <label class="fs-3"> 비밀번호 </label>
               <input placeholder="password" class="form-control"
-                     th:field="*{password}"/>
+                     th:field="*{password}" type="password"/>
               <div class="field-error" th:errors="*{password}">
                   validation error
               </div>

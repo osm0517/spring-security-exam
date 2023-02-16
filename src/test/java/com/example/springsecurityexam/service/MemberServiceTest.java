@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.event.annotation.BeforeTestClass;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -47,6 +48,13 @@ class MemberServiceTest {
 
     private Member testUser;
     private MemberService memberService;
+
+    @BeforeTestClass
+    void clear(){
+        itemRepository.deleteAllInBatch();
+        memberRepository.deleteAllInBatch();
+        buyItemRepository.deleteAllInBatch();
+    }
 
     @BeforeEach
     void init(){
@@ -225,12 +233,7 @@ class MemberServiceTest {
             ItemBuyDto itemBuyDto = new ItemBuyDto(savedItem.getItemName(), savedItem.getPrice(), 5);
 
 //            when
-            try {
-                itemService.buyItem(savedItem.getId(), savedUser.getUserId(), itemBuyDto);
-            }catch (Exception e){
-//                예외가 발생하면 의도적으로 실패함
-                assertThat(true).isFalse();
-            }
+            itemService.buyItem(savedItem.getId(), savedUser.getUserId(), itemBuyDto);
 
             List<BuyItem> buyItems = savedUser.getBuyItems();
 
