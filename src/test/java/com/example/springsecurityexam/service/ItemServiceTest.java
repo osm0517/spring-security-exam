@@ -53,7 +53,7 @@ class ItemServiceTest {
     void init(){
         itemService = new ItemService(itemRepository, buyItemRepository, memberRepository);
         member = new Member().createUserMember("test");
-//testtesttest
+
     }
 
     @Nested
